@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.0
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.PhonoBlocks 2.0.CSharp.Editor.Plugins", "UnityVS.PhonoBlocks 2.0.CSharp.Editor.Plugins.csproj", "{35653CA6-52DA-298C-ADB1-E32AFBCDE2DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.PhonoBlocks 2.0.CSharp.Plugins", "UnityVS.PhonoBlocks 2.0.CSharp.Plugins.csproj", "{CC0D6A62-06BB-F50F-92DD-6699A61D0E79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.PhonoBlocks 2.0.CSharp", "UnityVS.PhonoBlocks 2.0.CSharp.csproj", "{29B1A676-7656-A9CD-82DC-EDC9FD269187}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.PhonoBlocks 2.0.CSharp.Editor", "UnityVS.PhonoBlocks 2.0.CSharp.Editor.csproj", "{A5CBAE3E-5129-8429-7451-FD6EE5051F58}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{35653CA6-52DA-298C-ADB1-E32AFBCDE2DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35653CA6-52DA-298C-ADB1-E32AFBCDE2DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35653CA6-52DA-298C-ADB1-E32AFBCDE2DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35653CA6-52DA-298C-ADB1-E32AFBCDE2DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC0D6A62-06BB-F50F-92DD-6699A61D0E79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC0D6A62-06BB-F50F-92DD-6699A61D0E79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC0D6A62-06BB-F50F-92DD-6699A61D0E79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC0D6A62-06BB-F50F-92DD-6699A61D0E79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29B1A676-7656-A9CD-82DC-EDC9FD269187}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29B1A676-7656-A9CD-82DC-EDC9FD269187}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29B1A676-7656-A9CD-82DC-EDC9FD269187}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29B1A676-7656-A9CD-82DC-EDC9FD269187}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5CBAE3E-5129-8429-7451-FD6EE5051F58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5CBAE3E-5129-8429-7451-FD6EE5051F58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5CBAE3E-5129-8429-7451-FD6EE5051F58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5CBAE3E-5129-8429-7451-FD6EE5051F58}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

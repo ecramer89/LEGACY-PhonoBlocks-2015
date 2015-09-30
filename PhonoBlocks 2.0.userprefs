@@ -1,0 +1,19 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\LetterBarAndAffixZoneController.cs">
+    <Files>
+      <File FileName="Assets\PhonoBlocks\HiddenAffixBarController.cs" Line="65" Column="5" />
+      <File FileName="Assets\PhonoBlocks\AffixDropZone.cs" Line="125" Column="3" />
+      <File FileName="Assets\LetterBarAndAffixZoneController.cs" Line="74" Column="1" />
+      <File FileName="Assets\PhonoBlocks\Affix.cs" Line="8" Column="2" />
+      <File FileName="Assets\PhonoBlocks\LetterBarController.cs" Line="140" Column="11" />
+      <File FileName="Assets\LetterGrid.cs" Line="37" Column="4" />
+      <File FileName="Assets\PhonoBlocks\DraggableAffixController.cs" Line="9" Column="36" />
+      <File FileName="Assets\PhonoBlocks\Letter.cs" Line="46" Column="2" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

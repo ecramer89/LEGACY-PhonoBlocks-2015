@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.0
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.PhonoBlocks-2.0-master.CSharp", "UnityVS.PhonoBlocks-2.0-master.CSharp.csproj", "{9B1A72B5-45A0-3DFD-8AB9-93BCF9686260}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.PhonoBlocks-2.0-master.CSharp.Editor.Plugins", "UnityVS.PhonoBlocks-2.0-master.CSharp.Editor.Plugins.csproj", "{D027EA90-E391-E0E0-0551-A534A2EA868B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.PhonoBlocks-2.0-master.CSharp.Editor", "UnityVS.PhonoBlocks-2.0-master.CSharp.Editor.csproj", "{663EB824-E0C6-5D81-1098-15165FB25A48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.PhonoBlocks-2.0-master.CSharp.Plugins", "UnityVS.PhonoBlocks-2.0-master.CSharp.Plugins.csproj", "{BB87FCB4-E2AD-D1FD-8895-485EEB332F4B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9B1A72B5-45A0-3DFD-8AB9-93BCF9686260}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B1A72B5-45A0-3DFD-8AB9-93BCF9686260}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B1A72B5-45A0-3DFD-8AB9-93BCF9686260}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B1A72B5-45A0-3DFD-8AB9-93BCF9686260}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D027EA90-E391-E0E0-0551-A534A2EA868B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D027EA90-E391-E0E0-0551-A534A2EA868B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D027EA90-E391-E0E0-0551-A534A2EA868B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D027EA90-E391-E0E0-0551-A534A2EA868B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{663EB824-E0C6-5D81-1098-15165FB25A48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{663EB824-E0C6-5D81-1098-15165FB25A48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{663EB824-E0C6-5D81-1098-15165FB25A48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{663EB824-E0C6-5D81-1098-15165FB25A48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB87FCB4-E2AD-D1FD-8895-485EEB332F4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB87FCB4-E2AD-D1FD-8895-485EEB332F4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB87FCB4-E2AD-D1FD-8895-485EEB332F4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB87FCB4-E2AD-D1FD-8895-485EEB332F4B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

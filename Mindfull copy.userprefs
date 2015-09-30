@@ -1,0 +1,16 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PhonoBlocks\NGram.cs">
+    <Files>
+      <File FileName="Assets\PhonoBlocks\NGram.cs" Line="215" Column="27" />
+      <File FileName="Assets\PhonoBlocks\SpeechSound.cs" Line="151" Column="1" />
+      <File FileName="Assets\PhonoBlocks\SpeechSoundColourMap.cs" Line="54" Column="17" />
+      <File FileName="Assets\PhonoBlocks\LetterBarController.cs" Line="67" Column="4" />
+      <File FileName="Assets\PhonoBlocks\GraphemeToPhonoGramDecoder.cs" Line="97" Column="39" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
