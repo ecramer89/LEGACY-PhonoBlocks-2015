@@ -29,7 +29,7 @@ public class UserInputRouter : MonoBehaviour
 
 
 
-		public SessionManager sessionManager;
+	public SessionsDirector sessionManager;
 		public ArduinoAffixLetterController arduinoAndAffixLetterController;
 		public WordHistoryController wordHistoryController;
 		public ArduinoUnityInterface arduinoLetterInterface;
@@ -60,7 +60,7 @@ public class UserInputRouter : MonoBehaviour
 
 
              
-				screenMode = sessionParametersOB.GetComponent<SessionManager> ().IsScreenMode ();
+		screenMode = sessionParametersOB.GetComponent<SessionsDirector> ().IsScreenMode ();
 
        
 
@@ -108,8 +108,8 @@ public class UserInputRouter : MonoBehaviour
 
 				if (sessionParametersOB != null) {
 					
-						sessionManager = sessionParametersOB.GetComponent<SessionManager> ();
-						if (SessionManager.DelegateControlToStudentActivityController) {
+			sessionManager = sessionParametersOB.GetComponent<SessionsDirector> ();
+			if (SessionsDirector.DelegateControlToStudentActivityController) {
 							
 								studentActivityControllerGO = sessionManager.studentActivityControllerOB;
 								studentActivityController = studentActivityControllerGO.GetComponent<StudentActivityController> ();
@@ -145,14 +145,14 @@ public class UserInputRouter : MonoBehaviour
 
     public void RequestReplayInstruction ()
 		{
-				if (SessionManager.DelegateControlToStudentActivityController)
+		if (SessionsDirector.DelegateControlToStudentActivityController)
 						studentActivityController.PlayInstructions ();
 
 		}
 
 		public bool TeacherMode ()
 		{
-				return sessionParametersOB == null || SessionManager.IsTeacherMode;
+		return sessionParametersOB == null || SessionsDirector.IsTeacherMode;
 
 		}
 
@@ -341,7 +341,7 @@ public class UserInputRouter : MonoBehaviour
 						checkedWordImageController.EndDisplay ();
 
 				bool shouldUpdateArduinoLetterControlledLetters = true;
-				if (sessionManager != null && SessionManager.DelegateControlToStudentActivityController)
+		if (sessionManager != null && SessionsDirector.DelegateControlToStudentActivityController)
             //shouldUpdateArduinoLetterControlledLetters = studentActivityController.HandleNewArduinoLetter (newLetter, alc.TranslatePositionOfLetterInUILetterBarToRaw (atPosition));
             shouldUpdateArduinoLetterControlledLetters = studentActivityController.HandleNewArduinoLetter(newLetter, atPosition);
 
@@ -355,7 +355,7 @@ public class UserInputRouter : MonoBehaviour
 
 		public void RequestPlaySoundsOfSelectedArduinoLetters ()
 		{
-				if (acceptUIInput && !SessionManager.IsAssessmentMode) 
+		if (acceptUIInput && !SessionsDirector.IsAssessmentMode) 
 						arduinoAndAffixLetterController.PlaySoundsOfSelectedLetters ();
 		}
 

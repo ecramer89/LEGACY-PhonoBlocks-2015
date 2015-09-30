@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public abstract class LetterSoundComponent : MonoBehaviour
 {
 	
-		protected PhonotacticsManager.Phonotactics[] rules;
+	protected PhonotacticChecker.Phonotactics[] rules;
 		protected bool violatesPhonotactics;
 	
 		public bool ViolatesPhonotactics {
@@ -79,7 +79,7 @@ public abstract class LetterSoundComponent : MonoBehaviour
 		
 		}
 	
-		public LetterSoundComponent (string asString, PhonotacticsManager.Phonotactics[] rules)
+	public LetterSoundComponent (string asString, PhonotacticChecker.Phonotactics[] rules)
 		{
 				this.asString = asString;
 		
@@ -161,13 +161,13 @@ public abstract class LetterSoundComponent : MonoBehaviour
 		//we by default will apply the error color to all children regardless of other considertions.
 		public virtual void ApplyErrorColor ()
 		{
-				color = SessionManager.activeColourScheme.GetErrorColor ();
+				color = SessionsDirector.activeColourScheme.GetErrorColor ();
 		}
 	
 		protected virtual void ModifyColorBySound ()
 		{
 				if (soundType == SILENT)
-						color = SessionManager.activeColourScheme.GetColourForSilent (color);
+			color = SessionsDirector.activeColourScheme.GetColourForSilent (color);
 		
 		}
 	
@@ -181,7 +181,7 @@ public abstract class LetterSoundComponent : MonoBehaviour
 	
 		public void CheckPhonotactics (UserWord context, int placeOfSelf)
 		{       
-				foreach (PhonotacticsManager.Phonotactics rule in rules)
+				foreach (PhonotacticChecker.Phonotactics rule in rules)
 						if (rule (context.LetterSoundUnits, this, placeOfSelf)) {
 								violatesPhonotactics = true;
 								context.PhonotacticViolation (this, placeOfSelf); //alert the context (cache the fact that we're in error straight away)
@@ -220,7 +220,7 @@ public abstract class LetterSoundComposite : LetterSoundComponent
 				}
 		}
 	
-		public LetterSoundComposite (string asString, PhonotacticsManager.Phonotactics[] rules) : base(asString, rules)
+	public LetterSoundComposite (string asString, PhonotacticChecker.Phonotactics[] rules) : base(asString, rules)
 		{
 				children = new List<LetterSoundComponent> ();
 		}
@@ -243,7 +243,7 @@ public abstract class LetterSoundComposite : LetterSoundComponent
 	
 		public override void ApplyErrorColor ()
 		{
-				color = SessionManager.activeColourScheme.GetErrorColor ();
+		color = SessionsDirector.activeColourScheme.GetErrorColor ();
 				foreach (LetterSoundComponent child in children)
 						child.ApplyErrorColor ();
 		}
@@ -253,7 +253,7 @@ public abstract class LetterSoundComposite : LetterSoundComponent
 
 public abstract class Letter : LetterSoundComponent
 {
-		public Letter (string asString, PhonotacticsManager.Phonotactics[] rules): base(asString, rules)
+	public Letter (string asString, PhonotacticChecker.Phonotactics[] rules): base(asString, rules)
 		{
 		}
 	
@@ -305,7 +305,7 @@ public class Consonant : Letter
 	
 		protected override void ApplyLetterSoundUnitColor ()
 		{
-				color = SessionManager.activeColourScheme.GetColorsForHardConsonant ();
+		color = SessionsDirector.activeColourScheme.GetColorsForHardConsonant ();
 		
 		
 		}
@@ -314,7 +314,7 @@ public class Consonant : Letter
 		{
 				base.ModifyColorBySound ();
 				if (soundType == SOFT)
-						color = SessionManager.activeColourScheme.ModifyColorForSoftConsonant (color);
+			color = SessionsDirector.activeColourScheme.ModifyColorForSoftConsonant (color);
 		
 		}
 }
@@ -364,7 +364,7 @@ public class Vowel : Letter
 	
 		protected override void ApplyLetterSoundUnitColor ()
 		{
-				color = (soundType == R_CONTROLLED ? SessionManager.activeColourScheme.GetColorsForRControlledVowel (LetterAt (0)) : SessionManager.activeColourScheme.GetColorsForLongVowel (LetterAt (0)));
+		color = (soundType == R_CONTROLLED ? SessionsDirector.activeColourScheme.GetColorsForRControlledVowel (LetterAt (0)) : SessionsDirector.activeColourScheme.GetColorsForLongVowel (LetterAt (0)));
 				//color = SessionManager.activeColourScheme.GetColorsForLongVowel (LetterAt (0)); //for the experiment I'm not worrying about r controlled.
 				//we are only distinguishing between long and short.
 		
@@ -374,7 +374,7 @@ public class Vowel : Letter
 		{
 				base.ModifyColorBySound ();
 				if (soundType == SHORT) {
-						color = SessionManager.activeColourScheme.GetColorsForShortVowel (color);
+			color = SessionsDirector.activeColourScheme.GetColorsForShortVowel (color);
 						//				Debug.Log (SessionManager.activeColourScheme.label + " " + color);
 
 				}
@@ -411,11 +411,11 @@ public class Blend : LetterSoundComposite
 		{
 				
 				if (preferredPosition == SpeechSoundReference.INITIAL_BLEND)
-						color = SessionManager.activeColourScheme.GetColorsForInitialBlends ();
+			color = SessionsDirector.activeColourScheme.GetColorsForInitialBlends ();
 				else if (preferredPosition == SpeechSoundReference.FINAL_BLEND)
-						color = SessionManager.activeColourScheme.GetColorsForFinalBlends ();
+			color = SessionsDirector.activeColourScheme.GetColorsForFinalBlends ();
 				else
-						color = SessionManager.activeColourScheme.GetColorsForMiddleBlends ();
+			color = SessionsDirector.activeColourScheme.GetColorsForMiddleBlends ();
 	
 		}
 	
@@ -432,7 +432,7 @@ public class ConsonantDigraph : LetterSoundComposite
 	
 		protected override void ApplyColorToComposite ()
 		{
-				color = SessionManager.activeColourScheme.GetColorsForConsonantDigraphs ();
+		color = SessionsDirector.activeColourScheme.GetColorsForConsonantDigraphs ();
 		
 		}
 	
@@ -448,7 +448,7 @@ public class VowelDigraph : LetterSoundComposite
 		protected override void ApplyColorToComposite ()
 		{
 				//color = (soundType == R_CONTROLLED ? SessionManager.activeColourScheme.GetColorsForRControlledVowel (LetterAt (0)) : color = SessionManager.activeColourScheme.GetColorsForVowelDigraphs ());
-				color = SessionManager.activeColourScheme.GetColorsForVowelDigraphs (); //for the experiment I'm not worrying about r controlled.
+		color = SessionsDirector.activeColourScheme.GetColorsForVowelDigraphs (); //for the experiment I'm not worrying about r controlled.
 				//we are only distinguishing between long and short.
 		}
 	
@@ -464,7 +464,7 @@ public class StableSyllable : LetterSoundComposite
 		protected override void ApplyColorToComposite ()
 		{
 		
-				color = SessionManager.activeColourScheme.GetColorsForStableSyllables ();
+		color = SessionsDirector.activeColourScheme.GetColorsForStableSyllables ();
 		
 		}
 	

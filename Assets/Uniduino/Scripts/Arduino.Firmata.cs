@@ -123,7 +123,7 @@ namespace Uniduino
 		}
 			
         protected void connect(string serialPortName, Int32 baudRate, bool autoStart, int delay)
-        {
+        {/*
             _serialPort = new SerialPort(serialPortName, baudRate);
 			//_serialPort = Win32SerialPort.CreateInstance();
 			
@@ -137,7 +137,7 @@ namespace Uniduino
             _serialPort.StopBits = StopBits.One;
 			_serialPort.ReadTimeout = 1; // since on windows we *cannot* have a separate read thread
 			_serialPort.WriteTimeout = 1000;
-			
+			*/
 			
 			// HAX: cant use compile time flags here, so cache result in a variable
 			if (UnityEngine.Application.platform.ToString().StartsWith("Windows"))
@@ -172,7 +172,7 @@ namespace Uniduino
         /// opened when the object is first created.
         /// </summary>
         protected void Open()
-        {
+        {/*
             _serialPort.Open();
 			
 			if (_serialPort.IsOpen)
@@ -180,7 +180,7 @@ namespace Uniduino
 	            Thread.Sleep(delay);
 				
 			
-			}
+			}*/
         }
 
         /// <summary>

@@ -136,7 +136,7 @@ public class ArduinoUnityInterface : PhonoBlocksController
 		{
 				communicationWithArduinoAchieved = true;
 				timeOfLastCheck = Time.time;
-				if (userInputRouter != null && SessionManager.DelegateControlToStudentActivityController)
+				if (userInputRouter != null && SessionsDirector.DelegateControlToStudentActivityController)
 						userInputRouter.TellUserToPlaceInitialLetters ();
 				for (int i=0; i<ledOutputPins.Length; i++)
 						ShutOffAt (i);

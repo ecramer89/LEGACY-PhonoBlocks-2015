@@ -143,7 +143,7 @@ public class LockedPositionHandler : PhonoBlocksController
 						userInputRouter.ShutDownUI (true);
 
 	
-				StudentDataManager.instance.LogEvent ("unproductive_error", change + "", position + "");
+				StudentsDataHandler.instance.LogEvent ("unproductive_error", change + "", position + "");
 
 				return false;
 		}

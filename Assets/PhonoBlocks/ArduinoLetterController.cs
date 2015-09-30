@@ -93,7 +93,7 @@ public class ArduinoLetterController : PhonoBlocksController
 		//invoked by the arduino and the keyboard on screen
 		public void UserChangedALetter (char newLetter, int atPosition)
 		{
-				StudentDataManager.instance.LogEvent ("change_letter", newLetter + "", atPosition + "");
+				StudentsDataHandler.instance.LogEvent ("change_letter", newLetter + "", atPosition + "");
 
       
 
@@ -192,7 +192,7 @@ public class ArduinoLetterController : PhonoBlocksController
 
 				string result = st.ToString ();
 				if (logSelectionDeselection) {
-						StudentDataManager.instance.LogEvent ("selection_deselection", result, selectedDeselected);
+						StudentsDataHandler.instance.LogEvent ("selection_deselection", result, selectedDeselected);
 						logSelectionDeselection = false;
 
 				}
@@ -300,7 +300,7 @@ public class ArduinoLetterController : PhonoBlocksController
 		{      
 				SetupVariablesToLogSelectionDeselectionUponChangingColours (selectedLetter);
 				UpdateColorsAndSoundsOfLetters (letterGrid, true);
-				if (SessionManager.DelegateControlToStudentActivityController) {
+				if (SessionsDirector.DelegateControlToStudentActivityController) {
 						userInputRouter.studentActivityController.ObjectDeselected (selectedLetter, true);
 				}
 		

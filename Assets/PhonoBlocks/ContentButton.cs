@@ -9,13 +9,13 @@ public class ContentButton : MonoBehaviour
 {
 
 		public GameObject sessionManagerOB;
-		SessionManager sessionManager;
+	SessionsDirector sessionManager;
 		//public ProblemManager.Name problemType;
-		ProblemManager problemTypeData;
+		ProblemsRepository problemTypeData;
 
 		void Start ()
 		{
-				sessionManager = sessionManagerOB.GetComponent<SessionManager> ();
+				sessionManager = sessionManagerOB.GetComponent<SessionsDirector> ();
 
 		}
 

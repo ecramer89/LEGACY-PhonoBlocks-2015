@@ -221,7 +221,7 @@ public class ArduinoAffixLetterController : PhonoBlocksController
 				else
 						AudioSourceController.PushClip (syll);
 		
-		StudentDataManager.instance.LogEvent ("played_letter_sounds", subword, "NA");
+		StudentsDataHandler.instance.LogEvent ("played_letter_sounds", subword, "NA");
 		
 		}
 

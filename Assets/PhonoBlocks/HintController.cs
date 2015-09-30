@@ -59,7 +59,7 @@ public class HintController : PhonoBlocksController
 				}
 			
 
-				StudentDataManager.instance.LogEvent ("requested_hint", currHintIdx + "", "NA");
+				StudentsDataHandler.instance.LogEvent ("requested_hint", currHintIdx + "", "NA");
 			
 		}
 

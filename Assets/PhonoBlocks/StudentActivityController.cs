@@ -105,9 +105,9 @@ public class StudentActivityController : PhonoBlocksController
 				ClearSavedUserChanges ();
 				hintController.Reset ();
 			
-				currProblem = ProblemManager.instance.GetNextProblem ();
+				currProblem = ProblemsRepository.instance.GetNextProblem ();
 	
-				StudentDataManager.instance.RecordActivityTargetWord (currProblem.TargetWord (false));
+				StudentsDataHandler.instance.RecordActivityTargetWord (currProblem.TargetWord (false));
 
 
 				lockedPositionHandler.ResetForNewProblem ();
@@ -127,7 +127,7 @@ public class StudentActivityController : PhonoBlocksController
 				userInputRouter.ShutDownUI (true);
 				hintController.DeActivateHintButton ();
 				//play the instructions
-				if (!SessionManager.IsAssessmentMode && ArduinoUnityInterface.communicationWithArduinoAchieved)
+				if (!SessionsDirector.IsAssessmentMode && ArduinoUnityInterface.communicationWithArduinoAchieved)
 						PlayInstructions (); //dont bother telling to place initial letters during assessment mode
 
 	
@@ -180,9 +180,9 @@ public class StudentActivityController : PhonoBlocksController
 
 		void HandleEndOfActivity ()
 		{
-				if (ProblemManager.instance.AllProblemsDone ()) {
-						StudentDataManager.instance.UpdateUserSessionAndWriteAllUpdatedDataToPlayerPrefs ();
-						//StudentDataManager.WriteDataOfCurrentStudentToCSV ();
+				if (ProblemsRepository.instance.AllProblemsDone ()) {
+						StudentsDataHandler.instance.UpdateUserSessionAndWriteAllUpdatedDataToPlayerPrefs ();
+						//StudentsDataHandler.WriteDataOfCurrentStudentToCSV ();
 						AudioSourceController.PushClip (sessionIsFinished);
 						state = State.BREAK_BEFORE_END;
 				} else
@@ -372,7 +372,7 @@ public class StudentActivityController : PhonoBlocksController
 
 		public virtual void HandleSubmittedAnswer (string answer)
 		{
-				if (SessionManager.IsAssessmentMode) {
+				if (SessionsDirector.IsAssessmentMode) {
 						CurrentProblemCompleted (SubmissionIsCorrect (answer), answer);
 				} else {
 						if (SubmissionIsCorrect (answer)) {
@@ -416,15 +416,15 @@ public class StudentActivityController : PhonoBlocksController
 				state = State.REMOVE_ALL_LETTERS;
 
 				currProblem.SetTargetWordToEmpty ();
-				if (!SessionManager.IsAssessmentMode) //dont add the word to the history if this is test (assessment) mode.
+				if (!SessionsDirector.IsAssessmentMode) //dont add the word to the history if this is test (assessment) mode.
 						userInputRouter.AddCurrentWordToHistory (false);
 
 				userInputRouter.DeselectArduinoControlledLetters (); 
 				userInputRouter.ShutDownUI (false);
 
-				StudentDataManager.instance.RecordActivitySolved (userSubmittedCorrectAnswer, answer);
+				StudentsDataHandler.instance.RecordActivitySolved (userSubmittedCorrectAnswer, answer);
 			
-				StudentDataManager.instance.SaveActivityDataAndClearForNext (currProblem.TargetWord (false), currProblem.InitialWord);
+				StudentsDataHandler.instance.SaveActivityDataAndClearForNext (currProblem.TargetWord (false), currProblem.InitialWord);
       
 		}
 
@@ -459,7 +459,7 @@ public class StudentActivityController : PhonoBlocksController
 			
 				bool result = answer.Trim ().Equals (target);
 
-				StudentDataManager.instance.LogEvent ("submitted_answer", answer, target);
+				StudentsDataHandler.instance.LogEvent ("submitted_answer", answer, target);
 				return result;
 
 		}
