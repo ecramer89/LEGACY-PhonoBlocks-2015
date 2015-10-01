@@ -15,7 +15,7 @@ public class InteractiveLetter : PhonoBlocksController
 		BoxCollider trigger;
 		LetterSoundComponent lc;
 		int flashCounter = 0;
-		int timesToFlash = 3;
+		int timesToFlash = 8; 
 		float secondsDelayBetweenFlashes = .3f;
 		int idxAsArduinoControlledLetter;
 
@@ -30,11 +30,7 @@ public class InteractiveLetter : PhonoBlocksController
 				}
 		}
 
-		public bool IsAnArduinoControlledLetter ()
-		{
-        return true;
-
-		}
+		
 
 		public LetterSoundComponent LetterSoundComponentIsPartOf {
 				get {
@@ -110,11 +106,11 @@ public class InteractiveLetter : PhonoBlocksController
 		public IEnumerator Flash ()
 		{
 
-
+		       int mod_To_end_on=(timesToFlash%2==0?1:0);
 	
 				while (flashCounter<timesToFlash) {
 		
-						if (flashCounter % 2 == 0) {
+			if (flashCounter % 2 == mod_To_end_on) {
 								ChangeColourOfUITexture (defaultColour);
 							
 

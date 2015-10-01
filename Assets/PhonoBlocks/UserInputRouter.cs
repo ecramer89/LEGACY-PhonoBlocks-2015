@@ -16,7 +16,16 @@ public class UserInputRouter : MonoBehaviour
  
 		public static UserInputRouter global;
 		public static int totalLengthOfUserInputWord;
-		public static int numArduinoControlledLetters = 7; 
+		public static int numOnscreenLetterSpaces = 6; 
+
+	//the first slot in the physical prototype does not function.
+	//it was easier to just let the system create that slot but fill it with a blank than to change everything else in the code
+	//the problem class needs to know how many actual useable letter spaces there are for this to function... 
+	//so we created this other method to distinguish between number of on screen spaxces and number of those spaces that are useable
+	    /*public static int NumOfActiveAndUseableArduinoControlledLetters(){
+		return numOnscreenLetterSpaces - 1;
+
+	}*/
 		public GameObject studentActivityControllerGO;
 		public GameObject arduinoAndAffixLetterControllerGO;
 		public GameObject onscreenKeyboardControllerGO;
@@ -89,7 +98,7 @@ public class UserInputRouter : MonoBehaviour
 
 	
 
-				totalLengthOfUserInputWord = numArduinoControlledLetters;
+				totalLengthOfUserInputWord = numOnscreenLetterSpaces;
 				arduinoAndAffixLetterController = arduinoAndAffixLetterControllerGO.GetComponent<ArduinoAffixLetterController> ();
 				arduinoAndAffixLetterController.Initialize (arduinoLetterInterface);
 				
@@ -237,7 +246,7 @@ public class UserInputRouter : MonoBehaviour
 
 		}
 
-		public void ShutDownUI (bool removeColoursOfLetters)
+		public void BlockUserInputAndTurnOffLetters (bool removeColoursOfLetters)
 		{
 				//tell each letter to "shut down" (appear white) and change the colors of all the arduino letters
 				//accepting input general is false
@@ -291,20 +300,18 @@ public class UserInputRouter : MonoBehaviour
 		
 		}
 
-
+	   public void RequestTurnOffImage(){
+		checkedWordImageController.EndDisplay ();
+		}
 
 		//
-		public void RequestDisplayImage (Texture2D newimg, bool disableTextureOnPress)
+		public void RequestDisplayImage (Texture2D newimg, bool disableTextureOnPress, bool indefinite=false)
 		{
-				if (acceptUIInput)
-						checkedWordImageController.ShowImage (newimg, disableTextureOnPress);
+				
+						checkedWordImageController.ShowImage (newimg, disableTextureOnPress,indefinite);
 		}
 
-		public void RequestDisplayImage (Texture2D newimg, bool disableTextureOnPress, bool force)
-		{
-				checkedWordImageController.ShowImage (newimg, disableTextureOnPress);
-		}
-
+		
 		//check word
 		public void RequestCheckWord ()
 		{
@@ -337,8 +344,7 @@ public class UserInputRouter : MonoBehaviour
 		//new arduino letter
 		public void RequestAddOrRemoveArduinoLetter (char newLetter, int atPosition, ArduinoLetterController alc)
 		{
-				if (checkedWordImageController.WordImageIsOnDisplay ())
-						checkedWordImageController.EndDisplay ();
+				
 
 				bool shouldUpdateArduinoLetterControlledLetters = true;
 		if (sessionManager != null && SessionsDirector.DelegateControlToStudentActivityController)

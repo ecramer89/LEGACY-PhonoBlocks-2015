@@ -85,8 +85,8 @@ public class StudentActivityController : PhonoBlocksController
 
 		public void Initialize (GameObject hintButton)
 		{
-				usersMostRecentChanges = new char[UserInputRouter.numArduinoControlledLetters];
-				lettersThatUserNeedsToRemoveBeforeSkipping = new char[UserInputRouter.numArduinoControlledLetters];
+				usersMostRecentChanges = new char[UserInputRouter.numOnscreenLetterSpaces];
+				lettersThatUserNeedsToRemoveBeforeSkipping = new char[UserInputRouter.numOnscreenLetterSpaces];
 			
 				lockedPositionHandler = gameObject.GetComponent<LockedPositionHandler> ();
 				lockedPositionHandler.Initialize ();
@@ -119,12 +119,10 @@ public class StudentActivityController : PhonoBlocksController
 				userInputRouter.RequestOverwriteArduinoControllerLettersWith (currProblem.InitialWord, gameObject);
 			
 
+	
+				userInputRouter.BlockUserInputAndTurnOffLetters (true);
+		        userInputRouter.RequestTurnOffImage ();
 
-
-
-
-
-				userInputRouter.ShutDownUI (true);
 				hintController.DeActivateHintButton ();
 				//play the instructions
 				if (!SessionsDirector.IsAssessmentMode && ArduinoUnityInterface.communicationWithArduinoAchieved)
@@ -253,32 +251,33 @@ public class StudentActivityController : PhonoBlocksController
 
 		}
 
+
 		public bool HandleNewArduinoLetter (char letter, int atPosition)
 		{
-				if (atPosition > -1 && atPosition < lettersThatUserNeedsToRemoveBeforeSkipping.Length)
-						lettersThatUserNeedsToRemoveBeforeSkipping [atPosition] = letter;
+				/*if (atPosition > 0 && atPosition < lettersThatUserNeedsToRemoveBeforeSkipping.Length)
+						lettersThatUserNeedsToRemoveBeforeSkipping [atPosition] = letter;*/
 
 
 
 				bool allowArduinoControlledLettersToUpdate = false; //note: this includes updating the string representation of the arduino
 				//controlled letters. if this method returns false then the arduino letter controller's update method never gets called.
 				bool letterRemoved = letter == ' ';
-				bool positionWasLocked = lockedPositionHandler.IsLocked (atPosition);
+		bool positionWasLocked = lockedPositionHandler.IsLocked (atPosition); //we need to translate the index of the arduino controlled letter minus one because the locked position handler believes that the first index is 0
 
 				switch (state) {
 				case State.PLACE_INITIAL_LETTERS:
 
 						if (letterRemoved) {
 								if (positionWasLocked) {
-										lockedPositionHandler.HandleChangeToLockedPosition (atPosition, letter, currProblem.TargetWord (false), usersMostRecentChanges);
+					lockedPositionHandler.HandleChangeToLockedPosition (atPosition, letter, currProblem.TargetWord (false), usersMostRecentChanges);
 								}
-								SaveUsersChange (atPosition, letter); 
+				SaveUsersChange (atPosition, letter); 
 								CheckAndUpdateState ();
 						} else { //letter was added
 								if (positionWasLocked) {
-										if (UsersPreviousChangesMatchCurrentTargetNonBlankLetters (atPosition, currProblem.InitialWord)) {
-												lockedPositionHandler.HandleChangeToLockedPosition (atPosition, letter, currProblem.TargetWord (false), usersMostRecentChanges);
-												SaveUsersChange (atPosition, letter); 
+					if (UsersPreviousChangesMatchCurrentTargetNonBlankLetters (atPosition, currProblem.InitialWord)) {
+						lockedPositionHandler.HandleChangeToLockedPosition (atPosition, letter, currProblem.TargetWord (false), usersMostRecentChanges);
+						SaveUsersChange (atPosition, letter); 
 												CheckAndUpdateState ();
 										} else {
 												//used to tell user to clear the locked slot (user has placed a letter in a locked slot). now we don;t.
@@ -292,19 +291,19 @@ public class StudentActivityController : PhonoBlocksController
 										if (userInputRouter.IsArduinoMode()) { //unless we're using the physical letters, simply dont allow the new letters to go thru
 												
 				
-												SaveUsersChange (atPosition, letter); 
+						SaveUsersChange (atPosition, letter); 
 										}
 								}
 						}
 						break;
 
 				case State.MAIN_ACTIVITY:
-						bool outOfRange = PositionIsOutsideBoundsOfTargetWord (atPosition);
+			bool outOfRange = PositionIsOutsideBoundsOfTargetWord (atPosition);
 
 						if (positionWasLocked && !outOfRange) {
 								//does this include positio out of order?
-								lockedPositionHandler.HandleChangeToLockedPosition (atPosition, letter, currProblem.TargetWord (false), usersMostRecentChanges);
-								SaveUsersChange (atPosition, letter); //save the change becaue user needs to remedy the error;
+				lockedPositionHandler.HandleChangeToLockedPosition (atPosition, letter, currProblem.TargetWord (false), usersMostRecentChanges);
+				SaveUsersChange (atPosition, letter); //save the change becaue user needs to remedy the error;
 								//possible that user just rememdied an error by removing a letter they should not have placed.
 								CheckAndUpdateState ();
 
@@ -316,12 +315,12 @@ public class StudentActivityController : PhonoBlocksController
 										//and we always remember that they occurred.
 										//it's also possible that a removal puts the on screen letters into a "correct state"
 										//so we remember that as well.
-										SaveUsersChange (atPosition, letter); 
+					SaveUsersChange (atPosition, letter); 
 										CheckAndUpdateState ();
 										allowArduinoControlledLettersToUpdate = true;
 								} else {
 										//if (NoEarlierLetterSpacesAreBlank (atPosition)) {
-										SaveUsersChange (atPosition, letter); 
+					SaveUsersChange (atPosition, letter); 
 										CheckAndUpdateState ();
 										allowArduinoControlledLettersToUpdate = true;
 										
@@ -351,9 +350,9 @@ public class StudentActivityController : PhonoBlocksController
 
 		}
 
-		bool PositionIsOutsideBoundsOfTargetWord (int atPosition)
+		bool PositionIsOutsideBoundsOfTargetWord (int wordRelativeIndex)
 		{
-				return atPosition >= currProblem.TargetWord (true).Length;
+				return wordRelativeIndex >= currProblem.TargetWord (true).Length; 
 		}
 
 		bool UserHasNoLettersToRemove ()
@@ -376,6 +375,8 @@ public class StudentActivityController : PhonoBlocksController
 						CurrentProblemCompleted (SubmissionIsCorrect (answer), answer);
 				} else {
 						if (SubmissionIsCorrect (answer)) {
+				//TO DO!!! then if this was the first time that student submitted an answer (get the data from the current student object)
+				//then play the good hint else play the less good hint
 								AudioSourceController.PushClip (correctFeedback);
 								currProblem.PlayAnswer ();
 				
@@ -420,11 +421,14 @@ public class StudentActivityController : PhonoBlocksController
 						userInputRouter.AddCurrentWordToHistory (false);
 
 				userInputRouter.DeselectArduinoControlledLetters (); 
-				userInputRouter.ShutDownUI (false);
-
+				userInputRouter.BlockUserInputAndTurnOffLetters (false);
+		        
+		        userInputRouter.RequestDisplayImage (WordImages.instance.GetWordImage(currProblem.TargetWord(true)), false, true);
 				StudentsDataHandler.instance.RecordActivitySolved (userSubmittedCorrectAnswer, answer);
 			
 				StudentsDataHandler.instance.SaveActivityDataAndClearForNext (currProblem.TargetWord (false), currProblem.InitialWord);
+
+
       
 		}
 
@@ -519,7 +523,7 @@ public class StudentActivityController : PhonoBlocksController
 						Int32.TryParse (selectedLetter.name, out idx);
 						ArduinoLetterController ard = GameObject.Find ("ArduinoLetterController").GetComponent<ArduinoLetterController> ();
 						//idx = ard.TranslatePositionOfLetterInUILetterBarToRaw (idx);
-						if (idx > -1 && idx < UserInputRouter.numArduinoControlledLetters)
+						if (idx > -1 && idx < UserInputRouter.numOnscreenLetterSpaces)
 								HandleNewArduinoLetter (' ', idx);
 			
 				} 

@@ -21,7 +21,7 @@ public class WordHistoryController : PhonoBlocksController
 
 		public GameObject wordHistoryGrid;
 		LetterGridController lettersOfWordInHistory;
-		WordImageAndAudioMapAccessor wordDataAccessor; //reference to the data table that has the dictionary linking string reresentations of words to word objects.
+		//WordImageAndAudioMapAccessor wordDataAccessor; //reference to the data table that has the dictionary linking string reresentations of words to word objects.
 		
 
 		public List<Word> words; //words in the word history.
@@ -30,7 +30,7 @@ public class WordHistoryController : PhonoBlocksController
 				get {
 						if (psuedoWord == null) {
 								psuedoWord = new Word ("whoops");
-								psuedoWord.Image = wordDataAccessor.GetPsuedowordData ().ParseImage ();
+				psuedoWord.Image = WordImages.instance.default_image;
 						}
 						return psuedoWord;
 				}
@@ -44,7 +44,7 @@ public class WordHistoryController : PhonoBlocksController
 				this.wordLength = wordLength;
 				lettersOfWordInHistory = wordHistoryGrid.gameObject.GetComponent<LetterGridController> ();
 			
-				wordDataAccessor = gameObject.GetComponent<WordImageAndAudioMapAccessor> ();
+				//wordDataAccessor = gameObject.GetComponent<WordImageAndAudioMapAccessor> ();
 				wordHistoryGrid.GetComponent<UIGrid> ().maxPerLine = wordLength;
 				letterImageTable = GameObject.Find ("DataTables").GetComponent<LetterImageTable> ();
 	
@@ -98,8 +98,8 @@ public class WordHistoryController : PhonoBlocksController
 		Word CreateNewWordAndAddToList (string newWordAsString)
 		{
 				Word newWord = new Word (newWordAsString);
-				WordImageAndAudioMapAccessor.WordDataParser parser = wordDataAccessor.GetWordData (newWordAsString);
-				newWord.Image = parser.ParseImage ();
+				//WordImageAndAudioMapAccessor.WordDataParser parser = wordDataAccessor.GetWordData (newWordAsString);
+				//newWord.Image = parser.ParseImage ();
 				newWord.Sound = AudioSourceController.GetWordFromResources (newWordAsString);
 				words.Add (newWord);
 				return newWord;

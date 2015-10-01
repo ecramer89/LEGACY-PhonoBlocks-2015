@@ -1,28 +1,52 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.Reflection;
 using System.Collections.Generic;
+
 
 public class WordImages : MonoBehaviour {
 
-	public Texture2D cat;
-	public Texture2D picard;
-	public Texture2D bird;
-	public Texture2D hat;
+	public Texture2D bet;
 
-	public Texture2D stable;
-	public Texture2D fable;
-	public Texture2D fade;
-	public Texture2D bide;
+
+	public Texture2D default_image; //in case no image is found; return a default image instead of null.
 
 
 
-	public Texture2D went;
-	public Texture2D bubble;
+	public static WordImages instance;
+	Dictionary<string, Texture2D> cachedWords;
 
-	public Texture2D tint;
+	void Awake(){
+		instance = gameObject.GetComponent<WordImages> ();
 
 
-	public UnityEngine.Object[] psuedoword;
+
+		cachedWords = new Dictionary<string,Texture2D> ();
+			//initialize dictionary.
+			foreach (FieldInfo prop in typeof(WordImages).GetFields ()) {
+			cachedWords.Add (prop.Name, (UnityEngine.Texture2D)prop.GetValue (instance));
+			}
+
+		}
+
+
+	
+	public Texture2D GetWordImage (string word)
+	{
+	
+		word = word.Trim ().ToLower ();
+		
+		UnityEngine.Texture2D wordImage;
+		bool inCache = cachedWords.TryGetValue (word, out wordImage);
+		
+		if (inCache)
+			return wordImage;
+		return default_image;
+	}
+
+
+
 
 
 

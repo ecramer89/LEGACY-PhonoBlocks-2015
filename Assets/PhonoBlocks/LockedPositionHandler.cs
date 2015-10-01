@@ -59,7 +59,7 @@ public class LockedPositionHandler : PhonoBlocksController
 				//a position is locked iff the char at that position is the same between initial and target letters
 				for (int i=0; i<initialLetters.Length; i++) 
 						if (initialLetters [i] == targetLetters [i])
-								lockedPositions.Add (i);
+								lockedPositions.Add (i); //!! possibly should be i+1 because the user does not add items to the position 0
 
 		}
 
@@ -140,7 +140,7 @@ public class LockedPositionHandler : PhonoBlocksController
 						userInputRouter.LockNthArduinoControlledLetter (position);
 				}
 				if (numLockedPositionsWithIncorrectLetter == 1)
-						userInputRouter.ShutDownUI (true);
+						userInputRouter.BlockUserInputAndTurnOffLetters (true);
 
 	
 				StudentsDataHandler.instance.LogEvent ("unproductive_error", change + "", position + "");

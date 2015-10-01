@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Collections.Generic;
 
 public class WordImageAndAudioMapAccessor : MonoBehaviour
-{
+{/*
 		public static WordImageAndAudioMapAccessor instance;
 		WordImages wordDataCache;
 		Dictionary<string, UnityEngine.Object[]> cachedWords;
@@ -26,7 +26,7 @@ public class WordImageAndAudioMapAccessor : MonoBehaviour
 				cachedWords = new Dictionary<string,UnityEngine.Object[]> ();
 				//initialize dictionary.
 				foreach (FieldInfo prop in typeof(WordImages).GetFields ()) {
-						//cachedWords.Add (prop.Name, (UnityEngine.Object[])prop.GetValue (wordDataCache));
+					cachedWords.Add (prop.Name, (UnityEngine.Object[])prop.GetValue (wordDataCache));
 			
 			
 				}
@@ -44,7 +44,7 @@ public class WordImageAndAudioMapAccessor : MonoBehaviour
 				cachedWords = new Dictionary<string,UnityEngine.Object[]> ();
 				//initialize dictionary.
 				foreach (FieldInfo prop in typeof(WordImages).GetFields ()) {
-						//cachedWords.Add (prop.Name, (UnityEngine.Object[])prop.GetValue (wordDataCache));
+						cachedWords.Add (prop.Name, (UnityEngine.Object[])prop.GetValue (wordDataCache));
 		
 			
 				}
@@ -131,5 +131,5 @@ public class WordImageAndAudioMapAccessor : MonoBehaviour
 				//another one for the audio recording...
 		
 		
-		}
+		}*/
 }

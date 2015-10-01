@@ -218,10 +218,10 @@ public class ArduinoUnityInterface : PhonoBlocksController
 
 		}
 
-		public void ColorNthTangibleLetter (int rawPosition, Color color)
+		public void ColorNthTangibleLetter (int position, Color color)
 		{
       
-				ApplyNewColorTo (ConvertPositionBetweenArduinoAndScreen (rawPosition), color);
+				ApplyNewColorTo (position, color);
 			
 
 		}
@@ -261,16 +261,16 @@ public class ArduinoUnityInterface : PhonoBlocksController
 		{
 
         
-        arduinoLetterControllerOb.GetComponent<ArduinoLetterController>().UserChangedALetter(change.letter, (change.position));
+		arduinoLetterControllerOb.GetComponent<ArduinoLetterController>().UserChangedALetter(change.letter, (AdjustArduinoPositionForScreen(change.position)));
         
     }
 
-		int ConvertPositionBetweenArduinoAndScreen (int rawpos)
-		{
-     
-        return rawpos;
+	int AdjustArduinoPositionForScreen(int arduinoPlatformPosition){
+		//starts counting at 1; screen starts counting at 0
+		return arduinoPlatformPosition - 1;
 
-		}
+	}
+
 
 
     void SearchForAndSaveChangedLetterAndPosition()

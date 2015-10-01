@@ -24,7 +24,7 @@ public class Problem : MonoBehaviour
 		public static string EmptyWord ()
 		{
 				if (emptyWord.Length == 0)
-						CacheEmptyWord (UserInputRouter.numArduinoControlledLetters);
+						CacheEmptyWord (UserInputRouter.numOnscreenLetterSpaces);
 				return emptyWord;
 
 		}
@@ -82,7 +82,7 @@ public class Problem : MonoBehaviour
 		CacheFixedInstructions (initialWord, targetWord);
 		CacheNumberOfNonBlankInitialLetters (initialWord);
 		cachedTrimmedTargetWord = targetWord;
-		this.targetWord = AppendBlanksToEnd (targetWord, UserInputRouter.numArduinoControlledLetters);
+		this.targetWord = AppendBlanksToEnd (targetWord, UserInputRouter.numOnscreenLetterSpaces);
 		this.initialWord = AppendBlanksToFrontOrEnd (initialWord, this.targetWord);
 		CacheMissingLettersAsString ();
 		this.soundToEmphasize = soundToEmphasize;
@@ -90,7 +90,7 @@ public class Problem : MonoBehaviour
 		cachedTargetWord = this.targetWord;
 
 
-		Debug.Log ("initial word Length: " + initialWord.Length);
+
 		
 		
 	}
@@ -118,7 +118,7 @@ public class Problem : MonoBehaviour
 		public void SetTargetWordToEmpty ()
 		{
 				if (emptyWord.Length == 0)
-						CacheEmptyWord (UserInputRouter.numArduinoControlledLetters);
+						CacheEmptyWord (UserInputRouter.numOnscreenLetterSpaces);
 				
 				targetWord = emptyWord;
 
@@ -168,13 +168,17 @@ public class Problem : MonoBehaviour
 
 		}
 
+	   /* return a new string that is identical to targetWord except that apppended to the end are numArduinoControlledLetters-targetWord.length blanks*/
 		protected string AppendBlanksToEnd (string targetWord, int numArduinoControlledLetters)
 		{
 				StringBuilder s = new StringBuilder (targetWord);
-				for (int i=s.Length; i<numArduinoControlledLetters; i++)
+
+				for (int i=targetWord.Length; i<numArduinoControlledLetters; i++)
 						s.Append (' ');
 
-				return s.ToString ();
+		string afterAppendBlank=s.ToString ();
+	
+		return afterAppendBlank;
 
 
 		}
@@ -249,6 +253,7 @@ public class Problem : MonoBehaviour
 		{
 			
 				StringBuilder s = new StringBuilder (initialWord);
+
 				int numBlanksToAppendToFront = FindDifferenceInIndexesOfFirstMatchingLetter (initialWord, targetWord);
 				for (int i=0; i<numBlanksToAppendToFront; i++) {
 						s.Insert (0, ' ');
@@ -258,7 +263,9 @@ public class Problem : MonoBehaviour
 				for (int i=0; i<numBlanksToAppendToEnd; i++)
 						s.Append (' ');
 
-				return s.ToString ();
+		string afterAppendBlank=s.ToString ();
+	
+		return afterAppendBlank;
 
 
 		}

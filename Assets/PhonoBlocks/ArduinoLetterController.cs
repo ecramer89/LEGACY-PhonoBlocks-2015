@@ -109,10 +109,10 @@ public class ArduinoLetterController : PhonoBlocksController
 		public void SaveNewLetterInStringRepresentation (char newLetter, int position)
 		{
 				//UpdateStringReperesentationOfUserLetters (TranslatePositionOfLetterInUILetterBarToRaw (position), newLetter);
-        UpdateStringReperesentationOfUserLetters(position, newLetter);
+				UpdateStringReperesentationOfUserLetters (position, newLetter);
 
 
-    }
+		}
 
 		bool IsUpper (char letter)
 		{
@@ -208,8 +208,13 @@ public class ArduinoLetterController : PhonoBlocksController
 				for (; indexOfLetterBarCell<=endingIndexOfUserLetters; indexOfLetterBarCell++) {
 						GameObject letterCell = letterGrid.GetLetterCell (indexOfLetterBarCell);
      
-						letterCell.GetComponent<InteractiveLetter> ().IdxAsArduinoControlledLetter = indexOfLetterBarCell;
+						letterCell.GetComponent<InteractiveLetter> ().IdxAsArduinoControlledLetter = ConvertScreenToArduinoIndex (indexOfLetterBarCell);//plus 1 because the indexes are shifted.
 				}
+		}
+
+		int ConvertScreenToArduinoIndex (int screenIndex)
+		{ //arduino starts counting at 1
+				return screenIndex + 1;
 		}
 
 		void AssignNewColoursAndSoundsToLetters (UserWord letterSoundComponents, LetterGridController letterGridController, bool flash)
@@ -218,7 +223,7 @@ public class ArduinoLetterController : PhonoBlocksController
 				int indexOfLetterBarCell = startingIndexOfUserLetters;
 
 				foreach (LetterSoundComponent p in letterSoundComponents) {
-            //ending index == total number of letters minus one.
+						//ending index == total number of letters minus one.
 						if (indexOfLetterBarCell <= endingIndexOfUserLetters) { //no longer required because I fixed the bug in the LCFactoryManager that caused the error, but I'm leaving this here for redundant error protection...
 
 

@@ -42,24 +42,24 @@ public class ArduinoAffixLetterController : PhonoBlocksController
 
 		public void Initialize (ArduinoUnityInterface tangibleLetters)
 		{
-				int totalLengthOfWord = UserInputRouter.numArduinoControlledLetters;
+				int totalLengthOfWord = UserInputRouter.numOnscreenLetterSpaces;
 				letterGridController = letterGridControllerGO.GetComponent<LetterGridController> ();
        
 
      
-        letterGridController.InitializeBlankLetterSpaces (UserInputRouter.numArduinoControlledLetters, arduinoLetterControllerGO);
+        letterGridController.InitializeBlankLetterSpaces (UserInputRouter.numOnscreenLetterSpaces, arduinoLetterControllerGO);
         //we aren't using the letter cell at position 0 in Min's study because that slot is not working.
         //easiest way to deal with this right now is to make it so the arduino only recognizes inpiuts that come from positions 1 through 6 (inclusive)
         //and to here, retrieve the 0th cell, and change the picture from the blank with the line to the straight blank.
-        letterGridController.UpdateLetterImage(0, noLetterHere);
+        //letterGridController.UpdateLetterImage(0, noLetterHere);
 		
 		arduinoLetterController = arduinoLetterControllerGO.GetComponent<ArduinoLetterController> ();
 
-				arduinoLetterController.StartingIndex = 1;
+				arduinoLetterController.StartingIndex = 0; //I will try and switch it back to 0... then just translate inputs between the platform and screen. this is insanity.
 
-        arduinoLetterController.EndingIndex = UserInputRouter.numArduinoControlledLetters - 1;
-        //arduinoLetterController.EndingIndex = 6; //because of changed alignment of the platform
-                arduinoLetterController.MaxArduinoLetters = UserInputRouter.numArduinoControlledLetters;
+        arduinoLetterController.EndingIndex = UserInputRouter.numOnscreenLetterSpaces - 1;
+        //arduinoLetterController.EndingIndex = 5; 
+                arduinoLetterController.MaxArduinoLetters = UserInputRouter.numOnscreenLetterSpaces;
 				arduinoLetterController.Initialize (letterGridController);
 
 				this.tangibleLetters = tangibleLetters;
@@ -83,7 +83,7 @@ public class ArduinoAffixLetterController : PhonoBlocksController
 
 
 		public void OverwriteUserLettersWith (string word, GameObject requester)
-		{
+	{       Debug.Log ("word to overwite letters with "+word+"__"+word.Length);
 				
 				arduinoLetterController.OverwriteLettersWith (word, letterGridController, requester);
 
