@@ -323,12 +323,10 @@ public class UserInputRouter : MonoBehaviour
 				}
 		
 		}
-
+	   //what is this method doing?
 		public void LetterClicked (GameObject cell)
 		{
 				arduinoLetterController.LetterClicked (cell);
-
-
 
 		}
 

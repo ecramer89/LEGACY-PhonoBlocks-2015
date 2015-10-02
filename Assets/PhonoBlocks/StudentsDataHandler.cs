@@ -397,7 +397,7 @@ public class StudentsDataHandler : MonoBehaviour
 						// Write the string to a file.append mode is enabled so that the log
 						// lines get appended to  test.txt than wiping content and writing the log
 		
-						string assessType = (SessionsDirector.IsActivityMode ? "activity" : "assessment");
+						string assessType = (SessionsDirector.IsStudentMode ? "activity" : "assessment");
 						if (fileName.Length < 1)
 								SetFileName ();
 						string filePath = System.IO.Path.Combine (LOG_FILE_DIRECTORY, fileName);

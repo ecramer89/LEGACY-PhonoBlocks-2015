@@ -11,40 +11,31 @@ public class SessionsDirector : MonoBehaviour
 		//change this between students
 {
 
-		public static ColourCodingScheme activeColourScheme = new RControlledVowel(); //the active scheme depends on the current session, so we should create a hash map or an array connecting the session number to colour code (if its cyclical we can use modulus)
-		public static ColourCodingScheme cachedUserScheme = new RControlledVowel ();
-    public INTERFACE_TYPE INTERFACE;
-    //public static readonly int TANGIBLE = 1;  //no longer going to be a variable in Min's study but I'll keep the functionality in anyway
-    //public static readonly int SCREEN_KEYBOARD = 0;
+		
+		public static ColourCodingScheme colourCodingScheme = new RControlledVowel ();
+
+		public ColourCodingScheme ActiveColourCodingScheme
+		{ set {
+						colourCodingScheme = value;
+				} get {
+						return colourCodingScheme;
+				} }
+
+		public INTERFACE_TYPE INTERFACE;
  
 
-    public enum INTERFACE_TYPE
-    {
-        TANGIBLE, 
-        SCREEN_KEYBOARD
-    };
+		public enum INTERFACE_TYPE
+		{
+				TANGIBLE, 
+				SCREEN_KEYBOARD
+    }
+		;
 
 		public bool IsScreenMode ()
 		{
 				return INTERFACE == INTERFACE_TYPE.SCREEN_KEYBOARD;
 
 		}
-
-		public static void RemoveColours ()
-		{
-				activeColourScheme = new NoColour ();
-				
-		}
-		/*
-		public static void ApplyColours ()
-		{
-				activeColourScheme = cachedUserScheme;
-			
-		}*/
-
-		public static readonly int STARTING_INDEX_OF_TEST_SESSIONS = 50; //
-
-
 
 		public static int currentUserSession; //will obtain from player prefs
 
@@ -60,19 +51,12 @@ public class SessionsDirector : MonoBehaviour
 
 		public static bool DelegateControlToStudentActivityController {
 				get {
-						return mode == Mode.STUDENT || mode == Mode.TEST;
+						return mode == Mode.STUDENT;
 				}
 
 
 		}
 
-		public static bool IsAssessmentMode {
-				get {
-						return mode == Mode.TEST;
-				}
-
-
-		}
 
 
 		/* also more like a "sandbox" mode; teacher can create whatever words they want */
@@ -84,7 +68,7 @@ public class SessionsDirector : MonoBehaviour
 		
 		}
 
-		public static bool IsActivityMode {
+		public static bool IsStudentMode {
 				get {
 						return mode == Mode.STUDENT;
 				}
@@ -93,29 +77,24 @@ public class SessionsDirector : MonoBehaviour
 		}
 
 		public GameObject studentActivityControllerOB;
-		public GameObject contentSelectionScreen;
-		public GameObject modeSelectionScreen;
+		public GameObject activitySelectionButtons;
+		//public GameObject modeSelectionScreen;
+		public GameObject teacherModeButton;
+		public GameObject studentModeButton;
 		public GameObject studentNameInputField;
 		public GameObject dataTables;
 		InputField studentName;
 		public AudioClip noDataForStudentName;
 		public AudioClip enterAgainToCreateNewFile;
-		bool randomizeProblemTypePresentation;
 		public static DateTime assessmentStartTime;
 
-		public void Randomize ()
-		{
-				randomizeProblemTypePresentation = !randomizeProblemTypePresentation;
-
-
-		}
 
 
 		public enum Mode
 		{
 				TEACHER,
-				STUDENT,
-				TEST
+				STUDENT
+			
 		}
 
 
@@ -123,7 +102,7 @@ public class SessionsDirector : MonoBehaviour
 		void Start ()
 		{   
 				assessmentStartTime = DateTime.Now;
-				contentSelectionScreen.SetActive (false);
+				activitySelectionButtons.SetActive (false);
 				SpeechSoundReference.Initialize ();
 
 
@@ -139,41 +118,25 @@ public class SessionsDirector : MonoBehaviour
 		//!!TO DO: change startTeacherMode so that the acrtive colour scheme depends upon the button that the teacher pressed.
 		void StartTeacherMode ()
 		{
-				mode = Mode.TEACHER;
 
-				Application.LoadLevel ("Activity");
-
-		}
-
-		void StartAssessmentMode ()
-		{
-				string nameEntered = studentName.stringToEdit.Trim ().ToLower ();
-				nameEntered = CreateNewFileIfNeeded (nameEntered);
-			
-				string nameEnteredTest = nameEntered + StudentsDataHandler.instance.ASSESSMENT_EXTENSION;
-				bool wasStoredDataForName = StudentsDataHandler.instance.LoadStudentData (nameEnteredTest);
-				if (wasStoredDataForName) {
-						mode = Mode.TEST;
-						studentActivityControllerOB = (GameObject)GameObject.Instantiate (studentActivityControllerOB);
-	
-						SetParametersForExperimentalSession (studentActivityControllerOB);
-						UnityEngine.Object.DontDestroyOnLoad (studentActivityControllerOB);
-			
-						Application.LoadLevel ("Activity");
+				//if it's the first time we pressed the teacher mode button, then activate the content selection buttons and deactivate the student mode button.
+				if (mode != Mode.TEACHER) {
+						mode = Mode.TEACHER;
+						activitySelectionButtons.SetActive(true);
+						studentModeButton.SetActive(false);
+			           
 				} else {
-		
-						AudioSourceController.PushClip (noDataForStudentName);
-						
-					
-			
+						//if it's the second time we have pressed the teacher mode button, start the activity (...atm, I'm not doing any "checks" on whether the user pressed a buton to change the active scheme, which defaults to open/closed vowel.
+						Application.LoadLevel ("Activity");
 				}
 
 		}
 
-		void StartStudentMode ()
+
+		void StartPracticeMode ()
 		{
 				string nameEntered = studentName.stringToEdit.Trim ().ToLower ();
-		        if (nameEntered.Length > 0) {
+				if (nameEntered.Length > 0) {
 		
 						nameEntered = CreateNewFileIfNeeded (nameEntered);
 
@@ -185,7 +148,7 @@ public class SessionsDirector : MonoBehaviour
 								mode = Mode.STUDENT;
 								studentActivityControllerOB = (GameObject)GameObject.Instantiate (studentActivityControllerOB);
 			
-								SetParametersForExperimentalSession (studentActivityControllerOB);
+								SetParametersForStudentMode (studentActivityControllerOB);
 								UnityEngine.Object.DontDestroyOnLoad (studentActivityControllerOB);
 			
 								Application.LoadLevel ("Activity");
@@ -216,22 +179,15 @@ public class SessionsDirector : MonoBehaviour
 				return nameEntered;
 		}
 
-		void ShowContentSelectionScreen ()
-		{
-				contentSelectionScreen.SetActive (true);
-				modeSelectionScreen.SetActive (false);
-
-		}
-
-		public void SetParametersForExperimentalSession (GameObject studentActivityController)
+		public void SetParametersForStudentMode (GameObject studentActivityController)
 		{
 				currentUserSession = StudentsDataHandler.instance.GetUsersSession ();
-				//Debug.Log ("Current Session Is " + currentUserSession);
+			
 
 
 				ProblemsRepository.instance.Initialize (currentUserSession);
 			
-				cachedUserScheme = ProblemsRepository.instance.ActiveColourScheme;
+				colourCodingScheme = ProblemsRepository.instance.ActiveColourScheme;
 
 				StudentActivityController sc = studentActivityControllerOB.GetComponent<StudentActivityController> ();
 

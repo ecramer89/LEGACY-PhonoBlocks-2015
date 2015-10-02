@@ -232,14 +232,13 @@ public class StudentActivityController : PhonoBlocksController
 				bool positionWasLocked = lockedPositionHandler.IsLocked (atPosition); 
 				//we treat all positions as "locked" when the state is the end of the activity.
 				if (positionWasLocked || state == State.REMOVE_ALL_LETTERS) {
-						Debug.Log ("thinks pos is locked? " + positionWasLocked + " thinks state is " + State.REMOVE_ALL_LETTERS);
 						lockedPositionHandler.HandleChangeToLockedPosition (atPosition, letter, currProblem.TargetWord (false), usersMostRecentChanges, arduinoLetterController);
-				} else if (!lockedPositionHandler.AllLockedPositionsAreInCorrectState ())
+				} else if (!lockedPositionHandler.AllLockedPositionsAreInCorrectState ()) //if the user adds a letter to a portion of the string that isn't locked, (e.g., initial word is __nt and the child places w and e then w and e wont appear coloured... are you sure you want this? I don't know if that makes sense.
 						arduinoLetterController.LockASingleLetter (atPosition);
 				RecordUsersChange (atPosition, letter); 
 		        
 				ChangeProblemStateIfAllLockedPositionsAHaveCorrectCharacter ();
-			    
+			   
 				arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (state != State.PLACE_INITIAL_LETTERS);
 
 		}
@@ -265,9 +264,7 @@ public class StudentActivityController : PhonoBlocksController
 
 		public virtual void HandleSubmittedAnswer (string answer)
 		{
-				if (SessionsDirector.IsAssessmentMode) {
-						CurrentProblemCompleted (SubmissionIsCorrect (answer), answer);
-				} else {
+			
 						if (SubmissionIsCorrect (answer)) {
 								//TO DO!!! then if this was the first time that student submitted an answer (get the data from the current student object)
 								//then play the good hint else play the less good hint
@@ -280,11 +277,6 @@ public class StudentActivityController : PhonoBlocksController
 								HandleIncorrectAnswer ();				
 				
 						}
-
-				}
-				
-			
-
 
 		}
 
@@ -311,11 +303,7 @@ public class StudentActivityController : PhonoBlocksController
 				state = State.REMOVE_ALL_LETTERS;
 
 				currProblem.SetTargetWordToEmpty ();
-				if (!SessionsDirector.IsAssessmentMode) //dont add the word to the history if this is test (assessment) mode.
-						userInputRouter.AddCurrentWordToHistory (false);
 
-				//userInputRouter.DeselectArduinoControlledLetters (); 
-				//userInputRouter.BlockUserInputAndTurnOffLetters (false);
 				arduinoLetterController.LockAllLetters ();
 		        
 				userInputRouter.RequestDisplayImage (WordImages.instance.GetWordImage (currProblem.TargetWord (true)), false, true);

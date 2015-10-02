@@ -22,6 +22,48 @@ public class ProblemsRepository : MonoBehaviour
 
 
 		}
+
+
+		public enum ProblemType
+		{
+				OPEN_CLOSED_VOWEL,
+				MAGIC_E,
+				SYLLABLE_DIVISION,
+				CONSONANT_DIGRAPHS,
+				R_CONTROLLED_VOWEL,
+				VOWEL_DIGRAPHS
+
+		}
+
+		public ColourCodingScheme GetColourCodingSchemeGivenProblemType (ProblemType type)
+		{
+				switch (type) {
+				case ProblemType.OPEN_CLOSED_VOWEL:
+						return new OpenClosedVowel ();
+						break;
+				case ProblemType.MAGIC_E:
+						return new VowelInfluenceERule ();
+						break;
+				case ProblemType.SYLLABLE_DIVISION:
+						return new SyllableDivision ();
+						break;
+				case ProblemType.CONSONANT_DIGRAPHS:
+						return new ConsonantDigraphs ();
+						break;
+				case ProblemType.R_CONTROLLED_VOWEL:
+						return new RControlledVowel ();
+						break;
+				case ProblemType.VOWEL_DIGRAPHS:
+						return new NoColour (); //change after we make the vowel digraphs scheme
+						break;
+				default: 
+						return new NoColour ();
+						break;
+
+				}
+		       
+
+		}
 	
 		static readonly int INITIAL_WORD_IDX = 1;
 		static readonly int TARGET_WORD_IDX = 0;
