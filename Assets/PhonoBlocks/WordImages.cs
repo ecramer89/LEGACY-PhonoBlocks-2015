@@ -20,12 +20,13 @@ public class WordImages : MonoBehaviour {
 	void Awake(){
 		instance = gameObject.GetComponent<WordImages> ();
 
-
-
+		UnityEngine.Texture2D img=default_image;
 		cachedWords = new Dictionary<string,Texture2D> ();
 			//initialize dictionary.
 			foreach (FieldInfo prop in typeof(WordImages).GetFields ()) {
-			cachedWords.Add (prop.Name, (UnityEngine.Texture2D)prop.GetValue (instance));
+			object field_val=prop.GetValue (instance);
+			if(field_val is UnityEngine.Texture2D) img=(UnityEngine.Texture2D)field_val;
+			cachedWords.Add (prop.Name, img);
 			}
 
 		}

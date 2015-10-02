@@ -21,7 +21,9 @@ public class ArduinoLetterController : PhonoBlocksController
 		public static int startingIndexOfUserLetters;
 		public static int endingIndexOfUserLetters;
 		LetterGridController letterGrid;
-	
+		ArduinoUnityInterface tangibleLetters;
+		public GameObject letterGridControllerGO;
+
 		public int StartingIndex {
 				get {
 						return startingIndexOfUserLetters;
@@ -58,60 +60,161 @@ public class ArduinoLetterController : PhonoBlocksController
 
 		}
 
-		public void Initialize (LetterGridController lc)
+		public void Initialize (int startingIndexOfArduinoLetters, int endingIndexOfArduinoLetters, ArduinoUnityInterface tangibleLetters)
 		{
-				
+				StartingIndex = startingIndexOfArduinoLetters;
+				EndingIndex = endingIndexOfArduinoLetters;
+				maxUserLetters = EndingIndex + 1 - StartingIndex;
 				for (int i= 0; i<maxUserLetters; i++) {
 						currUserControlledLettersAsString.Append (" ");
 						EMPTY_USER_WORD = currUserControlledLettersAsString.ToString ();
 			
 				}
-				letterGrid = lc;
+				letterGrid = letterGridControllerGO.GetComponent<LetterGridController> ();
+				letterGrid.InitializeBlankLetterSpaces (maxUserLetters, gameObject);
+			
 
 				AssignInteractiveLettersToTangibleCounterParts ();
+		}
+
+
+
+	
+		//invoked by the arduino and the keyboard on screen
+		public void ReceiveNewUserInputLetter (char newLetter, int atPosition)
+		{
+				StudentsDataHandler.instance.LogEvent ("change_letter", newLetter + "", atPosition + "");
+
+		
+				if (atPosition < maxUserLetters && atPosition >= StartingIndex) {
+						if (IsUpper (newLetter))
+								newLetter = ToLower (newLetter);
+						//...automatically remember the change but don't necessarily update the colours.
+						ChangeTheLetterOfASingleCell (atPosition, newLetter);
+						userInputRouter.HandleNewUserInputLetter (newLetter,
+			                                          atPosition, this);
+				}
+		}
+
+
+
+		//unlocks the letter at position atPosition.
+		//the effect of unlocking a letter is to change its colour from the locked colour to whatever the colour of that letter should be
+		//given then other letters in the word
+		public void UnLockASingleLetter (int atPosition)
+		{
+				GameObject nthArduinoControlledLetter = letterGrid.GetLetterCell (atPosition);
+				nthArduinoControlledLetter.GetComponent<InteractiveLetter> ().UnLock ();
+
+				
+		}
+
+
+		//locks the letter at position atPosition.
+		//the effect of locking a letter is to make that letter appear black
+		//instead of appearing in its usual colour.
+		//letters that are locked will have their default colours updated
+		//but this class will not tell the letters to instantly assume their new colour
+		public void LockASingleLetter (int atPosition)
+		{
+
+				GameObject nthArduinoControlledLetter = letterGrid.GetLetterCell (atPosition);
+				nthArduinoControlledLetter.GetComponent<InteractiveLetter> ().Lock ();
+
+
+		}
+
+		public void LockAllLetters ()
+		{
+				List<InteractiveLetter> letters = letterGrid.GetLetters (false);
+				foreach (InteractiveLetter il in letters) {
+						il.Lock ();
+
+				}
+
+		}
+
+		public void UnLockAllLetters ()
+		{
+				List<InteractiveLetter> letters = letterGrid.GetLetters (false);
+				foreach (InteractiveLetter il in letters) {
+						il.UnLock ();
+			
+				}
+
+		}
+
+		public void ChangeTheLetterOfASingleCell (int atPosition, char newLetter)
+		{
+				SaveNewLetterInStringRepresentation (newLetter, atPosition);
+				letterGrid.UpdateLetter (gameObject, atPosition, newLetter + "");
+
+		}
+
+		public void PlaceWordInLetterGrid (string word)
+		{
+
+				for (int i=0, j=startingIndexOfUserLetters; i<word.Length; i++,j++) {
+						ChangeTheLetterOfASingleCell (j, word.Substring (i, 1) [0]);
+					
+				}
+		
+				 
+		}
+
+		public void ReplaceEachLetterWithBlank ()
+		{
+
+				PlaceWordInLetterGrid (EMPTY_USER_WORD);
+		}
+
+		public UserWord UpdateDefaultColoursAndSoundsOfLetters (bool flash)
+		{
+		
+				UserWord newLetterSoundComponents = GetNewColoursAndSoundsFromDecoder (letterGrid);
+		
+				AssignNewColoursAndSoundsToLetters (newLetterSoundComponents, letterGrid, flash);
+				return newLetterSoundComponents;
+		
+		}
+
+		public List<InteractiveLetter> GetAllUserInputLetters (bool skipBlanks)
+		{
+		
+				return letterGrid.GetLetters (skipBlanks);
+		
+		}
+
+		public string GetUserControlledLettersAsString (bool onlySelected)
+		{
+				if (onlySelected)
+						return AllSelectedLettersAsString ();
+				return CurrentUserControlledLettersAsString;
+		
+		}
+
+		void SaveNewLetterInStringRepresentation (char letter, int position)
+		{
+				
+				if (position < 0)
+						return;
+				if (position >= currUserControlledLettersAsString.Length)
+						currUserControlledLettersAsString.Append (letter);
+				else {
+			
+						currUserControlledLettersAsString.Remove (position, 1);
+						currUserControlledLettersAsString.Insert (position, letter);
+				}
+
+
+
 		}
 
 		public bool IsBlank (int indexInLetterGrid)
 		{
 				indexInLetterGrid -= startingIndexOfUserLetters; //re-scale to the indexes of the string that represents arduino letters only.
-			
+		
 				return currUserControlledLettersAsString.ToString () [indexInLetterGrid] == ' ';
-		}
-
-		public void OverwriteLettersWith (string word, LetterGridController letterGridController, GameObject handler)
-		{
-        
-				for (int i=0, j=startingIndexOfUserLetters; i<word.Length; i++,j++) {
-						letterGridController.UpdateLetter (handler, j, word.Substring (i, 1));
-						UpdateStringReperesentationOfUserLetters (i, word [i]);
-				}
-
-				UpdateColorsAndSoundsOfLetters (letterGridController, false); //do not flash.
-		}
-	
-	
-		//invoked by the arduino and the keyboard on screen
-		public void UserChangedALetter (char newLetter, int atPosition)
-		{
-				StudentsDataHandler.instance.LogEvent ("change_letter", newLetter + "", atPosition + "");
-
-      
-
-				if (atPosition < maxUserLetters && atPosition >= StartingIndex) {
-						if (IsUpper (newLetter))
-								newLetter = ToLower (newLetter);
-						//atPosition = TranslateRawPositionToPositionOfLetterInUILetterBar (atPosition);//re-scale.
-						userInputRouter.RequestAddOrRemoveArduinoLetter (newLetter,
-				atPosition, this);
-				}
-		}
-
-		public void SaveNewLetterInStringRepresentation (char newLetter, int position)
-		{
-				//UpdateStringReperesentationOfUserLetters (TranslatePositionOfLetterInUILetterBarToRaw (position), newLetter);
-				UpdateStringReperesentationOfUserLetters (position, newLetter);
-
-
 		}
 
 		bool IsUpper (char letter)
@@ -130,45 +233,17 @@ public class ArduinoLetterController : PhonoBlocksController
 
 		}
 
-
-		//this won't be needed when we switch to just receiving inputs from the arduino... 
-		//well, except considering the affix thing.
-		void UpdateStringReperesentationOfUserLetters (int position, char letter)
-		{
-				if (position < 0)
-						return;
-				if (position >= currUserControlledLettersAsString.Length)
-						currUserControlledLettersAsString.Append (letter);
-				else {
-
-						currUserControlledLettersAsString.Remove (position, 1);
-						currUserControlledLettersAsString.Insert (position, letter);
-				}
-		
-		}
-
-		public bool NoUserLetters ()
+		public bool NoUserControlledLetters ()
 		{
 
 				return currUserControlledLettersAsString.ToString ().Equals (EMPTY_USER_WORD);
 		}
-
-		public UserWord UpdateColorsAndSoundsOfLetters (LetterGridController letterGridController, bool flash)
-		{
-				
-				UserWord newLetterSoundComponents = GetNewColoursAndSoundsFromDecoder (letterGridController);
-	
-				AssignNewColoursAndSoundsToLetters (newLetterSoundComponents, letterGridController, flash);
-				return newLetterSoundComponents;
-		
-		}
 	
 		UserWord GetNewColoursAndSoundsFromDecoder (LetterGridController letterGridController)
 		{
-				string currUserControlledLetters = AllSelectedLettersAsString (letterGridController);
+			
 
-
-				return LetterSoundComponentFactoryManager.Decode (currUserControlledLetters);
+				return LetterSoundComponentFactoryManager.Decode (GetUserControlledLettersAsString(false));
 		
 		}
 
@@ -176,12 +251,12 @@ public class ArduinoLetterController : PhonoBlocksController
 		string selectedDeselected = "?";
 		//creates a string consisting of all selected letters. 
 		//non selected letters are treated as blanks.
-		public string AllSelectedLettersAsString (LetterGridController letterGridController)
+		public string AllSelectedLettersAsString ()
 		{
 				StringBuilder st = new StringBuilder ();
 				for (int j=startingIndexOfUserLetters; j<=endingIndexOfUserLetters; j++) {
 
-						InteractiveLetter i = letterGridController.GetLetterCell (j).GetComponent<InteractiveLetter> ();
+						InteractiveLetter i = letterGrid.GetLetterCell (j).GetComponent<InteractiveLetter> ();
 						Selectable s = i.gameObject.GetComponent<Selectable> ();
 						if (s.Selected)
 								st.Append (i.Letter ());
@@ -224,6 +299,7 @@ public class ArduinoLetterController : PhonoBlocksController
 
 				foreach (LetterSoundComponent p in letterSoundComponents) {
 						//ending index == total number of letters minus one.
+			            
 						if (indexOfLetterBarCell <= endingIndexOfUserLetters) { //no longer required because I fixed the bug in the LCFactoryManager that caused the error, but I'm leaving this here for redundant error protection...
 
 
@@ -250,7 +326,7 @@ public class ArduinoLetterController : PhonoBlocksController
 		{
 				
 				InteractiveLetter i = letterGridController.UpdateLetter (indexOfLetterBarCell, lc.Color);
-
+	
 				Selectable s = i.gameObject.GetComponent<Selectable> ();
 				if (s.Selected) {
 						bool flashInteractiveLetter = flash && i.HasLetterOrSoundChanged (lc) && lc.Color == i.CurrentColor ();
@@ -288,36 +364,63 @@ public class ArduinoLetterController : PhonoBlocksController
 		public void SelectedObjectActivated (GameObject selectedAndActivatedLetterCell)
 		{
 		       
-				userInputRouter.RequestPlaySoundsOfSelectedArduinoLetters ();
+				PlaySoundsOfSelectedLetters ();
 		      
 			
 		}
 
+		public void PlaySoundsOfSelectedLetters ()
+		{
+				//retrieve sounds from the 
+				StringBuilder selectedLetters = new StringBuilder ();
+				List<InteractiveLetter> selectableLetters = letterGrid.GetLetters (false);
+				foreach (InteractiveLetter l in selectableLetters) {
+						Selectable s = l.gameObject.GetComponent<Selectable> ();
+						//we are going to distinguish between prefixes and affixes
+						if (s.Selected) {
+								//s.Deselect (false);
+				
+								selectedLetters.Append (l.Letter ().Trim ());
+						} else
+								selectedLetters.Append (" ");
+				}
+		
+				string subword = selectedLetters.ToString ().Trim ();
+				AudioClip syll = AudioSourceController.GetSyllableFromResources (subword);
+				AudioSourceController.PushClip (syll);
+		
+				StudentsDataHandler.instance.LogEvent ("played_letter_sounds", subword, "NA");
+		
+		}
+
 		public void ObjectSelected (GameObject selectedLetter)
 		{
-				SetupVariablesToLogSelectionDeselectionUponChangingColours (selectedLetter);
-				UpdateColorsAndSoundsOfLetters (letterGrid, true);
+				//SetupVariablesToLogSelectionDeselectionUponChangingColours (selectedLetter);
+				UpdateDefaultColoursAndSoundsOfLetters (true);
 		      
 		
 		}
 	
 		public void ObjectDeselected (GameObject selectedLetter)
 		{      
-				SetupVariablesToLogSelectionDeselectionUponChangingColours (selectedLetter);
-				UpdateColorsAndSoundsOfLetters (letterGrid, true);
-				if (SessionsDirector.DelegateControlToStudentActivityController) {
-						userInputRouter.studentActivityController.ObjectDeselected (selectedLetter, true);
-				}
+				//SetupVariablesToLogSelectionDeselectionUponChangingColours (selectedLetter);
+				UpdateDefaultColoursAndSoundsOfLetters (true);
+
+				//TO DO when working out selection stuff, only the arduino letter controller will handler it
+				//if (SessionsDirector.DelegateControlToStudentActivityController) {
+				//		userInputRouter.studentActivityController.ObjectDeselected (selectedLetter, true);
+				//}
 		
 		}
 
+		/*
 		void SetupVariablesToLogSelectionDeselectionUponChangingColours (GameObject selectedLetter)
 		{
 				logSelectionDeselection = true;
 				selectedDeselected = selectedLetter.GetComponent<InteractiveLetter> ().Letter ();
 
 
-		}
+		}*/
 
 
 
@@ -441,7 +544,7 @@ public class ArduinoLetterController : PhonoBlocksController
 		{
 				if (testPosition != -1 && testLetter != null) {
 						
-						UserChangedALetter (testLetter [0], testPosition);
+						ReceiveNewUserInputLetter (testLetter [0], testPosition);
 						ClearTestPosition ();
 						
 				}

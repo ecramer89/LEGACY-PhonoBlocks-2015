@@ -173,31 +173,32 @@ public class SessionsDirector : MonoBehaviour
 		void StartStudentMode ()
 		{
 				string nameEntered = studentName.stringToEdit.Trim ().ToLower ();
+		        if (nameEntered.Length > 0) {
 		
-				nameEntered = CreateNewFileIfNeeded (nameEntered);
+						nameEntered = CreateNewFileIfNeeded (nameEntered);
 
 
-				bool wasStoredDataForName = StudentsDataHandler.instance.LoadStudentData (nameEntered);
+						bool wasStoredDataForName = StudentsDataHandler.instance.LoadStudentData (nameEntered);
 
-
-
-				if (wasStoredDataForName) {
-						mode = Mode.STUDENT;
-						studentActivityControllerOB = (GameObject)GameObject.Instantiate (studentActivityControllerOB);
+		
+						if (wasStoredDataForName) {
+								mode = Mode.STUDENT;
+								studentActivityControllerOB = (GameObject)GameObject.Instantiate (studentActivityControllerOB);
 			
-						SetParametersForExperimentalSession (studentActivityControllerOB);
-						UnityEngine.Object.DontDestroyOnLoad (studentActivityControllerOB);
+								SetParametersForExperimentalSession (studentActivityControllerOB);
+								UnityEngine.Object.DontDestroyOnLoad (studentActivityControllerOB);
 			
-						Application.LoadLevel ("Activity");
-				} else {
-						AudioSourceController.PushClip (noDataForStudentName);
+								Application.LoadLevel ("Activity");
+						} else {
+								AudioSourceController.PushClip (noDataForStudentName);
 			
+						}
 				}
 		
 		}
 
 		string CreateNewFileIfNeeded (string nameEntered)
-		{
+		{     
 				bool createNewFile = nameEntered [nameEntered.Length - 1] == '*'; //mark new file with asterik
 				
 				if (createNewFile) {

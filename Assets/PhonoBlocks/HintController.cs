@@ -53,7 +53,7 @@ public class HintController : PhonoBlocksController
 
 				case 2:
 						currProblem.PlaySecondHint ();
-						userInputRouter.ShowNonBlankLettersInPlacesAsHintToUser (studentActivityController.TargetLettersUserHasYetToPlace);
+						//userInputRouter.ShowNonBlankLettersInPlacesAsHintToUser (studentActivityController.TargetLettersUserHasYetToPlace);
 						break;
 	
 				}

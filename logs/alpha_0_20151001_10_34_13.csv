@@ -1,0 +1,19 @@
+2015-10-01 22:34:28Z,activity,change_letter,b,0
+2015-10-01 22:34:31Z,activity,change_letter,e,1
+2015-10-01 22:34:34Z,activity,change_letter,t,2
+2015-10-01 22:34:45Z,activity,change_letter, ,2
+2015-10-01 22:34:45Z,activity,unproductive_error, ,2
+2015-10-01 22:34:53Z,activity,change_letter, ,0
+2015-10-01 22:34:53Z,activity,unproductive_error, ,0
+2015-10-01 22:34:56Z,activity,change_letter, ,1
+2015-10-01 22:34:59Z,activity,change_letter,t,2
+2015-10-01 22:35:05Z,activity,change_letter,e,1
+2015-10-01 22:35:12Z,activity,change_letter,e,3
+2015-10-01 22:35:12Z,activity,unproductive_error,e,3
+2015-10-01 22:35:16Z,activity,change_letter,d,3
+2015-10-01 22:35:22Z,activity,change_letter,b,1
+2015-10-01 22:35:28Z,activity,change_letter,b,1
+2015-10-01 22:35:29Z,activity,change_letter,b,0
+2015-10-01 22:35:44Z,activity,change_letter,b,1
+2015-10-01 22:35:47Z,activity,change_letter,e,1
+2015-10-01 22:35:51Z,activity,change_letter,e,1

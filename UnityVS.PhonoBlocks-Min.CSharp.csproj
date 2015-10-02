@@ -55,12 +55,6 @@
     <Reference Include="UnityEngine.Analytics">
       <HintPath>Library\UnityAssemblies\UnityEngine.Analytics.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
     </Reference>
@@ -229,7 +223,6 @@
     <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
     <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
     <Compile Include="Assets\Permanent.cs" />
-    <Compile Include="Assets\PhonoBlocks\ArduinoAffixLetterController.cs" />
     <Compile Include="Assets\PhonoBlocks\ArduinoLetterController.cs" />
     <Compile Include="Assets\PhonoBlocks\ArduinoUnityInterface.cs" />
     <Compile Include="Assets\PhonoBlocks\AudioSourceController.cs" />
@@ -264,7 +257,6 @@
     <Compile Include="Assets\PhonoBlocks\UserWord.cs" />
     <Compile Include="Assets\PhonoBlocks\Word.cs" />
     <Compile Include="Assets\PhonoBlocks\WordHistoryController.cs" />
-    <Compile Include="Assets\PhonoBlocks\WordImageAndAudioMapAccessor.cs" />
     <Compile Include="Assets\PhonoBlocks\WordImages.cs" />
     <Compile Include="Assets\PushButton.cs" />
     <Compile Include="Assets\ReadButtonBehaviour.cs" />

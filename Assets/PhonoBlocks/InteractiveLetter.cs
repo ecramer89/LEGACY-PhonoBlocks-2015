@@ -10,12 +10,20 @@ public class InteractiveLetter : PhonoBlocksController
 
 		String letter;
 		UnityEngine.Color defaultColour;
+		bool isLocked = false;
+
+		public bool IsLocked {
+				get {
+						return isLocked;
+				}
+		}
+
 		Color lockedColor = Color.black;
 		UITexture selectHighlight;
 		BoxCollider trigger;
 		LetterSoundComponent lc;
 		int flashCounter = 0;
-		int timesToFlash = 8; 
+		int timesToFlash = 8;
 		float secondsDelayBetweenFlashes = .3f;
 		int idxAsArduinoControlledLetter;
 
@@ -29,8 +37,6 @@ public class InteractiveLetter : PhonoBlocksController
 						return idxAsArduinoControlledLetter;
 				}
 		}
-
-		
 
 		public LetterSoundComponent LetterSoundComponentIsPartOf {
 				get {
@@ -82,9 +88,20 @@ public class InteractiveLetter : PhonoBlocksController
 
 		}
 
+		public void Lock ()
+		{
+				ChangeColourOfUITexture (lockedColor);
+				isLocked = true;
+		}
+
+		public void UnLock ()
+		{
+				ChangeColourOfUITexture (defaultColour);
+				isLocked = false;
+		}
+
 		public String Letter ()
 		{
-
 				return letter;
 		}
 	
@@ -106,11 +123,11 @@ public class InteractiveLetter : PhonoBlocksController
 		public IEnumerator Flash ()
 		{
 
-		       int mod_To_end_on=(timesToFlash%2==0?1:0);
+				int mod_To_end_on = (timesToFlash % 2 == 0 ? 1 : 0);
 	
 				while (flashCounter<timesToFlash) {
 		
-			if (flashCounter % 2 == mod_To_end_on) {
+						if (flashCounter % 2 == mod_To_end_on) {
 								ChangeColourOfUITexture (defaultColour);
 							
 
@@ -147,7 +164,7 @@ public class InteractiveLetter : PhonoBlocksController
 				if (letter [0] == ' ')
 						c_ = Color.black;
 				if (userInputRouter != null)
-				if (userInputRouter.IsArduinoMode()) 
+				if (userInputRouter.IsArduinoMode ()) 
                 
 		
 						userInputRouter.arduinoLetterInterface.ColorNthTangibleLetter (IdxAsArduinoControlledLetter, c_);
@@ -164,27 +181,26 @@ public class InteractiveLetter : PhonoBlocksController
 			
 		}
 
-
-    public void UpdateLetterImage(Texture2D img_)
-    {
-        gameObject.GetComponent<UITexture>().mainTexture = img_;
-
-
-    }
-
-    public void UpdateLetter (String letter_, Texture2D img_)
+		public void UpdateLetterImage (Texture2D img_)
 		{
-				if (idxAsArduinoControlledLetter == -2)
-						return;
+				gameObject.GetComponent<UITexture> ().mainTexture = img_;
+
+
+		}
+
+		public void UpdateLetter (String letter_, Texture2D img_)
+		{
+				//if (idxAsArduinoControlledLetter == -2)
+				//		return;
 				letter = letter_;
 
+				//de-select this cell if it was selected
 				Selectable s = gameObject.GetComponent<Selectable> ();
 				s.Select (false, true);
 			
-				if (s.Locked)
-						gameObject.GetComponent<UITexture> ().mainTexture = img_;
-				else
-						gameObject.GetComponent<UITexture> ().mainTexture = img_;
+			
+				gameObject.GetComponent<UITexture> ().mainTexture = img_;
+			
 
 		}
 
@@ -220,13 +236,13 @@ public class InteractiveLetter : PhonoBlocksController
 				if (defaultColour == Color.clear)
 						defaultColour = Color.white;
 				defaultColour = c_;
-				ChangeColourOfUITexture (defaultColour);
+				if(!IsLocked) ChangeColourOfUITexture (defaultColour);
 				
-				if (!GetComponent<Selectable> ().Selected) {
+				/*if (!GetComponent<Selectable> ().Selected) {
 					
 						Darken ();
 
-				}
+				}*/
 		}
 
 		public void ChangeStateToSignalSelected ()

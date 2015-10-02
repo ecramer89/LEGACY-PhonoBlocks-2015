@@ -170,7 +170,6 @@
      <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
      <Compile Include="Assets\Permanent.cs" />
-     <Compile Include="Assets\PhonoBlocks\ArduinoAffixLetterController.cs" />
      <Compile Include="Assets\PhonoBlocks\ArduinoLetterController.cs" />
      <Compile Include="Assets\PhonoBlocks\ArduinoUnityInterface.cs" />
      <Compile Include="Assets\PhonoBlocks\AudioSourceController.cs" />
@@ -205,7 +204,6 @@
      <Compile Include="Assets\PhonoBlocks\UserWord.cs" />
      <Compile Include="Assets\PhonoBlocks\Word.cs" />
      <Compile Include="Assets\PhonoBlocks\WordHistoryController.cs" />
-     <Compile Include="Assets\PhonoBlocks\WordImageAndAudioMapAccessor.cs" />
      <Compile Include="Assets\PhonoBlocks\WordImages.cs" />
      <Compile Include="Assets\PushButton.cs" />
      <Compile Include="Assets\ReadButtonBehaviour.cs" />

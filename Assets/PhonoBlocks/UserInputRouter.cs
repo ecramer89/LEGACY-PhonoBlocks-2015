@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Text;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -11,41 +12,38 @@ using System.Collections.Generic;
 public class UserInputRouter : MonoBehaviour
 {
 
-    public GameObject sessionParametersOB;
-    bool screenMode;
- 
+		public GameObject sessionParametersOB;
+		bool screenMode;
 		public static UserInputRouter global;
 		public static int totalLengthOfUserInputWord;
 		public static int numOnscreenLetterSpaces = 6; 
 
-	//the first slot in the physical prototype does not function.
-	//it was easier to just let the system create that slot but fill it with a blank than to change everything else in the code
-	//the problem class needs to know how many actual useable letter spaces there are for this to function... 
-	//so we created this other method to distinguish between number of on screen spaxces and number of those spaces that are useable
-	    /*public static int NumOfActiveAndUseableArduinoControlledLetters(){
+		//the first slot in the physical prototype does not function.
+		//it was easier to just let the system create that slot but fill it with a blank than to change everything else in the code
+		//the problem class needs to know how many actual useable letter spaces there are for this to function... 
+		//so we created this other method to distinguish between number of on screen spaxces and number of those spaces that are useable
+		/*public static int NumOfActiveAndUseableArduinoControlledLetters(){
 		return numOnscreenLetterSpaces - 1;
 
 	}*/
 		public GameObject studentActivityControllerGO;
-		public GameObject arduinoAndAffixLetterControllerGO;
+		//public GameObject arduinoAndAffixLetterControllerGO;
+		public GameObject arduinoLetterControllerGO;
 		public GameObject onscreenKeyboardControllerGO;
 		public GameObject wordHistoryControllerGO;
-
 		public GameObject arduinoLetterInterfaceG0;
 		public GameObject uniduinoG0;
 		public GameObject checkedWordImageControllerGO;
 		public GameObject hintButtonGO;
-
-
-
-	public SessionsDirector sessionManager;
-		public ArduinoAffixLetterController arduinoAndAffixLetterController;
+		public SessionsDirector sessionManager;
+		//public ArduinoAffixLetterController arduinoAndAffixLetterController;
+		public ArduinoLetterController arduinoLetterController;
 		public WordHistoryController wordHistoryController;
 		public ArduinoUnityInterface arduinoLetterInterface;
 		public ScreenKeyboardController screenKeyboardController;
 		public CheckedWordImageController checkedWordImageController;
 		public StudentActivityController studentActivityController;
-		 bool acceptUIInput = true;
+		bool acceptUIInput = true;
 		bool currentWordViolatesPhonotactics = false; //either the arduino controlled letters or one of the affixes was placed incorrectly.
 		//dont add to the history.
 	    
@@ -54,7 +52,7 @@ public class UserInputRouter : MonoBehaviour
 
 		public string CurrentArduinoControlledLettersAsString {
 				get {
-						return arduinoAndAffixLetterController.GetUserControlledLettersAsString (false);
+						return arduinoLetterController.GetUserControlledLettersAsString (false);
 
 				}
 
@@ -69,7 +67,7 @@ public class UserInputRouter : MonoBehaviour
 
 
              
-		screenMode = sessionParametersOB.GetComponent<SessionsDirector> ().IsScreenMode ();
+				screenMode = sessionParametersOB.GetComponent<SessionsDirector> ().IsScreenMode ();
 
        
 
@@ -80,28 +78,28 @@ public class UserInputRouter : MonoBehaviour
 				if (screenMode) { //activate the onscreen keyboard object
 						screenKeyboardController = onscreenKeyboardControllerGO.GetComponent<ScreenKeyboardController> ();
 						screenKeyboardController.Initialize ();
-            arduinoLetterInterfaceG0.SetActive(false);
-            uniduinoG0.SetActive(false);
+						arduinoLetterInterfaceG0.SetActive (false);
+						uniduinoG0.SetActive (false);
 
 
-        } else { //tangible mode; activate the arduino unity interface and uniduino objects.
-            arduinoLetterInterface = arduinoLetterInterfaceG0.GetComponent<ArduinoUnityInterface>();
-            arduinoLetterInterfaceG0.SetActive (true);
-            arduinoLetterInterface.Initialize();
-                        uniduinoG0.SetActive (true);
-            uniduinoG0.GetComponent<Uniduino.Arduino>().Connect();
+				} else { //tangible mode; activate the arduino unity interface and uniduino objects.
+						arduinoLetterInterface = arduinoLetterInterfaceG0.GetComponent<ArduinoUnityInterface> ();
+						arduinoLetterInterfaceG0.SetActive (true);
+						arduinoLetterInterface.Initialize ();
+						uniduinoG0.SetActive (true);
+						uniduinoG0.GetComponent<Uniduino.Arduino> ().Connect ();
 
 
-        }
+				}
 
 
 
 	
 
 				totalLengthOfUserInputWord = numOnscreenLetterSpaces;
-				arduinoAndAffixLetterController = arduinoAndAffixLetterControllerGO.GetComponent<ArduinoAffixLetterController> ();
-				arduinoAndAffixLetterController.Initialize (arduinoLetterInterface);
-				
+	
+				arduinoLetterController = arduinoLetterControllerGO.GetComponent<ArduinoLetterController> ();
+				arduinoLetterController.Initialize (0, numOnscreenLetterSpaces - 1, arduinoLetterInterface);
 				wordHistoryController = wordHistoryControllerGO.GetComponent<WordHistoryController> ();
 				wordHistoryController.Initialize (totalLengthOfUserInputWord);
 			
@@ -117,13 +115,13 @@ public class UserInputRouter : MonoBehaviour
 
 				if (sessionParametersOB != null) {
 					
-			sessionManager = sessionParametersOB.GetComponent<SessionsDirector> ();
-			if (SessionsDirector.DelegateControlToStudentActivityController) {
+						sessionManager = sessionParametersOB.GetComponent<SessionsDirector> ();
+						if (SessionsDirector.DelegateControlToStudentActivityController) {
 							
 								studentActivityControllerGO = sessionManager.studentActivityControllerOB;
 								studentActivityController = studentActivityControllerGO.GetComponent<StudentActivityController> ();
 				                
-								studentActivityController.Initialize (hintButtonGO);
+								studentActivityController.Initialize (hintButtonGO, arduinoLetterController);
 
 						} 
 			            
@@ -134,54 +132,35 @@ public class UserInputRouter : MonoBehaviour
 		        
 		}
 
-
-
-    public bool IsScreenMode()
-    {
-
-        return screenMode;
-
-
-    }
-
-    public bool IsArduinoMode()
-    {
-
-        return !screenMode;
-
-
-    }
-
-    public void RequestReplayInstruction ()
+		public bool IsScreenMode ()
 		{
-		if (SessionsDirector.DelegateControlToStudentActivityController)
+
+				return screenMode;
+
+
+		}
+
+		public bool IsArduinoMode ()
+		{
+
+				return !screenMode;
+
+
+		}
+
+		public void RequestReplayInstruction ()
+		{
+				if (SessionsDirector.DelegateControlToStudentActivityController)
 						studentActivityController.PlayInstructions ();
 
 		}
 
 		public bool TeacherMode ()
 		{
-		return sessionParametersOB == null || SessionsDirector.IsTeacherMode;
+				return sessionParametersOB == null || SessionsDirector.IsTeacherMode;
 
 		}
 
-		public void UnlockNthArduinoControlledLetter (int rawPosition)
-		{
-				GameObject nthArduinoControlledLetter = arduinoAndAffixLetterController.GetNthUserControlledLetter (rawPosition);
-				nthArduinoControlledLetter.GetComponent<Selectable> ().UnLock ();
-				if (!screenMode)
-						arduinoLetterInterface.ColorNthTangibleLetter (rawPosition, nthArduinoControlledLetter.GetComponent<InteractiveLetter> ().CurrentColor ());
-		         
-
-
-		}
-	
-		public void LockNthArduinoControlledLetter (int rawPosition)
-		{
-				arduinoAndAffixLetterController.GetNthUserControlledLetter (rawPosition).GetComponent<Selectable> ().Lock ();
-		
-		
-		}
 
 		public void RequestHint ()
 		{//and if the UI is not on lockdown.
@@ -200,7 +179,7 @@ public class UserInputRouter : MonoBehaviour
 	
 
 		}
-
+	/*
 		public void ShowNonBlankLettersInPlacesAsHintToUser (string missingLettersHint)
 		{
 				for (int i=0; i<missingLettersHint.Length; i++) 
@@ -210,7 +189,7 @@ public class UserInputRouter : MonoBehaviour
 								nthLetter.SwitchImageTo (LetterImageTable.instance.GetLetterImageFromLetter (missingLettersHint [i]));
 						}
 
-		}
+		}*/
 	  
 		/*
 	     * called by the selectable component.
@@ -221,44 +200,19 @@ public class UserInputRouter : MonoBehaviour
 
 		}
 
-		public void ShowLockedImageAtBlankLockedArduinoControlledPosition (int rawPosition)
-		{       
-				arduinoAndAffixLetterController.GetNthUserControlledLetter (rawPosition).GetComponent<InteractiveLetter> ().SwitchImageTo (LetterImageTable.LockedLetterImage);
+		/*
 
-		}
-
-		public void RemoveLockedLetterImageAtBlankLockedArduinoControlledPosition (int rawPosition)
-		{
-			
-				arduinoAndAffixLetterController.GetNthUserControlledLetter (rawPosition).GetComponent<InteractiveLetter> ().SwitchImageTo (LetterImageTable.BlankLetterImage);
-
-
-		}
-
-
-	    
-
-
-		public void DeselectArduinoControlledLetters ()
-		{
-
-				arduinoAndAffixLetterController.DeselectUserControlledLetters ();
-
-		}
-
-		public void BlockUserInputAndTurnOffLetters (bool removeColoursOfLetters)
+		public void BlockUserInputAndTurnOffLetters (bool turnAllLettersOff)
 		{
 				//tell each letter to "shut down" (appear white) and change the colors of all the arduino letters
 				//accepting input general is false
 				//new letters are accepted but we set them to invisible
 				acceptUIInput = false;
-				if (removeColoursOfLetters) {
+				if (turnAllLettersOff) {
 						LockAllSelectables ();
-
-						arduinoAndAffixLetterController.AllNewLettersAreInvisible (); //aere we still doing this?
+					
 				
 					
-		        
 				}
 
 		}
@@ -269,7 +223,7 @@ public class UserInputRouter : MonoBehaviour
 				if (restoreColoursOfLetters) {
 						UnlockAllSelectables ();
 
-						arduinoAndAffixLetterController.AllNewLettersAreVisible ();
+						arduinoAndAffixLetterController.RecolorAllLettersWhenAnyLetterChanges (true);
 						//the user may have changed things before unlocking that require us to update the colours of the se;ectable letters.
 						UserWord newWord = arduinoAndAffixLetterController.RefreshAndRestoreColours ();
 						if (!screenMode && newWord != null)
@@ -278,11 +232,11 @@ public class UserInputRouter : MonoBehaviour
 				}
 
 
-		}
+		}*/
 
 		public void UnlockAllSelectables ()
 		{
-
+	
 				foreach (Selectable s in Resources.FindObjectsOfTypeAll<Selectable>()) {
 						if (s.gameObject.activeSelf)
 								s.UnLock (); 
@@ -300,15 +254,16 @@ public class UserInputRouter : MonoBehaviour
 		
 		}
 
-	   public void RequestTurnOffImage(){
-		checkedWordImageController.EndDisplay ();
+		public void RequestTurnOffImage ()
+		{
+				checkedWordImageController.EndDisplay ();
 		}
 
 		//
 		public void RequestDisplayImage (Texture2D newimg, bool disableTextureOnPress, bool indefinite=false)
 		{
 				
-						checkedWordImageController.ShowImage (newimg, disableTextureOnPress,indefinite);
+				checkedWordImageController.ShowImage (newimg, disableTextureOnPress, indefinite);
 		}
 
 		
@@ -316,20 +271,18 @@ public class UserInputRouter : MonoBehaviour
 		public void RequestCheckWord ()
 		{
 				if (acceptUIInput) {
-						if (arduinoAndAffixLetterController.NoUserControlledLetters ())
+						if (arduinoLetterController.NoUserControlledLetters ())
 								return;
 						if (TeacherMode ())
 								AddCurrentWordToHistory (true);//wordHistoryController.AddCurrentWordToHistory (arduinoAndAffixLetterController.GetAllUserInputLetters (false));
 						else
-								studentActivityController.HandleSubmittedAnswer (arduinoAndAffixLetterController.GetUserControlledLettersAsString (true));
+								studentActivityController.HandleSubmittedAnswer (arduinoLetterController.GetUserControlledLettersAsString (true));
 				}
 		}
 
-
-
 		public void AddCurrentWordToHistory (bool playSound)
 		{
-				wordHistoryController.AddCurrentWordToHistory (arduinoAndAffixLetterController.GetAllUserInputLetters (false), playSound);
+				wordHistoryController.AddCurrentWordToHistory (arduinoLetterController.GetAllUserInputLetters (false), playSound);
 
 		}
 
@@ -341,29 +294,18 @@ public class UserInputRouter : MonoBehaviour
 		}
 	                                              
 
-		//new arduino letter
-		public void RequestAddOrRemoveArduinoLetter (char newLetter, int atPosition, ArduinoLetterController alc)
+		/* if it is activity mode, then we delegate control of the new letter to the student activity controller. otherwise just update all of the letters*/
+		public void HandleNewUserInputLetter (char newLetter, int atPosition, ArduinoLetterController alc)
 		{
-				
+				if (sessionManager != null && SessionsDirector.DelegateControlToStudentActivityController)
+			
+						studentActivityController.HandleNewArduinoLetter (newLetter, atPosition);
+				else 
 
-				bool shouldUpdateArduinoLetterControlledLetters = true;
-		if (sessionManager != null && SessionsDirector.DelegateControlToStudentActivityController)
-            //shouldUpdateArduinoLetterControlledLetters = studentActivityController.HandleNewArduinoLetter (newLetter, alc.TranslatePositionOfLetterInUILetterBarToRaw (atPosition));
-            shouldUpdateArduinoLetterControlledLetters = studentActivityController.HandleNewArduinoLetter(newLetter, atPosition);
-
-        if (shouldUpdateArduinoLetterControlledLetters)  //
-						arduinoAndAffixLetterController.UserChangedALetter (newLetter, atPosition);
-					
-				
-
+						arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (true);
 
 		}
 
-		public void RequestPlaySoundsOfSelectedArduinoLetters ()
-		{
-		if (acceptUIInput && !SessionsDirector.IsAssessmentMode) 
-						arduinoAndAffixLetterController.PlaySoundsOfSelectedLetters ();
-		}
 
 		public void RequestPlayWord (string word)
 		{
@@ -374,7 +316,7 @@ public class UserInputRouter : MonoBehaviour
 		}
 		
 		void DeselectAllSelected ()
-		{
+		{	
 				foreach (Selectable s in Resources.FindObjectsOfTypeAll<Selectable>()) {
 						if (s.gameObject.activeSelf && s.Selected)
 								s.Deselect (false); 
@@ -384,7 +326,7 @@ public class UserInputRouter : MonoBehaviour
 
 		public void LetterClicked (GameObject cell)
 		{
-				arduinoAndAffixLetterController.GetArduinoLetterController.LetterClicked (cell);
+				arduinoLetterController.LetterClicked (cell);
 
 
 
@@ -398,38 +340,9 @@ public class UserInputRouter : MonoBehaviour
 
 		public List<InteractiveLetter> GetAllArduinoControlledLetters {
 				get {
-						return arduinoAndAffixLetterController.GetAllUserInputLetters (false);
+						return arduinoLetterController.GetAllUserInputLetters (false);
 			
 				}
 		}
-
-		public void RequestOverwriteArduinoControllerLettersWith (string word, GameObject requester)
-		{
-				arduinoAndAffixLetterController.OverwriteUserLettersWith (word, requester);
-
-
-		}
-
-		public void RequestSetAllArduinoLettersToBlank (GameObject requester)
-		{
-
-				arduinoAndAffixLetterController.SetAllUserControlledLettersToBlank (requester);
-
-		}
-
-		public void UpdateColoursOfLetters ()
-		{
-				arduinoAndAffixLetterController.RefreshAndRestoreColours ();
-
-
-
-		}
-
-		
-
-
-
-
-	
 
 }

@@ -69,31 +69,40 @@ public class LockedPositionHandler : PhonoBlocksController
 				return lockedPositions.Contains (position);
 		}
 
-		public bool HandleChangeToLockedPosition (int position, char change, string targetState, char[] usersMostRecentChanges)
+		public void HandleChangeToLockedPosition (int position, char change, string targetState, char[] usersMostRecentChanges, ArduinoLetterController arduinoLetterController)
 		{
-				
-				if (StateBeforeChangeWasDesireable (position, targetState, usersMostRecentChanges)) {
-						//we have changed something that we should not have 
-						if (PreviousStateAndNewLetterAreNotIdentical (position, targetState, change)) //handles a case only really possible with screen interface
-				//where I accidentially "remove" a letter that is not there.
-								return HandleError (position, change, targetState);
-				} else { //state before change was wrong. check if we have pushed it towards the better.
-			
-						if (StateIsNowAsDesired (change, targetState [position])) {
-								//letter that was added was the correct letter.
-								return HandleRestorationOfDesireableState (position, change, targetState);
-						} else { //state is not as desird.
-								/*if (AddedALetter (change))
-					//letter that was added was the incorrect letter (but the state was already wrong because blank)
-										studentActivityController.UserPlacedALetterTheyShouldNotHavePlaced ();
-								else
-										studentActivityController.UserRemovedAMisplacedLetter ();
-								//otherwise we removed a letter. if we removed a letter and state did not match then we removed a letter that was wrong.
-						*/}
-				}
-				return false;
+				//Debug.Log ("users most recent changes: " + usersMostRecentChanges);
+				//if the user changed a position that is supposed to have a letter (i.e., is not blank)
+				//I think that for remove all letters the target state is blanks
+				//if (!CharacterInTargetStateIsBlank (targetState, position)) {
 
+				//then: if the state of that letter before the change was correct
+				if (StateOfLettersBeforeUserChangeWasCorrect (position, targetState, usersMostRecentChanges)) {
+						//then say there is an error.
+						HandleError (position, change, targetState, arduinoLetterController);
+				} else {
+						//if the user's change is what should be there
+						if (UsersChangeMatchesCharacterInTargetWord (change, targetState [position])) {
+								//Debug.Log ("recognized that users change matches character in target word ");
+								DecreaseNumLockedPositionsWithIncorrectLetter (position, arduinoLetterController);
+
+						} else if (numLockedPositionsWithIncorrectLetter > 0)
+								arduinoLetterController.LockASingleLetter (position);
+						else
+								arduinoLetterController.UnLockASingleLetter (position); 
 			
+				}
+				//}
+		
+		}
+
+		void DecreaseNumLockedPositionsWithIncorrectLetter (int positionOfNewLetter, ArduinoLetterController arduinoLetterController)
+		{
+				numLockedPositionsWithIncorrectLetter--;
+				if (numLockedPositionsWithIncorrectLetter == 0)
+						arduinoLetterController.UnLockAllLetters ();
+				else
+						arduinoLetterController.UnLockASingleLetter (positionOfNewLetter);
 
 		}
 
@@ -110,42 +119,32 @@ public class LockedPositionHandler : PhonoBlocksController
 
 		}
 
-		bool HandleRestorationOfDesireableState (int position, char change, string targetLetters)
+		/*void HandleRestorationOfDesireableState (int position, char change, string targetLetters, ArduinoLetterController arduinoLetterController)
 		{
 				numLockedPositionsWithIncorrectLetter--;
-				if (UserModifiedLockedEmptySlot (targetLetters, position)) {
-						userInputRouter.RemoveLockedLetterImageAtBlankLockedArduinoControlledPosition (position);
+				if (numLockedPositionsWithIncorrectLetter == 0)
+						arduinoLetterController.UnLockAllLetters ();
+				//else
+				arduinoLetterController.UnLockASingleLetter (position);
 
-				} else 
-						userInputRouter.UnlockNthArduinoControlledLetter (position);
+		}*/
 
-				if (numLockedPositionsWithIncorrectLetter == 0) {
-					
-						return true;
-						
-				}
-				return false;
-
-		}
-
-		bool HandleError (int position, char change, string targetLetters)
+		void HandleError (int position, char change, string targetLetters, ArduinoLetterController arduinoLetterController)
 		{
+				if (numLockedPositionsWithIncorrectLetter == 0)
+						arduinoLetterController.LockAllLetters ();
 				
 				numLockedPositionsWithIncorrectLetter++;
-				if (UserModifiedLockedEmptySlot (targetLetters, position)) { 
-					//used to play a sound, but don't bother any more
+			
 					
-				} else {
-					
-						userInputRouter.LockNthArduinoControlledLetter (position);
-				}
-				if (numLockedPositionsWithIncorrectLetter == 1)
-						userInputRouter.BlockUserInputAndTurnOffLetters (true);
+				//arduinoLetterController.LockASingleLetter (position);
+				
+				
 
 	
 				StudentsDataHandler.instance.LogEvent ("unproductive_error", change + "", position + "");
 
-				return false;
+			
 		}
 
 		bool AddedALetter (char change)
@@ -154,26 +153,19 @@ public class LockedPositionHandler : PhonoBlocksController
 
 		}
 
-		bool StateIsNowAsDesired (char change, char desiredLetter)
+		bool UsersChangeMatchesCharacterInTargetWord (char change, char desiredLetter)
 		{
 				return LettersAreSameIgnoreCase (change, desiredLetter);
 			
 
 		}
 
-		bool StateBeforeChangeWasDesireable (int position, string targetLetters, char[] usersMostRecentChanges)
+		bool StateOfLettersBeforeUserChangeWasCorrect (int position, string targetLetters, char[] usersMostRecentChanges)
 		{
-				
 				return LettersAreSameIgnoreCase (targetLetters [position], usersMostRecentChanges [position]);
 
 		}
-
-		bool UserModifiedLockedEmptySlot (string targetLetters, int position)
-		{
-				return targetLetters [position] == ' ';
-
-		}
-
+		
 		bool LettersAreSameIgnoreCase (char a, char b)
 		{
 			   

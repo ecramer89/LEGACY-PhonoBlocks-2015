@@ -8,9 +8,9 @@ public class Problem : MonoBehaviour
 
 
 	    
-		public const int PLACE_LETTERS_INITIAL = 0;
-		public const int TO_MAKE_THE_WORD = 1;
-		public const int TARGET_WORD = 2;
+		//public const int PLACE_LETTERS_INITIAL = 0;
+		public const int TO_MAKE_THE_WORD = 0;
+		public const int TARGET_WORD = 1;
 
 
 		protected AudioClip[] instructions;
@@ -151,8 +151,8 @@ public class Problem : MonoBehaviour
 		protected virtual void CacheFixedInstructions (string initialWord, string targetWord)
 		{       
 				InstructionsAudio source = InstructionsAudio.instance;
-				instructions = new AudioClip[3];
-				instructions [PLACE_LETTERS_INITIAL] = source.placeInitialLettersInstruction;
+				instructions = new AudioClip[2];
+				//instructions [PLACE_LETTERS_INITIAL] = source.placeInitialLettersInstruction;
 				instructions [TO_MAKE_THE_WORD] = source.makeTheWordInsructions;
 				instructions [TARGET_WORD] = AudioSourceController.GetWordFromResources (targetWord);//(AudioClip)Resources.Load ("audio/words/" + targetWord, typeof(AudioClip));//WordImageAndAudioMapAccessor.GetInstance ().GetWordData (targetWord).ParseAudio ();
 				sounded_out_word = AudioSourceController.GetSoundedOutWordFromResources (targetWord);
@@ -186,22 +186,22 @@ public class Problem : MonoBehaviour
 		public void PlayInstructionsToPlaceInitialLetters ()
 		{
 
-				AudioSourceController.PushClip (instructions [PLACE_LETTERS_INITIAL]);
+				//AudioSourceController.PushClip (instructions [PLACE_LETTERS_INITIAL]);
 
 		}
 
 		public void PlayCurrentInstruction ()
 		{
-				if (currInstruction == PLACE_LETTERS_INITIAL)
-						AudioSourceController.PushClip (instructions [currInstruction]);
-				else {
+				//if (currInstruction == PLACE_LETTERS_INITIAL)
+						//AudioSourceController.PushClip (instructions [currInstruction]);
+				//else {
 						for (int i=TO_MAKE_THE_WORD; i<TARGET_WORD+1; i++) {
 							
 								if (instructions [i] != null)
 										AudioSourceController.PushClip (instructions [i]);
 						}
 
-				}
+				//}
 		}
 
 		public void PlayTargetWord ()

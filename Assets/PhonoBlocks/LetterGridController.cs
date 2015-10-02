@@ -129,14 +129,14 @@ public class LetterGridController : PhonoBlocksController
 
 		}
 
-		public InteractiveLetter UpdateLetter (GameObject localUpdaterOfLetterCell, int position, String letter, Color c)
+		public InteractiveLetter UpdateLetter (GameObject localUpdaterOfLetterCell, int position, String letter, Color newNonLockColour)
 		{
 				
 				InteractiveLetter l = LetterAtPosition (position);
 				bool attemptErasure = letter.Equals (" ");
 	
 				Texture2D letterImage = CopyAndScaleTexture (letterImageWidth, letterImageHeight, letterImageTable.GetLetterImageFromLetter (letter));
-				l.UpdateLetter (letter, letterImage, c);
+				l.UpdateLetter (letter, letterImage, newNonLockColour);
 			
 				l.Handler = localUpdaterOfLetterCell;
 			
@@ -172,7 +172,7 @@ public class LetterGridController : PhonoBlocksController
 		{
 
         GameObject cell = GetLetterCell(position);
-       if(ReferenceEquals(cell,null)) Debug.Log("null component at " + position + " position of letter ");
+       //if(ReferenceEquals(cell,null)) Debug.Log("null component at " + position + " position of letter ");
         return cell.GetComponent<InteractiveLetter>(); 
     }
 

@@ -261,7 +261,7 @@ public class ArduinoUnityInterface : PhonoBlocksController
 		{
 
         
-		arduinoLetterControllerOb.GetComponent<ArduinoLetterController>().UserChangedALetter(change.letter, (AdjustArduinoPositionForScreen(change.position)));
+		arduinoLetterControllerOb.GetComponent<ArduinoLetterController>().ReceiveNewUserInputLetter(change.letter, (AdjustArduinoPositionForScreen(change.position)));
         
     }
 
