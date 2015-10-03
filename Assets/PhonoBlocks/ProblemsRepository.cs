@@ -38,21 +38,25 @@ public class ProblemsRepository : MonoBehaviour
 				switch (type) {
 				case ProblemType.OPEN_CLOSED_VOWEL:
 						return new OpenClosedVowel ();
+
+			
+				case ProblemType.CONSONANT_DIGRAPHS:
+						return new ConsonantDigraphs ();
 					
 				case ProblemType.MAGIC_E:
 						return new VowelInfluenceERule ();
 					
-				case ProblemType.SYLLABLE_DIVISION:
-						return new SyllableDivision ();
-					
-				case ProblemType.CONSONANT_DIGRAPHS:
-						return new ConsonantDigraphs ();
+			
+				case ProblemType.VOWEL_DIGRAPHS:
+						return new VowelDigraphs (); //change after we make the vowel digraphs scheme
+				
 					
 				case ProblemType.R_CONTROLLED_VOWEL:
 						return new RControlledVowel ();
-						
-				case ProblemType.VOWEL_DIGRAPHS:
-						return new NoColour (); //change after we make the vowel digraphs scheme
+		
+
+				case ProblemType.SYLLABLE_DIVISION:
+						return new SyllableDivision ();
 
 				default: 
 						return new NoColour ();
@@ -65,7 +69,7 @@ public class ProblemsRepository : MonoBehaviour
 	
 		static readonly int INITIAL_WORD_IDX = 1;
 		static readonly int TARGET_WORD_IDX = 0;
-		string[][][] activity_words = {
+		static string[][][] activity_word_sets = {
 
 		new string[][]{
 			new string[]{"bet","dad","tin"}, //target words
@@ -78,58 +82,68 @@ public class ProblemsRepository : MonoBehaviour
 		},
 		
 		new string[][]{
-			new string[]{"flag","quit","thin"},
-			new string[]{"fl","it","in"}
+			new string[]{"flag","skin","stop"},
+			new string[]{"ag","in","op"}
 		},
 		
 		new string[][]{
 			new string[]{"trip","drop","crab"},
-			new string[]{" "," "," "}
+			new string[]{"ip","op","ab"}
 		},
 
 		new string[][]{
-			new string[]{"wish","lunch","last"},
-			new string[]{" "," "," "}
-		},
-
-		new string[][]{
-			new string[]{"thing","lift","pill"},
-			new string[]{" "," "," "}
+			new string[]{"thin","shop","chip"},
+			new string[]{"in","op","ip"}
 		},
 
 
 		new string[][]{
-			new string[]{"game","tape","side"},
-			new string[]{" "," "," "}
-		},
-
-
-		new string[][]{
-			new string[]{"home","tune","fine"},
-			new string[]{" "," "," "}
+			new string[]{"path","wish","lunch",},
+			new string[]{"pa","wi","lun"}
 		},
 
 		new string[][]{
-			new string[]{"house","play","sleep"},
-			new string[]{" "," "," "}
+			new string[]{"game","tape","cake"},
+			new string[]{"g m","t p","c k"}
 		},
 
 		new string[][]{
-			new string[]{"eat","boat","pie"},
-			new string[]{" "," "," "}
+			new string[]{"side","wide","late"},
+			new string[]{"s d","w d","l t"}
 		},
 
-	    new string[][]{
-		    new string[]{"car","her","stir"},
-			new string[]{" "," "," "}
-        },
+		new string[][]{
+			new string[]{"eat","boat","paid"},
+			new string[]{"t","b  t","p  d"}
+		},
 
-        new string[][]{
+		new string[][]{
+			new string[]{"car","jar","fir"},
+			new string[]{"c","j","f"}
+		},
+		
+		new string[][]{
 			new string[]{"hurt","horn","part"},
+			new string[]{"h  t","h  n","p  t"}
+		},
+
+
+		new string[][]{
+			new string[]{"over","water","creepy"},
 			new string[]{" "," "," "}
-        }
+		}
+
 	
+
+
 	};
+		static int numSessions = activity_word_sets.Length;
+
+		public int NumSessions {
+				get {
+						return numSessions;
+				}
+		}
 
 		void Problems (Problem[] problems)
 		{
@@ -150,7 +164,7 @@ public class ProblemsRepository : MonoBehaviour
 		void InitializeProblems (int sessionIndex)
 		{
 
-				string[][] wordsForSessionProblems = activity_words [sessionIndex % activity_words.Length];
+				string[][] wordsForSessionProblems = activity_word_sets [sessionIndex % activity_word_sets.Length];
 				problemsForSession = new Problem[PROBLEMS_PER_SESSION];
 				
 		      
@@ -170,27 +184,34 @@ public class ProblemsRepository : MonoBehaviour
 						return;
 				case 2:
 				case 3:
-				case 6:
-				case 7:
+				case 4:
+				case 5:
 						colourSchemeForSession = new ConsonantDigraphs ();
 						return;
 
-				case 4:
-				case 5:
+				case 6:
+				case 7:
 
 						colourSchemeForSession = new VowelInfluenceERule ();
 						return;
 				case 8:
-				case 9:
-						colourSchemeForSession = new SyllableDivision ();
+
+						colourSchemeForSession = new VowelDigraphs ();
 						return;
+				case 9:
 				case 10:
-				case 11:
 
 						colourSchemeForSession = new RControlledVowel ();
 						return;
+				case 11:
+						colourSchemeForSession = new SyllableDivision ();
+						return;
+				default:
+						colourSchemeForSession = new NoColour ();
+						return;
 		
 				}
+
 			
 
 
@@ -198,13 +219,7 @@ public class ProblemsRepository : MonoBehaviour
 		/* only if we want sub directories for words for different types of problems (slightly faster searching)*/
 		string GetPathToWord ()
 		{
-				StringBuilder s = new StringBuilder ("audio/words/");
-				/*if (id.Equals (Name.CON_LE))
-						s.Append ("conle/");
-				else
-						s.Append ("voweld/");
-			*/
-				return s.ToString ();
+				return "audio/words/";
 		}
 
 		public Problem GetNextProblem ()

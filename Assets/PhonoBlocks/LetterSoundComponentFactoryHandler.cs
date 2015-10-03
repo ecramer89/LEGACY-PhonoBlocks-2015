@@ -19,7 +19,7 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 		{
 				protected static VowelConsonantFactory vowelConsonantFactory = new VowelConsonantFactory ();
 		
-				public abstract UserWord Parse (string context);
+		public abstract UserWord Parse (string context, bool bySyllables=false);
 
 		}
 		
@@ -48,7 +48,7 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 						return result;
 				}
 
-				public override UserWord Parse (string input)
+		public override UserWord Parse (string input,bool bySyllables=false)
 				{
 						return null;
 				}
@@ -65,25 +65,17 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 				static StableSyllableFactory stableSyllableFactory = new StableSyllableFactory ();
 				List<LetterSoundComponent> preSyllable;
 
-				public override UserWord Parse (string word)
+				public override UserWord Parse (string word, bool bySyllables=false)
 				{
 
 						string substringToDecode = word.TrimEnd ();
 
 						preSyllable = new List<LetterSoundComponent> ();
-
-						LetterSoundComponent stableSyllable = stableSyllableFactory.ParseStableSyllable (substringToDecode);
-						int numBlanksToRestore = 0;
-						if (!ReferenceEquals (stableSyllable, null)) {
-								substringToDecode = substringToDecode.Substring (0, substringToDecode.Length - stableSyllable.Length);
-								numBlanksToRestore = word.Length - substringToDecode.Length - stableSyllable.Length;
-						} else
-								numBlanksToRestore = word.Length - substringToDecode.Length;
+						int numBlanksToRestore = word.Length - substringToDecode.Length;
 						preSyllable = ParseBlendsDigraphsAndLetters (substringToDecode);
 						IdentifyVowelSoundsAndPhonotacticErrorsBySyllable (preSyllable); //we need to check the phonotactics after we have collected ad appended
 						UserWord userWord = new UserWord (preSyllable);
-						if (!ReferenceEquals (stableSyllable, null)) 
-								userWord.Add (stableSyllable);
+				
 						userWord.ApplyColoursToLetterSoundComponents (checkPhonotactics); 
 						userWord.RecordIndexOfLastNonBlankLetter ();
 
@@ -318,8 +310,14 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 						LetterSoundComponent beforeVowel = pattern [0];
 						if (beforeVowel.IsConsonantConsonantDigraphOrBlend) {
 								LetterSoundComponent last = pattern [1];
-								if (last.IsVowelOrVowelDigraph)
+								if (last.IsVowelOrVowelDigraph) {
+										//Oct 2: Min wants open syllable patterns (consonant-vowel) to read as short.
+										if (last is Vowel) {
+												Vowel v = (Vowel)last;
+												v.MakeShort ();
+										}
 										return true;
+								}
 								if (last.LettersAre ("y")) {
 										preSyllable [idxOfFirstLetter + 1] = new Vowel ("y");
 										return true;
@@ -437,7 +435,7 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 			
 				}
 
-				public UserWord Parse (string context)
+		public UserWord Parse (string context,bool bySyllables=false)
 				{
 						return null;
 				}

@@ -11,7 +11,7 @@ using System.Collections.Generic;
 //...misnamed. is going to be the global controller.
 public class UserInputRouter : MonoBehaviour
 {
-
+		static readonly string RESOURCES_WORD_IMAGE_PATH = "WordImages/";
 		public GameObject sessionParametersOB;
 		bool screenMode;
 		public static UserInputRouter global;
@@ -29,7 +29,8 @@ public class UserInputRouter : MonoBehaviour
 		public GameObject studentActivityControllerGO;
 		//public GameObject arduinoAndAffixLetterControllerGO;
 		public GameObject arduinoLetterControllerGO;
-		public GameObject onscreenKeyboardControllerGO;
+		//public GameObject onscreenKeyboardControllerGO;
+		public GameObject userStarControllerGO;
 		public GameObject wordHistoryControllerGO;
 		public GameObject arduinoLetterInterfaceG0;
 		public GameObject uniduinoG0;
@@ -38,9 +39,10 @@ public class UserInputRouter : MonoBehaviour
 		public SessionsDirector sessionManager;
 		//public ArduinoAffixLetterController arduinoAndAffixLetterController;
 		public ArduinoLetterController arduinoLetterController;
+		UserStarGridController userStarController;
 		public WordHistoryController wordHistoryController;
 		public ArduinoUnityInterface arduinoLetterInterface;
-		public ScreenKeyboardController screenKeyboardController;
+		//public ScreenKeyboardController screenKeyboardController;
 		public CheckedWordImageController checkedWordImageController;
 		public StudentActivityController studentActivityController;
 		bool acceptUIInput = true;
@@ -116,16 +118,20 @@ public class UserInputRouter : MonoBehaviour
 							
 								studentActivityControllerGO = sessionManager.studentActivityControllerOB;
 								studentActivityController = studentActivityControllerGO.GetComponent<StudentActivityController> ();
-				                
+				            
 								studentActivityController.Initialize (hintButtonGO, arduinoLetterController);
-
-						} 
-			            
-				}
+								userStarControllerGO.SetActive (true);
+								userStarController = userStarControllerGO.GetComponent<UserStarGridController> ();
+								userStarController.Initialize ();
+			
+						} else {
+								userStarControllerGO.SetActive (false);
+						}
 		    	
 
 		      
 		        
+				}
 		}
 
 		public bool IsScreenMode ()
@@ -157,7 +163,6 @@ public class UserInputRouter : MonoBehaviour
 
 		}
 
-
 		public void RequestHint ()
 		{//and if the UI is not on lockdown.
 				if (!TeacherMode () && acceptUIInput)
@@ -175,7 +180,7 @@ public class UserInputRouter : MonoBehaviour
 	
 
 		}
-	/*
+		/*
 		public void ShowNonBlankLettersInPlacesAsHintToUser (string missingLettersHint)
 		{
 				for (int i=0; i<missingLettersHint.Length; i++) 
@@ -256,14 +261,19 @@ public class UserInputRouter : MonoBehaviour
 		}
 
 		//
-		public void RequestDisplayImage (Texture2D newimg, bool disableTextureOnPress, bool indefinite=false)
+		public void RequestDisplayImage (string word, bool disableTextureOnPress, bool indefinite=false)
 		{
-				
-				checkedWordImageController.ShowImage (newimg, disableTextureOnPress, indefinite);
+	
+				StringBuilder path = new StringBuilder (RESOURCES_WORD_IMAGE_PATH);
+				path.Append (word);
+				Texture2D newimg = (Texture2D)Resources.Load (path.ToString (), typeof(Texture2D));
+				if (!ReferenceEquals (newimg, null)) {
+						checkedWordImageController.ShowImage (newimg, disableTextureOnPress, indefinite);
+				}
 		}
 
 		
-		//check word
+		//called by the check word button.
 		public void RequestCheckWord ()
 		{
 				if (acceptUIInput) {
@@ -271,7 +281,7 @@ public class UserInputRouter : MonoBehaviour
 								return;
 						if (TeacherMode ())
 								AddCurrentWordToHistory (true);//wordHistoryController.AddCurrentWordToHistory (arduinoAndAffixLetterController.GetAllUserInputLetters (false));
-						else
+						else 
 								studentActivityController.HandleSubmittedAnswer (arduinoLetterController.GetUserControlledLettersAsString (true));
 				}
 		}
@@ -288,6 +298,12 @@ public class UserInputRouter : MonoBehaviour
 
 
 		}
+
+		//show stars acquired during a session (but not yet stored in player prefs and not yet displayed initially) during the activity.
+		public void DisplayNewStarOnScreen ()
+		{
+				userStarController.AddNewUserStar (true);
+		}
 	                                              
 
 		/* if it is activity mode, then we delegate control of the new letter to the student activity controller. otherwise just update all of the letters*/
@@ -301,7 +317,6 @@ public class UserInputRouter : MonoBehaviour
 						arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (true);
 
 		}
-
 
 		public void RequestPlayWord (string word)
 		{
@@ -319,7 +334,7 @@ public class UserInputRouter : MonoBehaviour
 				}
 		
 		}
-	   //what is this method doing?
+		//what is this method doing?
 		public void LetterClicked (GameObject cell)
 		{
 				arduinoLetterController.LetterClicked (cell);

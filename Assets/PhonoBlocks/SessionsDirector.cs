@@ -14,6 +14,7 @@ public class SessionsDirector : MonoBehaviour
 		
 		public static ColourCodingScheme colourCodingScheme = new RControlledVowel ();
 		public INTERFACE_TYPE INTERFACE;
+	    
  
 
 		public enum INTERFACE_TYPE
@@ -30,8 +31,9 @@ public class SessionsDirector : MonoBehaviour
 		}
 
 		public static int currentUserSession; //will obtain from player prefs
-
-
+		public static int numStarsOfCurrentUser; //will obtain from player prefs
+	
+	
 		public static bool IsTheFirstTutorLedSession ()
 		{
 
@@ -48,6 +50,10 @@ public class SessionsDirector : MonoBehaviour
 
 
 		}
+
+
+
+	   
 
 
 
@@ -79,7 +85,7 @@ public class SessionsDirector : MonoBehaviour
 		public AudioClip noDataForStudentName;
 		public AudioClip enterAgainToCreateNewFile;
 		public static DateTime assessmentStartTime;
-		int numStarsOfCurrentUser;
+		
 
 
 
@@ -114,7 +120,8 @@ public class SessionsDirector : MonoBehaviour
 				mode = Mode.TEACHER;
 				activitySelectionButtons.SetActive (true);
 				studentModeButton.SetActive (false);
-			           
+				teacherModeButton.SetActive (false);
+				studentNameInputField.SetActive (false);
 				
 
 		}
@@ -177,9 +184,7 @@ public class SessionsDirector : MonoBehaviour
 		{
 				currentUserSession = StudentsDataHandler.instance.GetUsersSession ();
 				numStarsOfCurrentUser = StudentsDataHandler.instance.GetUsersNumStars ();
-				Debug.Log ("User's stars: " + numStarsOfCurrentUser);
-
-
+			
 				ProblemsRepository.instance.Initialize (currentUserSession);
 			
 				colourCodingScheme = ProblemsRepository.instance.ActiveColourScheme;
@@ -187,4 +192,8 @@ public class SessionsDirector : MonoBehaviour
 				StudentActivityController sc = studentActivityControllerOB.GetComponent<StudentActivityController> ();
 
 		}
+
+
+
+
 }

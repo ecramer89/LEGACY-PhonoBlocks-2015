@@ -21,13 +21,15 @@ public class StudentActivityController : PhonoBlocksController
 		HintController hintController;
 		ArduinoLetterController arduinoLetterController;
 		Problem currProblem;
-		public AudioClip correctFeedback;
+		public AudioClip correctOnFirstTryFeedBack;
 		char[] usersMostRecentChanges;
 		public AudioClip incorrectFeedback;
 		public AudioClip sessionIsFinished;
 		public Texture2D sessionFinishedImage;
-		public AudioClip takeABreakBetweenSessions;
-		public AudioClip pressOrTapScreenToContinue;
+		public AudioClip correctFeedback;
+
+
+
 	    
 
 
@@ -148,7 +150,7 @@ public class StudentActivityController : PhonoBlocksController
 		{
 				for (int i=0; i<usersMostRecentChanges.Length; i++) {
 						usersMostRecentChanges [i] = ' ';
-						//lettersThatUserNeedsToRemoveBeforeSkipping [i] = ' ';
+					
 				}
 
 
@@ -178,7 +180,7 @@ public class StudentActivityController : PhonoBlocksController
 				if (ProblemsRepository.instance.AllProblemsDone ()) {
 						StudentsDataHandler.instance.UpdateUserSessionAndWriteAllUpdatedDataToPlayerPrefs ();
 						AudioSourceController.PushClip (sessionIsFinished);
-						Debug.Log ("session is finished");
+					
 				
 				} else
 						SetUpNextProblem ();
@@ -292,6 +294,10 @@ public class StudentActivityController : PhonoBlocksController
 
 		}
 
+
+
+	   
+
 		public void CurrentProblemCompleted (bool userSubmittedCorrectAnswer, string answer)
 		{
 			
@@ -299,13 +305,19 @@ public class StudentActivityController : PhonoBlocksController
 				state = State.REMOVE_ALL_LETTERS;
 
 				currProblem.SetTargetWordToEmpty ();
-
+				userInputRouter.AddCurrentWordToHistory (false);
 				arduinoLetterController.LockAllLetters ();
-		        
-				userInputRouter.RequestDisplayImage (WordImages.instance.GetWordImage (currProblem.TargetWord (true)), false, true);
+		   
+				userInputRouter.RequestDisplayImage (currProblem.TargetWord (true), false, true);
 
-				Debug.Log (currProblem.TimesAttempted + " current problem times attempted");
 				bool solvedOnFirstTry = currProblem.TimesAttempted == 1;
+				if (solvedOnFirstTry) {
+						AudioSourceController.PushClip (correctOnFirstTryFeedBack);
+						userInputRouter.DisplayNewStarOnScreen ();
+
+				}
+
+
 				StudentsDataHandler.instance.RecordActivitySolved (userSubmittedCorrectAnswer, answer, solvedOnFirstTry);
 			
 				StudentsDataHandler.instance.SaveActivityDataAndClearForNext (currProblem.TargetWord (false), currProblem.InitialWord);

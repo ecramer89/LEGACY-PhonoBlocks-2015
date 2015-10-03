@@ -10,137 +10,90 @@ public abstract class ColourCodingScheme: MonoBehaviour
 
 
 		public string label;
-		public Color orange; /* note: the values in rthe colour32 objects are */
-		public Color purple;
+		protected int alternate = 0;
 
-		public ColourCodingScheme ()
-		{
-				float max = (float)255;
-				orange = Color.black;
-				orange.r = (float)250 / max;
-				orange.g = (float)150 / max;
-				orange.b = (float)25 / max;
-				purple = Color.black; 
-				purple.r = (float)127 / max;
-				purple.g = (float)42 / max;
-				purple.b = (float)242 / max;
-		}
-		
 		public virtual Color GetColorsForLongVowel (char vowel)
 		{
-				return Color.red;
+				return Color.white;
 		
 		}
 
-		public virtual Color GetColorsForShortVowel (Color currentVowelColor)
-		{
-        return Color.yellow;
-		}
-
-		protected float AdjustChannelBy (float colorChannelValue, float by)
-		{
-				return colorChannelValue + by;
-		}
-	
-		public virtual Color GetColorsForInitialBlends ()
-		{
-				Color c = Color.green;
-				c.r = AdjustChannelBy (c.r, -.8f);
-				c.g = AdjustChannelBy (c.g, -.8f);
-				c.b = AdjustChannelBy (c.b, -.8f);
-				return c;
-		}
-
-		public virtual Color GetColorsForFinalBlends ()
-		{
-				return Color.red;
-		}
-
-		public virtual Color GetColorsForMiddleBlends ()
-		{
-				return Color.cyan;
-		}
-	
-		public virtual Color GetColorsForStableSyllables ()
-		{
-				return Color.red;
-	
-		}
-	
 		public virtual Color GetColorsForHardConsonant ()
 		{
 				return Color.white;
 		}
 
-		public virtual Color ModifyColorForSoftConsonant (Color currentConsonantColor)
+		public virtual Color GetColourForSilent (char letter)
 		{
-				currentConsonantColor.r = AdjustChannelBy (currentConsonantColor.r, .8f);
-				currentConsonantColor.g = AdjustChannelBy (currentConsonantColor.g, .8f);
-				currentConsonantColor.b = AdjustChannelBy (currentConsonantColor.b, .8f);
-				return currentConsonantColor;
+				return Color.white;
+		}
+	
+		public virtual Color GetColorsForShortVowel (Color currentVowelColor)
+		{
+				return Color.white;
+		}
+	
+		public virtual Color GetColorsForInitialBlends ()
+		{
+				return Color.white;
+		}
+	
+		public virtual Color GetColorsForMiddleBlends ()
+		{
+				return Color.white;
+		}
+	
+		public virtual Color GetColorsForFinalBlends ()
+		{
+				return Color.white;
+		}
+	
+		public virtual Color GetColorsForStableSyllables ()
+		{
+				return Color.white;
+		}
+	
+		public virtual Color ModifyColorForSoftConsonant (Color color)
+		{
+				return Color.white;
 		}
 	
 		public virtual Color GetColorsForConsonantDigraphs ()
 		{
-			
-				return Color.green;
-				
+				return Color.white;
 		}
-
+	
 		public virtual Color GetColorsForVowelDigraphs ()
 		{
-				return orange;
+				return Color.white;
 		}
-
-		public virtual Color GetColorsForRControlledVowel (char vowel)
-		{
-				return purple;
-		}
-
-		public virtual Color GetColourForSilent (Color currentColor)
-		{
-				return Color.black;
-				//return new Color (AdjustChannelBy (currentColor.r, -.5f), AdjustChannelBy (currentColor.g, -.5f), AdjustChannelBy (currentColor.b, -.5f));
-		}
-
-		public virtual Color GetErrorColor ()
-		{
-				return Color.black;
-		}
-
-		public virtual Color GetColorsForPrefixes ()
-		{
-				return Color.green;
-
-		}
-
-		public virtual Color GetColorsForSuffixes ()
+	
+		public virtual Color GetColorsForRControlledVowel (char letter)
 		{
 		
-				return Color.red;
+				return Color.white;
 		}
-	
-	
-		//some concepts attempt to draw kids attention to special letters.
-		//often, however, it is not just that a letter is a certain kind,
-		//but also that it appears in a particular location.
-		//the first step is:
-		//is this letter special?
-		//and if so
-		//return colour for a special letter.
 
-
-		//we need to get the context and the position of this letter again
-
-		public virtual Color GetColorForRelevantLetterSoundComponent (LetterSoundComponent l)
+		protected virtual Color AlternatingColours ()
 		{
-				return l.Color;
+				if (alternate == 0)
+						return GetAlternateA ();
+				else
+						return GetAlternateB ();
+				alternate = 1 - alternate;
+
 		}
-	
-		public virtual bool IsLetterSoundComponentRelevant (LetterSoundComponent l)
+
+		protected virtual Color GetAlternateA ()
 		{
-				return false;
+				return Color.green;
 		}
+
+		protected virtual Color GetAlternateB ()
+		{
+				return Color.cyan;
+		}
+
 	
 }
 
@@ -148,10 +101,8 @@ public abstract class ColourCodingScheme: MonoBehaviour
 //Colour coding schemes for Min's Study:
 
 
-//changes:
-//-don't highlight consonant-le unit
-//silent letters (silent e) are just as they should be, given the letter's identity as vowel or consonant
-class OpenClosedVowel : Categorical
+
+class OpenClosedVowel : NoColour
 {
 
 		public OpenClosedVowel () : base()
@@ -159,18 +110,31 @@ class OpenClosedVowel : Categorical
 				label = "openClosedVowel";
 		}
 
-		public override Color GetColourForSilent (Color currentColor)
+		public override Color GetColorsForShortVowel (Color currentVowelColor)
 		{
-				return currentColor;
+				return Color.yellow;
 		}
 
+		public override Color GetColorsForLongVowel (char vowel)
+		{
+				return Color.red;
+		}
+
+		/* Min wants each consonant in the word to have a different colour. Most of the words she uses are CVC, so the rule
+	     * that we alternate blue and green should work*/
+		
+
+		public override Color GetColorsForHardConsonant ()
+		{
+				return AlternatingColours ();
+		}
 
 
 }
 
 //changes to parent
 //colour silent e black
-class VowelInfluenceERule : OpenClosedVowel
+class VowelInfluenceERule : NoColour
 {
 	
 		public VowelInfluenceERule () : base()
@@ -178,9 +142,16 @@ class VowelInfluenceERule : OpenClosedVowel
 				label = "vowelInfluenceE";
 		}
 
-		public override Color GetColourForSilent (Color currentColor)
+		public override Color GetColorsForLongVowel (char vowel)
 		{
-				return Color.black;
+				return Color.red;
+		}
+
+		public override Color GetColourForSilent (char letter)
+		{
+				if (letter == 'e')
+						return GetColorsForLongVowel ('e'); //silent e colour matches long vowel it influences.
+				return GetColorsForHardConsonant ();
 		}
 
 	
@@ -189,7 +160,7 @@ class VowelInfluenceERule : OpenClosedVowel
 
 //changes to parent
 //colour consonant digraphs green
-class ConsonantDigraphs : OpenClosedVowel
+class ConsonantDigraphs : NoColour
 {
 	
 		public ConsonantDigraphs () : base()
@@ -218,11 +189,6 @@ class ConsonantDigraphs : OpenClosedVowel
 		}
 
 
-    public override Color GetColorsForHardConsonant()
-    {
-        return Color.cyan;
-    }
-
 
 
 }
@@ -230,16 +196,11 @@ class ConsonantDigraphs : OpenClosedVowel
 
 //changes to parent
 //colour r controlled vowels purple
-class RControlledVowel: ConsonantDigraphs
+class RControlledVowel: NoColour
 {
 		public RControlledVowel () : base()
 		{
 				label = "rControlledVowel";
-		}
-
-		public override Color GetColorsForVowelDigraphs ()
-		{
-				return Color.black;
 		}
 
 		public override Color GetColorsForRControlledVowel (char vowel)
@@ -247,24 +208,15 @@ class RControlledVowel: ConsonantDigraphs
 				return Color.magenta;
 		}
 
-    public override Color GetColorsForLongVowel(char vowel)
-    {
-        return Color.black;
-    }
-
-    public override Color GetColorsForShortVowel(Color currentVowelColor)
-    {
-        return Color.black;
-    }
-
+	
 
 }
 
 //changes to parent
 //colour vowel digraphs orange
-class SyllableDivision : ConsonantDigraphs
+class VowelDigraphs : NoColour
 {
-		public SyllableDivision () : base()
+		public VowelDigraphs () : base()
 		{
 				label = "rsyllableDivision";
 		}
@@ -278,159 +230,79 @@ class SyllableDivision : ConsonantDigraphs
 
 }
 
-public class SoundBased : ColourCodingScheme
+class SyllableDivision : NoColour
 {
-
-		Color a = Color.red;
-		Color i = Color.yellow;
-		Color o = Color.blue;
-		Color u = Color.cyan;
-		Color e = Color.green;
-
-		public SoundBased () : base()
+		public SyllableDivision () : base()
 		{
-				label = "sounds";
+				label = "syllableDivision";
 		}
-	
-		public override Color GetColorsForLongVowel (char vowel)
-		{      
-				switch (vowel) {
-				case 'a':
-						return a;
-				case 'e':
-						return e;
-				case 'i':
-						return i;
-				case 'u':
-						return u;
-				case 'o':
-						return o;
-				}
-			
-				return Color.white; 
+
+		public virtual Color GetColorsForLongVowel (char vowel)
+		{
+				return Color.magenta;
 		
 		}
-
-		public override Color GetColorsForRControlledVowel (char vowel)
+	
+		public virtual Color GetColorsForHardConsonant ()
+		{
+				return Color.magenta;
+		}
+	
+		public virtual Color GetColourForSilent (char letter)
+		{
+				return Color.magenta;
+		}
+	
+		public virtual Color GetColorsForShortVowel (Color currentVowelColor)
+		{
+				return Color.magenta;
+		}
+	
+		public virtual Color GetColorsForInitialBlends ()
+		{
+				return Color.magenta;
+		}
+	
+		public virtual Color GetColorsForMiddleBlends ()
+		{
+				return Color.magenta;
+		}
+	
+		public virtual Color GetColorsForFinalBlends ()
+		{
+				return Color.magenta;
+		}
+	
+		public virtual Color GetColorsForStableSyllables ()
+		{
+				return AlternatingColours ();
+		}
+	
+		public virtual Color ModifyColorForSoftConsonant (Color color)
+		{
+				return Color.magenta;
+		}
+	
+		public virtual Color GetColorsForConsonantDigraphs ()
+		{
+				return Color.magenta;
+		}
+	
+		public virtual Color GetColorsForVowelDigraphs ()
+		{
+				return Color.magenta;
+		}
+	
+		public virtual Color GetColorsForRControlledVowel (char letter)
 		{
 		
 				return Color.magenta;
-
 		}
-	
-		public override Color GetColorsForShortVowel (Color currentVowelColor)
-		{
-				return currentVowelColor;
-	
-		}
-
-		public override Color GetColorsForHardConsonant ()
-		{
-				return Color.white;
-		}
-	
-		public override Color GetColorsForInitialBlends ()
-		{
-				return GetColorsForHardConsonant ();
-	
-		}
-	
-		public override Color GetColorsForMiddleBlends ()
-		{
-				return GetColorsForHardConsonant ();
-		}
-
-		public override Color GetColorsForFinalBlends ()
-		{
-				return GetColorsForHardConsonant ();
-	
-		}
-
-		public override Color GetColorsForStableSyllables ()
-		{
-				return Color.magenta;
-
-		}
-	
-		public override Color ModifyColorForSoftConsonant (Color color)
-		{
-				return GetColorsForHardConsonant ();
-		}
-		/*
-		public override Color GetColorsForConsonantDigraphs ()
-		{
-				return GetColorsForHardConsonant ();
-		}*/
 	
 
 	
 	
 }
-
-public class Categorical : ColourCodingScheme
-{
-		public Categorical () : base()
-		{
-				label = "categorical";
-		}
-	
-		public override Color GetColorsForLongVowel (char vowel)
-		{
-				return Color.red;
-		
-		}
-	
-		public override Color GetColorsForShortVowel (Color currentVowelColor)
-		{
-				return Color.yellow;
-		}
-
-		public override Color GetColorsForInitialBlends ()
-		{
-				return GetColorsForHardConsonant ();
-		}
-	
-		public override Color GetColorsForMiddleBlends ()
-		{
-				return GetColorsForHardConsonant ();
-		}
-
-		public override Color GetColorsForFinalBlends ()
-		{
-				return GetColorsForHardConsonant ();
-		}
-	
-		public override Color GetColorsForStableSyllables ()
-		{
-				return Color.magenta;
-		}
-	
-		public override Color ModifyColorForSoftConsonant (Color color)
-		{
-				return GetColorsForHardConsonant ();
-		}
-		
-		public override Color GetColorsForConsonantDigraphs ()
-		{
-				return GetColorsForHardConsonant ();
-		}
-
-		public override Color GetColorsForRControlledVowel (char vowel)
-		{
-				return GetColorsForLongVowel (vowel);
-		}
-
-		public virtual Color GetColourForSilent (Color currentColor)
-		{
-				return currentColor;
-		}
-
-	
-	
-	
-	
-}
-
 
 
 
@@ -439,96 +311,10 @@ public class Categorical : ColourCodingScheme
 public class NoColour : ColourCodingScheme
 {
 
-		public NoColour () : base()
-		{
-				label = "control";
-		}
-	   
-		public override Color GetColorsForLongVowel (char vowel)
-		{
-				return Color.white;
 		
-		}
-	
-		public override Color GetColorsForShortVowel (Color currentVowelColor)
-		{
-				return Color.white;
-		}
-
-		public override Color GetColorsForInitialBlends ()
-		{
-				return Color.white;
-		}
-
-		public override Color GetColorsForMiddleBlends ()
-		{
-				return Color.white;
-		}
-
-		public override Color GetColorsForFinalBlends ()
-		{
-				return Color.white;
-		}
-	
-		public override Color GetColorsForStableSyllables ()
-		{
-				return Color.white;
-		}
-		
-		public override Color ModifyColorForSoftConsonant (Color color)
-		{
-				return Color.white;
-		}
-		/*
-		public override Color GetColorsForConsonantDigraphs ()
-		{
-				return Color.white;
-		}*/
-
-		public override Color GetColorsForVowelDigraphs ()
-		{
-				return Color.white;
-		}
-
-		public override Color GetColorsForRControlledVowel (char letter)
-		{
-
-				return Color.white;
-		}
-
-
-}
-
-class Nick : Categorical
-{
-
-		public Nick () : base()
-		{
-				label = "Nick";
-		}
-
-		public override Color GetColorsForStableSyllables ()
-		{
-				return Color.green;
-		}
-
-		public override Color GetColorsForShortVowel (Color currentVowelColor)
-		{
-				return Color.blue;
-		}
-
-		public override Color GetColorsForLongVowel (char vowel)
-		{
-				return Color.yellow;
-		
-		}
-
-
-
-
-
 
 
 
 
 }
+

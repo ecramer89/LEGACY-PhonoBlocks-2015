@@ -46,10 +46,6 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\BlinkyLightBehaviour.cs" />
-     <Compile Include="Assets\DataManager.cs" />
-     <Compile Include="Assets\DecoderTest.cs" />
-     <Compile Include="Assets\FrontCameraController.cs" />
      <Compile Include="Assets\InputField.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipItems.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipRandomItem.cs" />
@@ -201,20 +197,11 @@
      <Compile Include="Assets\PhonoBlocks\SwipeDetector.cs" />
      <Compile Include="Assets\PhonoBlocks\UDPPacketIO.cs" />
      <Compile Include="Assets\PhonoBlocks\UserInputRouter.cs" />
+     <Compile Include="Assets\PhonoBlocks\UserStarGridController.cs" />
      <Compile Include="Assets\PhonoBlocks\UserWord.cs" />
      <Compile Include="Assets\PhonoBlocks\Word.cs" />
      <Compile Include="Assets\PhonoBlocks\WordHistoryController.cs" />
-     <Compile Include="Assets\PhonoBlocks\WordImages.cs" />
-     <Compile Include="Assets\PushButton.cs" />
-     <Compile Include="Assets\ReadButtonBehaviour.cs" />
-     <Compile Include="Assets\Scripts\DropReceiver.cs" />
      <Compile Include="Assets\Scripts\TextureScale.cs" />
-     <Compile Include="Assets\SecretButton.cs" />
-     <Compile Include="Assets\SecretButtonManager.cs" />
-     <Compile Include="Assets\Session.cs" />
-     <Compile Include="Assets\SpeechRecorder.cs" />
-     <Compile Include="Assets\TestPlayerPrefs.cs" />
-     <Compile Include="Assets\Token.cs" />
      <Compile Include="Assets\Uniduino\Scripts\Arduino.Firmata.cs" />
      <Compile Include="Assets\Uniduino\Scripts\Arduino.cs" />
      <Compile Include="Assets\Uniduino\Scripts\SerialPortProxy.cs" />
@@ -227,13 +214,6 @@
      <Compile Include="Assets\Uniduino\Tutorials\Servo\Servo.cs" />
      <Compile Include="Assets\Uniduino\Tutorials\Servo\ServoSlideControl.cs" />
      <Compile Include="Assets\Uniduino\UniduinoTestPanel\UniduinoTestPanel.cs" />
-     <Compile Include="Assets\User.cs" />
-     <Compile Include="Assets\UserController.cs" />
-     <Compile Include="Assets\UserGridController.cs" />
-     <Compile Include="Assets\UserImage.cs" />
-     <Compile Include="Assets\UserManagementController.cs" />
-     <Compile Include="Assets\UserManager.cs" />
-     <Compile Include="Assets\test.cs" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Depth Cutout.shader" />
      <None Include="Assets\NGUI\Examples\Models\Orc\Orc Skin.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo20.txt" />

@@ -246,10 +246,7 @@ public class ArduinoUnityInterface : PhonoBlocksController
 						arduino.digitalWrite (pin, CategoricalColorChannel (color, colorChannel));
 						//Debug.Log ("position " + position + " pin # " + ledOutputPins [position] [rescaledChannel] + " " + valueAtChannel + " " + ParseLetter (position));
 				}
-
-
-
-
+	
 		}
 
 		bool WasAChange ()

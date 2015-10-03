@@ -21,7 +21,7 @@ public class SpeechSoundReference : MonoBehaviour
 		static SpeechSoundLookup<string> initial_blends_ = new SpeechSoundLookup<string> ();
 		static SpeechSoundLookup<string> middle_blends_ = new SpeechSoundLookup<string> ();
 		static SpeechSoundLookup<string> final_blends_ = new SpeechSoundLookup<string> ();
-	static PhonotacticChecker.Phonotactics[] blankRules = new PhonotacticChecker.Phonotactics[]{PhonotacticChecker.NoRestrictions};
+		static PhonotacticChecker.Phonotactics[] blankRules = new PhonotacticChecker.Phonotactics[]{PhonotacticChecker.NoRestrictions};
 
 		public static PhonotacticChecker.Phonotactics[] BlankRules ()
 		{
@@ -31,31 +31,38 @@ public class SpeechSoundReference : MonoBehaviour
 		public class SpeechSoundLookup<Type>
 		{
 
-		Dictionary<Type, PhonotacticChecker.Phonotactics[]> rules = new Dictionary<Type,PhonotacticChecker.Phonotactics[]> ();
+				Dictionary<Type, PhonotacticChecker.Phonotactics[]> rules = new Dictionary<Type,PhonotacticChecker.Phonotactics[]> ();
 
-		public void Add (Type letters, PhonotacticChecker.Phonotactics rule)
+				public void Add (Type letters, PhonotacticChecker.Phonotactics rule)
 				{
-			this.rules.Add (letters, new PhonotacticChecker.Phonotactics[]{rule});
+						this.rules.Add (letters, new PhonotacticChecker.Phonotactics[]{rule});
 
 
 
 				}
 
-		public void Add (Type letters, PhonotacticChecker.Phonotactics a, PhonotacticChecker.Phonotactics b)
+				public void Add (Type letters, PhonotacticChecker.Phonotactics a, PhonotacticChecker.Phonotactics b)
 				{
-			this.rules.Add (letters, new PhonotacticChecker.Phonotactics[]{a,b});
+						this.rules.Add (letters, new PhonotacticChecker.Phonotactics[]{a,b});
 		
 				}
 
-		public void Add (Type letters, PhonotacticChecker.Phonotactics a, PhonotacticChecker.Phonotactics b, PhonotacticChecker.Phonotactics c)
+				public void Add (Type letters, PhonotacticChecker.Phonotactics a, PhonotacticChecker.Phonotactics b, PhonotacticChecker.Phonotactics c)
 				{
-			this.rules.Add (letters, new PhonotacticChecker.Phonotactics[]{a,b,});
+						this.rules.Add (letters, new PhonotacticChecker.Phonotactics[]{a,b,});
 			
 				}
 
 				public void Add (Type letters, PhonotacticChecker.Phonotactics[] rules)
 				{
 						this.rules.Add (letters, rules);
+			
+		
+				}
+
+				public void Add (Type letters)
+				{
+						this.rules.Add (letters, new PhonotacticChecker.Phonotactics[]{PhonotacticChecker.NoRestrictions});
 			
 			
 			
@@ -68,15 +75,15 @@ public class SpeechSoundReference : MonoBehaviour
 
 				}
 
-		public PhonotacticChecker.Phonotactics[] TryGetValue (Type key)
+				public PhonotacticChecker.Phonotactics[] TryGetValue (Type key)
 				{
-			PhonotacticChecker.Phonotactics[] val = null;
+						PhonotacticChecker.Phonotactics[] val = null;
 						rules.TryGetValue (key, out val);
 						return val;
 
 				}
 
-		public Dictionary<Type,PhonotacticChecker.Phonotactics[]>.KeyCollection Units ()
+				public Dictionary<Type,PhonotacticChecker.Phonotactics[]>.KeyCollection Units ()
 				{
 						return rules.Keys;
 
@@ -87,14 +94,14 @@ public class SpeechSoundReference : MonoBehaviour
 
 	   
 
-	public static PhonotacticChecker.Phonotactics[] GetRulesForConsonant (char consonant)
+		public static PhonotacticChecker.Phonotactics[] GetRulesForConsonant (char consonant)
 		{
 
 				return consonants_.TryGetValue (consonant);
 
 		}
 
-	public static PhonotacticChecker.Phonotactics[] GetRulesForVowel (char vowel)
+		public static PhonotacticChecker.Phonotactics[] GetRulesForVowel (char vowel)
 		{
 				if (IsY (vowel))
 						return consonants_.TryGetValue (vowel);
@@ -102,7 +109,7 @@ public class SpeechSoundReference : MonoBehaviour
 		
 		}
 
-	public static PhonotacticChecker.Phonotactics[] GetRulesForBlend (string blend, int type)
+		public static PhonotacticChecker.Phonotactics[] GetRulesForBlend (string blend, int type)
 		{
 				if (type == INITIAL_BLEND)
 						return initial_blends_.TryGetValue (blend);
@@ -112,21 +119,21 @@ public class SpeechSoundReference : MonoBehaviour
 		
 		}
 
-	public static PhonotacticChecker.Phonotactics[] GetRulesForConsonantDigraph (string cDigraph)
+		public static PhonotacticChecker.Phonotactics[] GetRulesForConsonantDigraph (string cDigraph)
 		{
 		
 				return consonant_digraphs_.TryGetValue (cDigraph);
 		
 		}
 
-	public static PhonotacticChecker.Phonotactics[] GetRulesForVowelDigraph (string vDigraph)
+		public static PhonotacticChecker.Phonotactics[] GetRulesForVowelDigraph (string vDigraph)
 		{
 		
 				return vowel_digraphs_.TryGetValue (vDigraph);
 		
 		}
 
-	public static PhonotacticChecker.Phonotactics[] GetRulesForStableSyllable (string stable)
+		public static PhonotacticChecker.Phonotactics[] GetRulesForStableSyllable (string stable)
 		{
 		
 				return stable_syllables_.TryGetValue (stable);
@@ -259,30 +266,27 @@ public class SpeechSoundReference : MonoBehaviour
 	
 		static void AddVowelDigraphs ()
 		{
-				vowel_digraphs_.Add ("ea", PhonotacticChecker.NoRestrictions);
-				vowel_digraphs_.Add ("ae", PhonotacticChecker.NoRestrictions);
-				vowel_digraphs_.Add ("aa", PhonotacticChecker.NoRestrictions);
-				vowel_digraphs_.Add ("ee", PhonotacticChecker.NoRestrictions);
-				vowel_digraphs_.Add ("ie", PhonotacticChecker.NoRestrictions);
-				vowel_digraphs_.Add ("oe", PhonotacticChecker.NoRestrictions);
-				vowel_digraphs_.Add ("ue", PhonotacticChecker.NoRestrictions);
-				vowel_digraphs_.Add ("ou", PhonotacticChecker.NoRestrictions);
-				vowel_digraphs_.Add ("ay", PhonotacticChecker.NoRestrictions);
-				vowel_digraphs_.Add ("oa", PhonotacticChecker.NoRestrictions);
+				vowel_digraphs_.Add ("ea");
+				vowel_digraphs_.Add ("ae");
+				vowel_digraphs_.Add ("aa");
+				vowel_digraphs_.Add ("ee");
+				vowel_digraphs_.Add ("ie");
+				vowel_digraphs_.Add ("oe");
+				vowel_digraphs_.Add ("ue");
+				vowel_digraphs_.Add ("ou");
+				vowel_digraphs_.Add ("ay");
+				vowel_digraphs_.Add ("oa");
 		}
 
 		static void AddStableSyllables ()
 		{       
 
-				
-				stable_syllables_.Add ("ckle", PhonotacticChecker.ConsonantCannotPrecede);
-				stable_syllables_.Add ("kle", PhonotacticChecker.ConsonantCannotPrecede);
-				stable_syllables_.Add ("gle", PhonotacticChecker.ConsonantCannotPrecede);
-				stable_syllables_.Add ("fle", PhonotacticChecker.ConsonantCannotPrecede);
-				stable_syllables_.Add ("ble", PhonotacticChecker.ConsonantCannotPrecedeUnlessDoubled);
-				stable_syllables_.Add ("dle", PhonotacticChecker.ConsonantCannotPrecedeUnlessDoubled);
-				stable_syllables_.Add ("ple", PhonotacticChecker.ConsonantCannotPrecedeUnlessDoubled);
-				stable_syllables_.Add ("tle", PhonotacticChecker.ConsonantCannotPrecedeUnlessDoubled);
+				stable_syllables_.Add ("ov");
+				stable_syllables_.Add ("er");
+				stable_syllables_.Add ("wa");
+				stable_syllables_.Add ("ter");
+				stable_syllables_.Add ("slee");
+				stable_syllables_.Add ("py");
 
 
 		}

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Text;
 using System.Collections.Generic;
@@ -18,11 +18,12 @@ public class AudioSourceController : MonoBehaviour
 						source = gameObject.GetComponent<AudioSource> ();
 		}
 
-	public static AudioClip GetSoundedOutWordFromResources(string word){
-		StringBuilder path = new StringBuilder (RESOURCES_WORD_PATH);
-		path.Append("so_");
-		path.Append(word);
-		return (AudioClip)Resources.Load (path.ToString (), typeof(AudioClip));
+		public static AudioClip GetSoundedOutWordFromResources (string word)
+		{
+				StringBuilder path = new StringBuilder (RESOURCES_WORD_PATH);
+				path.Append ("so_");
+				path.Append (word);
+				return (AudioClip)Resources.Load (path.ToString (), typeof(AudioClip));
 
 		}
 

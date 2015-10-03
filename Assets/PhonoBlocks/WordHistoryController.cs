@@ -21,8 +21,7 @@ public class WordHistoryController : PhonoBlocksController
 
 		public GameObject wordHistoryGrid;
 		LetterGridController lettersOfWordInHistory;
-		//WordImageAndAudioMapAccessor wordDataAccessor; //reference to the data table that has the dictionary linking string reresentations of words to word objects.
-		
+
 
 		public List<Word> words; //words in the word history.
 		Word psuedoWord; //a dummy value to return in case there is some kind of error.
@@ -30,7 +29,7 @@ public class WordHistoryController : PhonoBlocksController
 				get {
 						if (psuedoWord == null) {
 								psuedoWord = new Word ("whoops");
-				psuedoWord.Image = WordImages.instance.default_image;
+			
 						}
 						return psuedoWord;
 				}

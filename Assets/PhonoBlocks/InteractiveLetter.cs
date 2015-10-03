@@ -23,8 +23,8 @@ public class InteractiveLetter : PhonoBlocksController
 		BoxCollider trigger;
 		LetterSoundComponent lc;
 		int flashCounter = 0;
-		int timesToFlash = 8;
-		float secondsDelayBetweenFlashes = .3f;
+		int timesToFlash = 5;
+		float secondsDelayBetweenFlashes = .2f;
 		int idxAsArduinoControlledLetter;
 
 		public int IdxAsArduinoControlledLetter {
