@@ -13,14 +13,6 @@ public class SessionsDirector : MonoBehaviour
 
 		
 		public static ColourCodingScheme colourCodingScheme = new RControlledVowel ();
-
-		public ColourCodingScheme ActiveColourCodingScheme
-		{ set {
-						colourCodingScheme = value;
-				} get {
-						return colourCodingScheme;
-				} }
-
 		public INTERFACE_TYPE INTERFACE;
  
 
@@ -116,24 +108,26 @@ public class SessionsDirector : MonoBehaviour
 
 		//Teacher mode is the current "sandbox" mode, which just defaults to rthe colour scheme chosen at the head of this file.
 		//!!TO DO: change startTeacherMode so that the acrtive colour scheme depends upon the button that the teacher pressed.
-		void StartTeacherMode ()
+		public void SelectTeacherMode ()
 		{
-
-				//if it's the first time we pressed the teacher mode button, then activate the content selection buttons and deactivate the student mode button.
-				if (mode != Mode.TEACHER) {
-						mode = Mode.TEACHER;
-						activitySelectionButtons.SetActive(true);
-						studentModeButton.SetActive(false);
+				Debug.Log ("called start teacher mode ");
+				mode = Mode.TEACHER;
+				activitySelectionButtons.SetActive (true);
+				studentModeButton.SetActive (false);
 			           
-				} else {
-						//if it's the second time we have pressed the teacher mode button, start the activity (...atm, I'm not doing any "checks" on whether the user pressed a buton to change the active scheme, which defaults to open/closed vowel.
-						Application.LoadLevel ("Activity");
-				}
+				
 
 		}
 
+		public void SetContentForTeacherMode (ProblemsRepository.ProblemType problemType)
+		{
 
-		void StartPracticeMode ()
+				colourCodingScheme = ProblemsRepository.instance.GetColourCodingSchemeGivenProblemType (problemType);
+				Debug.Log ("called set content for teacher mode :" + colourCodingScheme.label);
+				Application.LoadLevel ("Activity");
+		}
+
+		public void SelectStudentMode ()
 		{
 				string nameEntered = studentName.stringToEdit.Trim ().ToLower ();
 				if (nameEntered.Length > 0) {

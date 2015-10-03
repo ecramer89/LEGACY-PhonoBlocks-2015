@@ -20,7 +20,7 @@ public class ContentButton : MonoBehaviour
             
 				if (pressed) {
 					
-						sessionsDirector.ActiveColourCodingScheme = ProblemsRepository.instance.GetColourCodingSchemeGivenProblemType (problemType);
+						sessionsDirector.SetContentForTeacherMode (problemType);
 				}
 			
 
