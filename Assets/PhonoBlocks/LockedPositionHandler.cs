@@ -77,7 +77,7 @@ public class LockedPositionHandler : PhonoBlocksController
 				//if (!CharacterInTargetStateIsBlank (targetState, position)) {
 
 				//then: if the state of that letter before the change was correct
-				if (StateOfLettersBeforeUserChangeWasCorrect (position, targetState, usersMostRecentChanges)) {
+		if (StateOfLettersBeforeUserChangeWasCorrect (position, targetState, usersMostRecentChanges)) {
 						//then say there is an error.
 						HandleError (position, change, targetState, arduinoLetterController);
 				} else {
@@ -95,6 +95,7 @@ public class LockedPositionHandler : PhonoBlocksController
 				//}
 		
 		}
+
 
 		void DecreaseNumLockedPositionsWithIncorrectLetter (int positionOfNewLetter, ArduinoLetterController arduinoLetterController)
 		{

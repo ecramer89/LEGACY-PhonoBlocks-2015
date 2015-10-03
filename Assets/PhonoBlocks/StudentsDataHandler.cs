@@ -12,14 +12,11 @@ public class StudentsDataHandler : MonoBehaviour
 		static readonly string LOG_FILE_DIRECTORY = "logs";
 		public readonly string ASSESSMENT_EXTENSION = "_t";
 		public static StudentsDataHandler instance = new StudentsDataHandler ();
-
-		//static string templateForExperimentWideParams = "[0,0]";
-		static string templateForExperimentWideParams = "[0]";
+		static string templateForExperimentWideParams = "[0,0]";
 		const string experimentWideParamStart = "[";
 		const string experimentWideParamEnd = "]";
-		//const int idxOfColorCodeSchemeInTemplate = 1;
 		const int idxOfCurrentSessionInTemplate = 1;
-		//const int idxOfCurrentSessionInTemplate = 3;
+		const int idxOfNumStarsInTemplate = 3;
 		const string activityDelimiter = "!";
 
 		//these arent indexes of the values in a string. they are idx of the values in the array
@@ -27,16 +24,7 @@ public class StudentsDataHandler : MonoBehaviour
 		//string in player prefs.
 
 
-		public const int idxOfSolved = 0;
-
-		//keep these the way they are so that we can exploit the hint integer argument to the record
-		//requested hint method as the way of accessing the correct array index.
-		/*public const int idxOfTimesListenedHint1 = 1;
-		public const int idxOfTimesListenedHint2 = 2;
-		public const int idxOfTimesListenedHint3 = 3;
-		public const int idxOfNumAttempts = 4;*/
-		public const int idxOfSkippedActivity = 1;
-		const int NUM_NUMERIC_ACTIVITY_FIELDS = idxOfSkippedActivity + 1;
+		
 		const string valDelimiter = ",";
 		const int asciiFor0 = 48;
 
@@ -47,39 +35,17 @@ public class StudentsDataHandler : MonoBehaviour
 
 		public class StudentData
 		{
+				//values that we update each session. then we store the new values in the player prefs.
 				int currSession;
-				//ColourCodingScheme scheme;
-				//int schemeAsInt;
-
-				/*public int ColorCodingSchemeAsInt {
-						get{ return schemeAsInt;}
-				}*/
-
+				public int numStars;
+				public int solved;
 				public string studentName;
-				//each activity finishes with the delimiter character !
-				//when you load in the student data at the very end,
-				//just split this string into an array by !
-				//and then write each string to file as a separate line
-				// (the string will already contain the comma delimiters between fields because
-				//we will format the string made from the values in the array this way before we save them to
-				//the player prefs
 				public string dataFromPreviouslyCompletedActivities = "";
-				public int[] numericDataForCurrentActivity = new int[NUM_NUMERIC_ACTIVITY_FIELDS];
 				public string targetWordOfCurrentActivity;
 				public string initialWordOfCurrentActivity;
 				public string conceptOfCurrentActivity;
 				public string finalSubmittedWord;
-				//public string coloursApplied = "true";
 				string asString;
-
-				/*
-				public ColourCodingScheme ColourCodingScheme {
-						get {
-								return scheme;
-						}
-		
-			
-				}*/
 
 				public int CurrentSession {
 						get {
@@ -88,23 +54,16 @@ public class StudentsDataHandler : MonoBehaviour
 		
 				}
 
-				/*public StudentData (string studentName, int colorCodingScheme, int currSession)
+
+		   
+				//construct an object that "caches" the data of this student in the application
+				//so that we can update the fields of the student that are stored in player prefs
+				public StudentData (string studentName, int currSession, int numStars)
 				{
 						this.studentName = studentName;
 						this.currSession = currSession;
-						//this.scheme = colourCodes [colorCodingScheme];
-						//this.schemeAsInt = colorCodingScheme;
-					
-					
-
-				}*/
-
-				public StudentData (string studentName, int currSession)
-				{
-						this.studentName = studentName;
-						this.currSession = currSession;
-						//this.scheme = colourCodes [colorCodingScheme];
-						//this.schemeAsInt = colorCodingScheme;
+						this.numStars = numStars;
+					    
 			
 			
 			
@@ -122,13 +81,11 @@ public class StudentsDataHandler : MonoBehaviour
 
 						StringBuilder data = new StringBuilder (dataFromPreviouslyCompletedActivities);
 						AppendDatum (data, currSession);
+						AppendDatum (data, numStars);
+						AppendDatum (data, solved);
 						AppendDatum (data, conceptOfCurrentActivity);
 						AppendDatum (data, targetWordOfCurrentActivity);
 						AppendDatum (data, initialWordOfCurrentActivity);
-						//AppendDatum (data, coloursApplied);
-						foreach (int val in numericDataForCurrentActivity) {
-								AppendDatum (data, val);
-						}
 						AppendDatum (data, finalSubmittedWord);
 						//append the activity delimiter (!) to the end of the string.
 						data.Append (activityDelimiter);
@@ -145,13 +102,6 @@ public class StudentsDataHandler : MonoBehaviour
 
 				}
 
-				//clear the array that stores the summary numeric activity data.
-				public void ClearCurrentActivityData ()
-				{
-
-						numericDataForCurrentActivity = new int[NUM_NUMERIC_ACTIVITY_FIELDS];
-
-				}
 
 		}
 
@@ -166,23 +116,6 @@ public class StudentsDataHandler : MonoBehaviour
 				PlayerPrefs.SetString (studentName, templateForExperimentWideParams); 
 		}
 
-
-
-
-
-	  
-		// writes all of the student's stored data (for each session)
-		// to a csv file. Each student receives their own csv file.
-
-		public void WriteDataOfCurrentStudentToCSV ()
-		{
-
-				//WriteStudentDataToCSV (currUser.studentName);
-
-
-
-		}
-
 		char IntAsChar (int i)
 		{
 				return (char)(i + asciiFor0);
@@ -195,11 +128,12 @@ public class StudentsDataHandler : MonoBehaviour
 
 		}
 
-		string UpdateSavedSessionAsString (int currentSession)
+		string UpdateSavedSessionAsString (int currentSession, int numStars)
 		{
 				StringBuilder s = new StringBuilder (templateForExperimentWideParams);
 		
 				s [idxOfCurrentSessionInTemplate] = IntAsChar (currentSession);
+				s [idxOfNumStarsInTemplate] = IntAsChar (numStars);
 		
 				return s.ToString ();
 		
@@ -223,10 +157,10 @@ public class StudentsDataHandler : MonoBehaviour
 		StudentData ParseStudentData (string studentName, string studentData)
 		{
 				string expWideParams = studentData.Substring (0, templateForExperimentWideParams.Length);
-				//int colorCodingScheme = CharAsInt (expWideParams [idxOfColorCodeSchemeInTemplate]);
+		        
 				int currSession = CharAsInt (expWideParams [idxOfCurrentSessionInTemplate]);
-				//StudentData data = new StudentData (studentName, colorCodingScheme, currSession);
-				StudentData data = new StudentData (studentName, currSession);
+				int numStars = CharAsInt (expWideParams [idxOfNumStarsInTemplate]);
+				StudentData data = new StudentData (studentName, currSession, numStars);
 				if (ThereIsDataFromEarlierSessions (studentData))
 						data.dataFromPreviouslyCompletedActivities = studentData.Substring (templateForExperimentWideParams.Length, studentData.Length - templateForExperimentWideParams.Length);
 				return data;
@@ -245,11 +179,6 @@ public class StudentsDataHandler : MonoBehaviour
 		
 		}
 
-		public void RecordThatActivityWasSkipped ()
-		{
-				currUser.numericDataForCurrentActivity [idxOfSkippedActivity] = 1;
-		}
-
 		public void RecordActivityTargetWord (string word)
 		{
 				currUser.targetWordOfCurrentActivity = word;
@@ -262,9 +191,10 @@ public class StudentsDataHandler : MonoBehaviour
 		
 		}
 
-		public void RecordActivitySolved (bool solved, string finalSubmittedAnswer)
+		public void RecordActivitySolved (bool solved, string finalSubmittedAnswer, bool solvedOnFirstAttempt)
 		{
-				currUser.numericDataForCurrentActivity [idxOfSolved] = (solved ? 1 : 0);
+				currUser.solved = (solved ? 1 : 0);
+				currUser.numStars += (solvedOnFirstAttempt ? 1 : 0);
 				currUser.finalSubmittedWord = finalSubmittedAnswer;
 			
 		}
@@ -284,17 +214,15 @@ public class StudentsDataHandler : MonoBehaviour
 				currUser.AppendDataForCurrentActivityToPreviousData ();
 
 				LogActivitySummaryData (currUser.targetWordOfCurrentActivity, currUser.finalSubmittedWord);
-				currUser.ClearCurrentActivityData ();
+				
 
 		}
 
 		public void UpdateUserSessionAndWriteAllUpdatedDataToPlayerPrefs ()
 		{       //update the current session number so that next time we retrieve this students data we set up the right session
 				int nextSession = currUser.CurrentSession + 1;
-				//we are going to overwrite the stored string for this student in player prefs;
-				//the first part of that string is the substing [int, int] which has the experiment wide session parameters
-				//string experimentWideParametersOfStudent = BuildStringForExperimentWideParams (currUser.ColorCodingSchemeAsInt, nextSession);
-				string experimentWideParametersOfStudent = UpdateSavedSessionAsString (nextSession);
+				
+				string experimentWideParametersOfStudent = UpdateSavedSessionAsString (nextSession, currUser.numStars);
 				StringBuilder studentData = new StringBuilder (experimentWideParametersOfStudent);
 				//nbe sure to save the activity data after each activity and just re-save the data when done
 				studentData.Append (currUser.dataFromPreviouslyCompletedActivities);
@@ -303,8 +231,6 @@ public class StudentsDataHandler : MonoBehaviour
 
 
 		       
-				
-
 		}
 
 		public int GetUsersSession ()
@@ -312,8 +238,15 @@ public class StudentsDataHandler : MonoBehaviour
 				if (!ReferenceEquals (currUser, null))
 						return currUser.CurrentSession;
 				return 0;
-		
-		
+	
+		}
+
+		public int GetUsersNumStars ()
+		{
+				if (!ReferenceEquals (currUser, null))
+						return currUser.numStars;
+				return 0;
+
 		}
 
 

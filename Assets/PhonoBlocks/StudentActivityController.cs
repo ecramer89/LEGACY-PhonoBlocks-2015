@@ -14,10 +14,6 @@ public class StudentActivityController : PhonoBlocksController
 				MAIN_ACTIVITY,
 				REMOVE_ALL_LETTERS,
 			
-				BREAK_BEFORE_END
-
-
-
 		}
 
 		State state = State.PLACE_INITIAL_LETTERS;
@@ -32,7 +28,7 @@ public class StudentActivityController : PhonoBlocksController
 		public Texture2D sessionFinishedImage;
 		public AudioClip takeABreakBetweenSessions;
 		public AudioClip pressOrTapScreenToContinue;
-
+	    
 
 
 		//stupid hack to prevent skipping without removing all letters.
@@ -94,7 +90,7 @@ public class StudentActivityController : PhonoBlocksController
 				lockedPositionHandler.Initialize ();
 				hintController = gameObject.GetComponent<HintController> ();
 				hintController.Initialize (hintButton);
-				SwipeDetector.MousePressed += HandleMousePress;
+			
 				SetUpNextProblem ();
 
 	
@@ -113,7 +109,7 @@ public class StudentActivityController : PhonoBlocksController
 
 
 				lockedPositionHandler.ResetForNewProblem ();
-				lockedPositionHandler.RememberPositionsThatShouldNotBeChanged (currProblem.InitialWord.Trim(), currProblem.TargetWord (false).Trim()); 
+				lockedPositionHandler.RememberPositionsThatShouldNotBeChanged (currProblem.InitialWord.Trim (), currProblem.TargetWord (false).Trim ()); 
 				lockedPositionHandler.NumTangibleLettersThatUserMustMatchToLockedUILetters = currProblem.NumInitialLetters;
 				
 		           
@@ -181,22 +177,12 @@ public class StudentActivityController : PhonoBlocksController
 		{
 				if (ProblemsRepository.instance.AllProblemsDone ()) {
 						StudentsDataHandler.instance.UpdateUserSessionAndWriteAllUpdatedDataToPlayerPrefs ();
-						//StudentsDataHandler.WriteDataOfCurrentStudentToCSV ();
 						AudioSourceController.PushClip (sessionIsFinished);
-						state = State.BREAK_BEFORE_END;
+						Debug.Log ("session is finished");
+				
 				} else
 						SetUpNextProblem ();
 
-		}
-
-		public void HandleMousePress (object sender, EventArgs args)
-		{  
-				if (state == State.BREAK_BEFORE_END) {
-
-						userInputRouter.RequestDisplayImage (sessionFinishedImage, true, true);
-
-				}
-	
 		}
 
 		void BeginMainProblemState ()
@@ -228,18 +214,32 @@ public class StudentActivityController : PhonoBlocksController
 
 		public void HandleNewArduinoLetter (char letter, int atPosition)
 		{       
-			
-				bool positionWasLocked = lockedPositionHandler.IsLocked (atPosition); 
-				//we treat all positions as "locked" when the state is the end of the activity.
-				if (positionWasLocked || state == State.REMOVE_ALL_LETTERS) {
-						lockedPositionHandler.HandleChangeToLockedPosition (atPosition, letter, currProblem.TargetWord (false), usersMostRecentChanges, arduinoLetterController);
-				} else if (!lockedPositionHandler.AllLockedPositionsAreInCorrectState ()) //if the user adds a letter to a portion of the string that isn't locked, (e.g., initial word is __nt and the child places w and e then w and e wont appear coloured... are you sure you want this? I don't know if that makes sense.
-						arduinoLetterController.LockASingleLetter (atPosition);
-				RecordUsersChange (atPosition, letter); 
+				if (LetterIsActuallyNew (letter, atPosition)) {
+						bool positionWasLocked = lockedPositionHandler.IsLocked (atPosition); 
+						//we treat all positions as "locked" when the state is the end of the activity.
+						if (positionWasLocked || state == State.REMOVE_ALL_LETTERS) {
+								lockedPositionHandler.HandleChangeToLockedPosition (atPosition, letter, currProblem.TargetWord (false), usersMostRecentChanges, arduinoLetterController);
+						} else if (!lockedPositionHandler.AllLockedPositionsAreInCorrectState ()) //if the user adds a letter to a portion of the string that isn't locked, (e.g., initial word is __nt and the child places w and e then w and e wont appear coloured... are you sure you want this? I don't know if that makes sense.
+								arduinoLetterController.LockASingleLetter (atPosition);
+						RecordUsersChange (atPosition, letter); 
 		        
-				ChangeProblemStateIfAllLockedPositionsAHaveCorrectCharacter ();
+						ChangeProblemStateIfAllLockedPositionsAHaveCorrectCharacter ();
 			   
-				arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (state != State.PLACE_INITIAL_LETTERS);
+						arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (state != State.PLACE_INITIAL_LETTERS);
+
+				}
+		}
+
+		/// <summary>
+		/// Letters the is actually new.
+		/// </summary>
+		/// <returns><c>true</c>, if the user actually changed the letter, <c>false</c> otherwise, i.e., if we're reading a "new value" from an arduino circuit or input error.</returns>
+		/// <param name="letter">Letter.</param>
+		/// <param name="atPosition">At position.</param>
+		bool LetterIsActuallyNew (char letter, int atPosition)
+		{
+				return usersMostRecentChanges [atPosition] != letter;
+
 
 		}
 
@@ -256,27 +256,23 @@ public class StudentActivityController : PhonoBlocksController
 				return true;
 		
 		}
-
-		bool CurrentlyRunningAnActivity ()
-		{
-				return state != State.BREAK_BEFORE_END;
-		}
-
+		
 		public virtual void HandleSubmittedAnswer (string answer)
 		{
+				currProblem.IncrementTimesAttempted ();
 			
-						if (SubmissionIsCorrect (answer)) {
-								//TO DO!!! then if this was the first time that student submitted an answer (get the data from the current student object)
-								//then play the good hint else play the less good hint
-								AudioSourceController.PushClip (correctFeedback);
-								currProblem.PlayAnswer ();
+				if (SubmissionIsCorrect (answer)) {
+						//TO DO!!! then if this was the first time that student submitted an answer (get the data from the current student object)
+						//then play the good hint else play the less good hint
+						AudioSourceController.PushClip (correctFeedback);
+						currProblem.PlayAnswer ();
 				
-								CurrentProblemCompleted (true, answer);
+						CurrentProblemCompleted (true, answer);
 				
-						} else {
-								HandleIncorrectAnswer ();				
+				} else {
+						HandleIncorrectAnswer ();				
 				
-						}
+				}
 
 		}
 
@@ -307,7 +303,10 @@ public class StudentActivityController : PhonoBlocksController
 				arduinoLetterController.LockAllLetters ();
 		        
 				userInputRouter.RequestDisplayImage (WordImages.instance.GetWordImage (currProblem.TargetWord (true)), false, true);
-				StudentsDataHandler.instance.RecordActivitySolved (userSubmittedCorrectAnswer, answer);
+
+				Debug.Log (currProblem.TimesAttempted + " current problem times attempted");
+				bool solvedOnFirstTry = currProblem.TimesAttempted == 1;
+				StudentsDataHandler.instance.RecordActivitySolved (userSubmittedCorrectAnswer, answer, solvedOnFirstTry);
 			
 				StudentsDataHandler.instance.SaveActivityDataAndClearForNext (currProblem.TargetWord (false), currProblem.InitialWord);
 

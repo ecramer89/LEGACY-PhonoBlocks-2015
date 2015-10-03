@@ -1,0 +1,19 @@
+2015-10-02 20:01:49Z,activity,change_letter,b,0
+2015-10-02 20:01:56Z,activity,change_letter,t,2
+2015-10-02 20:01:59Z,activity,change_letter,e,1
+2015-10-02 20:02:03Z,activity,submitted_answer,bet   ,bet
+2015-10-02 20:02:06Z,activity,change_letter, ,0
+2015-10-02 20:02:07Z,activity,change_letter, ,1
+2015-10-02 20:02:08Z,activity,change_letter, ,2
+2015-10-02 20:02:47Z,activity,change_letter,o,1
+2015-10-02 20:02:49Z,activity,change_letter,d,2
+2015-10-02 20:02:51Z,activity,submitted_answer,dod   ,dad
+2015-10-02 20:02:54Z,activity,change_letter,a,1
+2015-10-02 20:02:57Z,activity,submitted_answer,dad   ,dad
+2015-10-02 20:03:23Z,activity,change_letter, ,0
+2015-10-02 20:03:23Z,activity,unproductive_error, ,0
+2015-10-02 20:03:24Z,activity,change_letter, ,1
+2015-10-02 20:03:25Z,activity,change_letter, ,2
+2015-10-02 20:03:32Z,activity,played_letter_sounds,,NA
+2015-10-02 20:03:32Z,activity,change_letter, ,4
+2015-10-02 20:03:32Z,activity,unproductive_error, ,4

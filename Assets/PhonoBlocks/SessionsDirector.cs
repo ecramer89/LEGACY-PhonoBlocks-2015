@@ -79,6 +79,7 @@ public class SessionsDirector : MonoBehaviour
 		public AudioClip noDataForStudentName;
 		public AudioClip enterAgainToCreateNewFile;
 		public static DateTime assessmentStartTime;
+		int numStarsOfCurrentUser;
 
 
 
@@ -110,7 +111,6 @@ public class SessionsDirector : MonoBehaviour
 		//!!TO DO: change startTeacherMode so that the acrtive colour scheme depends upon the button that the teacher pressed.
 		public void SelectTeacherMode ()
 		{
-				Debug.Log ("called start teacher mode ");
 				mode = Mode.TEACHER;
 				activitySelectionButtons.SetActive (true);
 				studentModeButton.SetActive (false);
@@ -123,7 +123,7 @@ public class SessionsDirector : MonoBehaviour
 		{
 
 				colourCodingScheme = ProblemsRepository.instance.GetColourCodingSchemeGivenProblemType (problemType);
-				Debug.Log ("called set content for teacher mode :" + colourCodingScheme.label);
+				
 				Application.LoadLevel ("Activity");
 		}
 
@@ -176,7 +176,8 @@ public class SessionsDirector : MonoBehaviour
 		public void SetParametersForStudentMode (GameObject studentActivityController)
 		{
 				currentUserSession = StudentsDataHandler.instance.GetUsersSession ();
-			
+				numStarsOfCurrentUser = StudentsDataHandler.instance.GetUsersNumStars ();
+				Debug.Log ("User's stars: " + numStarsOfCurrentUser);
 
 
 				ProblemsRepository.instance.Initialize (currentUserSession);

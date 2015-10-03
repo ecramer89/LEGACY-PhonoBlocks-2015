@@ -71,13 +71,9 @@ public class UserInputRouter : MonoBehaviour
 
        
 
-
-				
-
-
 				if (screenMode) { //activate the onscreen keyboard object
-						screenKeyboardController = onscreenKeyboardControllerGO.GetComponent<ScreenKeyboardController> ();
-						screenKeyboardController.Initialize ();
+						//screenKeyboardController = onscreenKeyboardControllerGO.GetComponent<ScreenKeyboardController> ();
+						//screenKeyboardController.Initialize ();
 						arduinoLetterInterfaceG0.SetActive (false);
 						uniduinoG0.SetActive (false);
 

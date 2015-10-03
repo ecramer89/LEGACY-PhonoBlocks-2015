@@ -194,7 +194,7 @@ public class LetterGridController : PhonoBlocksController
 		}
 
 		public GameObject CreateLetterBarCell (String letter, Texture2D tex2D, string position, Color c, GameObject localUpdaterOfLetterCell)
-		{ 
+	{      
 				Texture2D tex2dCopy = CopyAndScaleTexture (letterImageWidth, letterImageHeight, tex2D);
 				UITexture ut = NGUITools.AddChild<UITexture> (letterGrid);
 				ut.material = new Material (Shader.Find ("Unlit/Transparent Colored"));

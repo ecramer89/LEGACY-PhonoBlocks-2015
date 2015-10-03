@@ -19,8 +19,6 @@ public class ProblemsRepository : MonoBehaviour
 						return colourSchemeForSession;
 
 				}
-
-
 		}
 
 
@@ -40,25 +38,25 @@ public class ProblemsRepository : MonoBehaviour
 				switch (type) {
 				case ProblemType.OPEN_CLOSED_VOWEL:
 						return new OpenClosedVowel ();
-						break;
+					
 				case ProblemType.MAGIC_E:
 						return new VowelInfluenceERule ();
-						break;
+					
 				case ProblemType.SYLLABLE_DIVISION:
 						return new SyllableDivision ();
-						break;
+					
 				case ProblemType.CONSONANT_DIGRAPHS:
 						return new ConsonantDigraphs ();
-						break;
+					
 				case ProblemType.R_CONTROLLED_VOWEL:
 						return new RControlledVowel ();
-						break;
+						
 				case ProblemType.VOWEL_DIGRAPHS:
 						return new NoColour (); //change after we make the vowel digraphs scheme
-						break;
+
 				default: 
 						return new NoColour ();
-						break;
+				
 
 				}
 		       
