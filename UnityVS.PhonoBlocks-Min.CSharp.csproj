@@ -13,7 +13,7 @@
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
     <CompilerResponseFile></CompilerResponseFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -225,7 +225,6 @@
     <Compile Include="Assets\PhonoBlocks\CheckedWordImageController.cs" />
     <Compile Include="Assets\PhonoBlocks\ColourCodingScheme.cs" />
     <Compile Include="Assets\PhonoBlocks\ContentButton.cs" />
-    <Compile Include="Assets\PhonoBlocks\ErrorAudios.cs" />
     <Compile Include="Assets\PhonoBlocks\HintController.cs" />
     <Compile Include="Assets\PhonoBlocks\InstructionsAudio.cs" />
     <Compile Include="Assets\PhonoBlocks\InteractiveLetter.cs" />
@@ -234,14 +233,10 @@
     <Compile Include="Assets\PhonoBlocks\LetterSoundComponent.cs" />
     <Compile Include="Assets\PhonoBlocks\LetterSoundComponentFactoryHandler.cs" />
     <Compile Include="Assets\PhonoBlocks\LockedPositionHandler.cs" />
-    <Compile Include="Assets\PhonoBlocks\OSCWordReader.cs" />
-    <Compile Include="Assets\PhonoBlocks\Osc.cs" />
     <Compile Include="Assets\PhonoBlocks\PhonoBlocksController.cs" />
     <Compile Include="Assets\PhonoBlocks\PhonotacticChecker.cs" />
     <Compile Include="Assets\PhonoBlocks\Problem.cs" />
     <Compile Include="Assets\PhonoBlocks\ProblemsRepository.cs" />
-    <Compile Include="Assets\PhonoBlocks\ScreenKeyboardController.cs" />
-    <Compile Include="Assets\PhonoBlocks\Selectable.cs" />
     <Compile Include="Assets\PhonoBlocks\SessionsDirector.cs" />
     <Compile Include="Assets\PhonoBlocks\SpeechSoundReference.cs" />
     <Compile Include="Assets\PhonoBlocks\SpeechSoundsAudio.cs" />

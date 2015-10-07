@@ -20,7 +20,7 @@ namespace System.IO.Ports
 	/* 	This is a proxy class solely to allow our editor scripts to compile the first time 
 	 	so that they have an opportunity to be run and auto-install	
 	*/
-//#if !UNIDUINO_API_LEVEL_SET //&& UNITY_STANDALONE_OSX
+#if !UNIDUINO_API_LEVEL_SET //&& UNITY_STANDALONE_OSX
 	public class SerialPort
 	{
 		
@@ -56,9 +56,9 @@ namespace System.IO.Ports
 	
 	// TODO: whatever else is necessary to make it load 
 
-//#else
+#else
 	
 	
 	
-//#endif
+#endif
 }

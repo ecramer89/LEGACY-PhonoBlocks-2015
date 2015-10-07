@@ -28,14 +28,6 @@ public class StudentActivityController : PhonoBlocksController
 		public Texture2D sessionFinishedImage;
 		public AudioClip correctFeedback;
 
-
-
-	    
-
-
-		//stupid hack to prevent skipping without removing all letters.
-		char[] lettersThatUserNeedsToRemoveBeforeSkipping;
-
 		public int NonBlankLettersThatUserHasPlaced {
 				get {
 						int result = 0;
@@ -61,41 +53,61 @@ public class StudentActivityController : PhonoBlocksController
 
 		}
 
-		public string TargetLettersUserHasYetToPlace {
-				get {
-						string target = currProblem.TargetWord (false);
-						StringBuilder result = new StringBuilder ();
-			
-						for (int i=0; i<usersMostRecentChanges.Length; i++) {
-								char targetLetter = target [i];
-								if (usersMostRecentChanges [i] != targetLetter)
-										result.Append (targetLetter);
-								else
-										result.Append (' ');
-
-						}
-			
-						return result.ToString ();
-
-
-				}
-
-		}
-
 		public void Initialize (GameObject hintButton, ArduinoLetterController arduinoLetterController)
 		{
 				this.arduinoLetterController = arduinoLetterController;
 				usersMostRecentChanges = new char[UserInputRouter.numOnscreenLetterSpaces];
-				lettersThatUserNeedsToRemoveBeforeSkipping = new char[UserInputRouter.numOnscreenLetterSpaces];
 			
 				lockedPositionHandler = gameObject.GetComponent<LockedPositionHandler> ();
-				lockedPositionHandler.Initialize ();
+			
 				hintController = gameObject.GetComponent<HintController> ();
 				hintController.Initialize (hintButton);
 			
 				SetUpNextProblem ();
+				InteractiveLetter.LetterSelectedDeSelected += LetterSelectDeselect;
 
 	
+		}
+
+
+		//impose "reflection"- if the child waits three seconds after swiping,
+		//then check the word
+		//and if it works
+		//colour pink and play sound
+		int selectTimer = -1;
+
+		public void LetterSelectDeselect (bool wasSelected, GameObject selectedLetter)
+		{     
+				selectTimer = 60 * 3; 
+
+		}
+
+		bool wholeWordIsColoured = true;
+
+		void Update ()
+		{
+				if (selectTimer > 0)
+						selectTimer--;
+				if (selectTimer == 0) {
+						string selectedletters = arduinoLetterController.SelectedUserControlledLettersAsString.Trim ();
+						bool matchesTargetWord = selectedletters.Equals (currProblem.TargetWord (true));
+						if (matchesTargetWord) {
+								currProblem.PlayTargetWord ();
+								wholeWordIsColoured = true;
+								for (int i=0; i<selectedletters.Length; i++)
+										arduinoLetterController.ChangeDisplayColourOfASingleCell (i, SessionsDirector.colourCodingScheme.GetColorsForWholeWord ());
+						} else if (wholeWordIsColoured) {
+								for (int i=0; i<selectedletters.Length; i++) {
+										arduinoLetterController.RevertASingleLetterToDefaultColour (i);
+								}
+								wholeWordIsColoured = false;
+				
+						}
+			        
+						selectTimer = -1;
+				}
+
+
 		}
 
 		public void SetUpNextProblem ()
@@ -111,10 +123,8 @@ public class StudentActivityController : PhonoBlocksController
 
 
 				lockedPositionHandler.ResetForNewProblem ();
-				lockedPositionHandler.RememberPositionsThatShouldNotBeChanged (currProblem.InitialWord.Trim (), currProblem.TargetWord (false).Trim ()); 
-				lockedPositionHandler.NumTangibleLettersThatUserMustMatchToLockedUILetters = currProblem.NumInitialLetters;
-				
-		           
+				lockedPositionHandler.RememberPositionsThatShouldNotBeChanged (currProblem.InitialWord, currProblem.TargetWord (false).Trim ()); 
+	
 				arduinoLetterController.ReplaceEachLetterWithBlank ();
 				arduinoLetterController.PlaceWordInLetterGrid (currProblem.InitialWord);
 				arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (false);
@@ -134,6 +144,7 @@ public class StudentActivityController : PhonoBlocksController
 				//In case the initial state is already correct (...which happens when the user needs to build the word "from scratch". This makes it so
 				//we don;t need to trigger the check by adding a "blank"!
 				ChangeProblemStateIfAllLockedPositionsAHaveCorrectCharacter ();
+		        
 		         
 				//
 		}
@@ -156,23 +167,40 @@ public class StudentActivityController : PhonoBlocksController
 
 		}
 
+		bool CurrentStateOfLettersMatches (string targetLetters)
+		{       
+				for (int i=0; i<usersMostRecentChanges.Length; i++) {
+						if (i >= targetLetters.Length) {
+								if (usersMostRecentChanges [i] != ' ')
+										return false;
+						} else if (usersMostRecentChanges [i] != targetLetters [i])
+								return false;
+				}
+				return true;
+
+		}
+
 		public void ChangeProblemStateIfAllLockedPositionsAHaveCorrectCharacter ()
 		{
-				if (lockedPositionHandler.AllLockedPositionsAreInCorrectState ()) {
-						if (state == State.PLACE_INITIAL_LETTERS) {
+			
+				if (state == State.PLACE_INITIAL_LETTERS) {
+						if (CurrentStateOfLettersMatches (currProblem.InitialWord))
 								BeginMainProblemState ();
 				
-						}
-						if (state == State.REMOVE_ALL_LETTERS) {
-						
+				}
+				if (state == State.REMOVE_ALL_LETTERS) {
+					
+						if (CurrentStateOfLettersMatches (currProblem.TargetWord (false))) {
+							
 								HandleEndOfActivity ();
-								return;
 						}
+					
+				}
 						
 						
 
 				
-				}
+
 		}
 
 		void HandleEndOfActivity ()
@@ -189,8 +217,8 @@ public class StudentActivityController : PhonoBlocksController
 
 		void BeginMainProblemState ()
 		{
-			
-				arduinoLetterController.UnLockAllLetters (); //so that when we call update colours and sounds they appear in their new colours.
+				arduinoLetterController.UnLockAllLetters (); //we do this to unlock the letters that are outside the range of the initial word.
+				//during the initial stage only the letters in the initial word will absolutely be locked.
 				state = State.MAIN_ACTIVITY;
 
 		}
@@ -205,15 +233,7 @@ public class StudentActivityController : PhonoBlocksController
 						hintController.ProvideHint (currProblem);
 
 		}
-
-
-
-
-		//if the position is locked then delegate control to the locked position handler.
-		//otherwise tell the arduino letter controller to remember the change and update the (default) colours and sounds of all letters.
-		//no matter what, we remember the users' change and we always check to see whether we can switch the game state 
-
-
+	
 		public void HandleNewArduinoLetter (char letter, int atPosition)
 		{       
 				if (LetterIsActuallyNew (letter, atPosition)) {
@@ -221,8 +241,11 @@ public class StudentActivityController : PhonoBlocksController
 						//we treat all positions as "locked" when the state is the end of the activity.
 						if (positionWasLocked || state == State.REMOVE_ALL_LETTERS) {
 								lockedPositionHandler.HandleChangeToLockedPosition (atPosition, letter, currProblem.TargetWord (false), usersMostRecentChanges, arduinoLetterController);
-						} else if (!lockedPositionHandler.AllLockedPositionsAreInCorrectState ()) //if the user adds a letter to a portion of the string that isn't locked, (e.g., initial word is __nt and the child places w and e then w and e wont appear coloured... are you sure you want this? I don't know if that makes sense.
-								arduinoLetterController.LockASingleLetter (atPosition);
+						}
+
+						if (state == State.PLACE_INITIAL_LETTERS)
+								arduinoLetterController.UnLockASingleLetter (atPosition);
+
 						RecordUsersChange (atPosition, letter); 
 		        
 						ChangeProblemStateIfAllLockedPositionsAHaveCorrectCharacter ();
@@ -250,19 +273,10 @@ public class StudentActivityController : PhonoBlocksController
 				return wordRelativeIndex >= currProblem.TargetWord (true).Length; 
 		}
 
-		bool UserHasNoLettersToRemove ()
-		{
-				for (int i=0; i<lettersThatUserNeedsToRemoveBeforeSkipping.Length; i++)
-						if (lettersThatUserNeedsToRemoveBeforeSkipping [i] != ' ')
-								return false;
-				return true;
-		
-		}
-		
 		public virtual void HandleSubmittedAnswer (string answer)
 		{
 				currProblem.IncrementTimesAttempted ();
-			
+	
 				if (SubmissionIsCorrect (answer)) {
 						//TO DO!!! then if this was the first time that student submitted an answer (get the data from the current student object)
 						//then play the good hint else play the less good hint
@@ -294,14 +308,10 @@ public class StudentActivityController : PhonoBlocksController
 
 		}
 
-
-
-	   
-
 		public void CurrentProblemCompleted (bool userSubmittedCorrectAnswer, string answer)
 		{
 			
-				lockedPositionHandler.UserMustRemoveAllTheLettersOf = NonBlankLettersThatUserHasPlaced;
+
 				state = State.REMOVE_ALL_LETTERS;
 
 				currProblem.SetTargetWordToEmpty ();
@@ -334,19 +344,7 @@ public class StudentActivityController : PhonoBlocksController
 		
 		}
 
-		bool NoLettersThatAreNotFromTheInitialOnesRemain ()
-		{
-				for (int i=0; i<usersMostRecentChanges.Length; i++) {
-				
-						if (usersMostRecentChanges [i] != currProblem.InitialWord [i]) {
-								
-								return false;
-						}
 
-				}
-				return true;
-
-		}
 
 		
 		//could make this faster by just checking the indexes that arent locked.
@@ -354,7 +352,7 @@ public class StudentActivityController : PhonoBlocksController
 		protected bool SubmissionIsCorrect (string answer)
 		{      
 				string target = currProblem.TargetWord (true);
-			
+
 				bool result = answer.Trim ().Equals (target);
 
 				StudentsDataHandler.instance.LogEvent ("submitted_answer", answer, target);

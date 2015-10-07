@@ -7,6 +7,7 @@ public class LetterGridController : PhonoBlocksController
 {       
 		public GameObject letterGrid;
 		public GameObject letterHighlightsGrid;
+		public GameObject letterUnderlinesGrid;
 		public int letterImageWidth;
 		public int letterImageHeight;
 		float selectH;
@@ -51,8 +52,17 @@ public class LetterGridController : PhonoBlocksController
 						letterHighlightsGrid.transform.position = letterGrid.transform.position;
 
 
-						selectH = letterImageHeight / 1.3f;
-						selectW = letterImageWidth / 1.3f;
+						selectH = letterImageHeight;
+						selectW = letterImageWidth;
+
+				}
+
+				if (letterHighlightsGrid) {
+						UIGrid high = letterHighlightsGrid.GetComponent<UIGrid> ();
+						UIGrid letters = letterGrid.GetComponent<UIGrid> ();
+						high.cellWidth = letters.cellWidth;
+						high.cellHeight = letters.cellHeight;
+						letterHighlightsGrid.transform.position = letterGrid.transform.position;
 
 				}
 	
@@ -68,25 +78,6 @@ public class LetterGridController : PhonoBlocksController
 
 		}
 
-		public void ToggleHighlightAt (int position)
-		{ 
-
-				GameObject highlightCell = GetCell (position, letterHighlightsGrid);
-				bool val = highlightCell.GetComponent<UITexture> ().enabled;
-				highlightCell.GetComponent<UITexture> ().enabled = !val;
-
-		}
-
-		public void SetHighlightAt (int position, bool val)
-		{ 
-		
-				GameObject highlightCell = GetCell (position, letterHighlightsGrid);
-				
-				if (highlightCell)
-						highlightCell.GetComponent<UITexture> ().enabled = val;
-		
-		}
-
 		void MatchLetterImageToGridCellDimensions ()
 		{
 			
@@ -96,13 +87,24 @@ public class LetterGridController : PhonoBlocksController
 
 		}
 	
-		public void InitializeBlankLetterSpaces (int numCells, GameObject localUpdaterOfLetterCell)
+		public void InitializeBlankLetterSpaces (int numCells)
 		{
-        InitializeFieldsIfNecessary ();
+				InitializeFieldsIfNecessary ();
     
 				for (int i= 0; i<numCells; i++) {
 				
-						CreateLetterBarCell (" ", blankLetter, i + "", Color.white, localUpdaterOfLetterCell);
+						GameObject newLetter = CreateLetterBarCell (" ", blankLetter, i + "", Color.white);
+
+						//the word history controller also involves a letter grid... but doesn't highlight selected letters or show the lines.
+						//consider changing this so that the arduino letter controller is what creates the underlines and highlights...
+						//seems weird that this class would be making decisions about that
+						if (letterHighlightsGrid) {
+								UITexture letterHighlight = CreateLetterHighlightCell ();
+								newLetter.GetComponent<InteractiveLetter> ().SelectHighlight = letterHighlight;
+						}
+						if (letterUnderlinesGrid) {
+								CreateLetterUnderlineCell ();
+						}
 				}
 				RepositionGrids ();
 		}
@@ -110,26 +112,29 @@ public class LetterGridController : PhonoBlocksController
 		public void RepositionGrids ()
 		{
 				letterGrid.GetComponent<UIGrid> ().Reposition ();
-				letterHighlightsGrid.GetComponent<UIGrid> ().Reposition ();
-
+				if (letterHighlightsGrid)
+						letterHighlightsGrid.GetComponent<UIGrid> ().Reposition ();
+				if (letterUnderlinesGrid)
+						letterUnderlinesGrid.GetComponent<UIGrid> ().Reposition ();
+			
 		}
 
-		public void SetAllLettersToBlank (GameObject localUpdaterOfLetters)
+		public void SetAllLettersToBlank ()
 		{
-				SetLettersToBlank (0, transform.childCount, localUpdaterOfLetters);
+				SetLettersToBlank (0, transform.childCount);
 		}
 
-		public void SetLettersToBlank (int startingFrom, int number, GameObject localUpdaterOfLetterCell)
+		public void SetLettersToBlank (int startingFrom, int number)
 		{
 				for (int i=startingFrom; i<startingFrom+number; i++) {
-						UpdateLetter (localUpdaterOfLetterCell, i, " ", Color.white);
+						UpdateLetter (i, " ", Color.white);
 			
 				}
 
 
 		}
 
-		public InteractiveLetter UpdateLetter (GameObject localUpdaterOfLetterCell, int position, String letter, Color newNonLockColour)
+		public InteractiveLetter UpdateLetter (int position, String letter, Color newNonLockColour)
 		{
 				
 				InteractiveLetter l = LetterAtPosition (position);
@@ -138,43 +143,67 @@ public class LetterGridController : PhonoBlocksController
 				Texture2D letterImage = CopyAndScaleTexture (letterImageWidth, letterImageHeight, letterImageTable.GetLetterImageFromLetter (letter));
 				l.UpdateLetter (letter, letterImage, newNonLockColour);
 			
-				l.Handler = localUpdaterOfLetterCell;
+
 			
 				return l;
 		
 		}
 
-		public InteractiveLetter UpdateLetter (GameObject localUpdaterOfLetterCell, int position, String letter)
-		{     
-				return UpdateLetter (localUpdaterOfLetterCell, position, letter, Color.white);
+		public UITexture CreateLetterHighlightCell ()
+		{
+				UITexture selectHighlight = NGUITools.AddChild<UITexture> (letterHighlightsGrid);
+				selectHighlight.transform.localScale = new Vector2 (selectW, selectH);
+				selectHighlight = SetShaders (selectHighlight);
+				selectHighlight.mainTexture = CopyAndScaleTexture (selectW, selectH, LetterImageTable.SelectLetterImage);
+				selectHighlight.enabled = false;
+			
+				return selectHighlight;
 
 		}
 
-		public InteractiveLetter UpdateLetter (int position, Color c)
+		public void CreateLetterUnderlineCell ()
+		{
+	
+				UITexture underline = NGUITools.AddChild<UITexture> (letterUnderlinesGrid);
+				underline.transform.localScale = new Vector2 (selectW, selectH);
+				underline = SetShaders (underline);
+				underline.mainTexture = CopyAndScaleTexture (selectW, selectH, LetterImageTable.LetterUnderlineImage);
+				
+		}
+
+		public InteractiveLetter UpdateLetter (int position, String letter)
+		{     
+				return UpdateLetter (position, letter, Color.white);
+
+		}
+
+		public InteractiveLetter UpdateLetter (int position, Color c, bool isNewDefault=true)
 		{
 				
 				InteractiveLetter l = LetterAtPosition (position);
-				l.UpdateDefaultColour (c);
+				if (isNewDefault)
+						l.UpdateDefaultColour (c);
+				else
+						l.UpdateDisplayColour (c);
 				return l;
 
 		}
 
-    public InteractiveLetter UpdateLetterImage(int position, Texture2D img)
-    {
-
-        InteractiveLetter l = LetterAtPosition(position);
-        l.UpdateLetterImage(img);
-        return l;
-
-    }
-
-    public InteractiveLetter LetterAtPosition (int position)
+		public InteractiveLetter UpdateLetterImage (int position, Texture2D img)
 		{
 
-        GameObject cell = GetLetterCell(position);
-       //if(ReferenceEquals(cell,null)) Debug.Log("null component at " + position + " position of letter ");
-        return cell.GetComponent<InteractiveLetter>(); 
-    }
+				InteractiveLetter l = LetterAtPosition (position);
+				l.UpdateLetterImage (img);
+				return l;
+
+		}
+
+		public InteractiveLetter LetterAtPosition (int position)
+		{
+
+				GameObject cell = GetLetterCell (position);
+				return cell.GetComponent<InteractiveLetter> (); 
+		}
 
 		public GameObject GetLetterCell (int position)
 		{     
@@ -190,11 +219,11 @@ public class LetterGridController : PhonoBlocksController
 
 						return null;
 			
-			}
+				}
 		}
 
-		public GameObject CreateLetterBarCell (String letter, Texture2D tex2D, string position, Color c, GameObject localUpdaterOfLetterCell)
-	{      
+		public GameObject CreateLetterBarCell (String letter, Texture2D tex2D, string position, Color c)
+		{      
 				Texture2D tex2dCopy = CopyAndScaleTexture (letterImageWidth, letterImageHeight, tex2D);
 				UITexture ut = NGUITools.AddChild<UITexture> (letterGrid);
 				ut.material = new Material (Shader.Find ("Unlit/Transparent Colored"));
@@ -205,35 +234,16 @@ public class LetterGridController : PhonoBlocksController
 				b.isTrigger = true;
 				b.size = new Vector2 (.6f, .6f);
 
-				Selectable s = ut.gameObject.AddComponent<Selectable> ();
+	
 
-
-			
-				s.ActivateByTouch ();
-				s.SelectBySwipe ();
-				s.Select (false);
-				//s.ForceActivate = true;
 				InteractiveLetter l = ut.gameObject.AddComponent<InteractiveLetter> ();
 				l.Trigger = b;
 				l.UpdateLetter (letter, tex2dCopy, c);
-				l.Handler = localUpdaterOfLetterCell;
+	
 				ut.gameObject.name = position;
 				ut.MakePixelPerfect ();
-				
 
-		       
-
-				if (letterHighlightsGrid) {
-						UITexture selectHighlight = NGUITools.AddChild<UITexture> (letterHighlightsGrid);
-						selectHighlight.transform.localScale = new Vector2 (selectW, selectH);
-						selectHighlight = SetShaders (selectHighlight);
-						selectHighlight.mainTexture = CopyAndScaleTexture (selectW, selectH, LetterImageTable.SelectLetterImage);
-						selectHighlight.enabled = false;
-						selectHighlight.gameObject.name = position;
-				}
-	
-		        
-				return ut.gameObject;
+				return l.gameObject;
 
 		}
 

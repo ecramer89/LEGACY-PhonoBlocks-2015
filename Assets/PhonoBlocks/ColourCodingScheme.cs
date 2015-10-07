@@ -12,6 +12,12 @@ public abstract class ColourCodingScheme: MonoBehaviour
 		public string label;
 		protected int alternate = 0;
 
+		public virtual Color GetColorsForWholeWord ()
+		{
+				return Color.magenta;
+		
+		}
+	
 		public virtual Color GetColorsForLongVowel (char vowel)
 		{
 				return Color.white;

@@ -172,7 +172,6 @@
      <Compile Include="Assets\PhonoBlocks\CheckedWordImageController.cs" />
      <Compile Include="Assets\PhonoBlocks\ColourCodingScheme.cs" />
      <Compile Include="Assets\PhonoBlocks\ContentButton.cs" />
-     <Compile Include="Assets\PhonoBlocks\ErrorAudios.cs" />
      <Compile Include="Assets\PhonoBlocks\HintController.cs" />
      <Compile Include="Assets\PhonoBlocks\InstructionsAudio.cs" />
      <Compile Include="Assets\PhonoBlocks\InteractiveLetter.cs" />
@@ -181,14 +180,10 @@
      <Compile Include="Assets\PhonoBlocks\LetterSoundComponent.cs" />
      <Compile Include="Assets\PhonoBlocks\LetterSoundComponentFactoryHandler.cs" />
      <Compile Include="Assets\PhonoBlocks\LockedPositionHandler.cs" />
-     <Compile Include="Assets\PhonoBlocks\OSCWordReader.cs" />
-     <Compile Include="Assets\PhonoBlocks\Osc.cs" />
      <Compile Include="Assets\PhonoBlocks\PhonoBlocksController.cs" />
      <Compile Include="Assets\PhonoBlocks\PhonotacticChecker.cs" />
      <Compile Include="Assets\PhonoBlocks\Problem.cs" />
      <Compile Include="Assets\PhonoBlocks\ProblemsRepository.cs" />
-     <Compile Include="Assets\PhonoBlocks\ScreenKeyboardController.cs" />
-     <Compile Include="Assets\PhonoBlocks\Selectable.cs" />
      <Compile Include="Assets\PhonoBlocks\SessionsDirector.cs" />
      <Compile Include="Assets\PhonoBlocks\SpeechSoundReference.cs" />
      <Compile Include="Assets\PhonoBlocks\SpeechSoundsAudio.cs" />

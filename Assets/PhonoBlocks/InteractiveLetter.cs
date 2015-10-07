@@ -18,6 +18,21 @@ public class InteractiveLetter : PhonoBlocksController
 				}
 		}
 
+		bool isSelected = false;
+
+		public bool Selected {
+				get {
+						return isSelected;
+				}
+		}
+
+		public delegate void SelectAction (bool wasSelected,GameObject o);
+
+		public static event SelectAction LetterSelectedDeSelected;
+		public delegate void PressAction (GameObject o);
+
+		public static event PressAction LetterPressed;
+
 		Color lockedColor = Color.black;
 		UITexture selectHighlight;
 		BoxCollider trigger;
@@ -25,7 +40,8 @@ public class InteractiveLetter : PhonoBlocksController
 		int flashCounter = 0;
 		int timesToFlash = 5;
 		float secondsDelayBetweenFlashes = .2f;
-		int idxAsArduinoControlledLetter;
+		const int NOT_AN_ARDUINO_CONTROLLED_LETTER = -1;
+		int idxAsArduinoControlledLetter = NOT_AN_ARDUINO_CONTROLLED_LETTER; //i.e., if it's a word history controlled letter. you have to "opt in" to be an arduino controlled letter.
 
 		public int IdxAsArduinoControlledLetter {
 				set {
@@ -75,28 +91,15 @@ public class InteractiveLetter : PhonoBlocksController
 
 		}
 
-		public GameObject Handler {
-				get {
-						return GetComponent<Selectable> ().Handler;
-
-				}
-
-				set {
-						GetComponent<Selectable> ().Handler = value;
-
-				}
-
-		}
-
 		public void Lock ()
 		{
-				ChangeColourOfUITexture (lockedColor);
+				UpdateDisplayColour (lockedColor);
 				isLocked = true;
 		}
 
 		public void UnLock ()
 		{
-				ChangeColourOfUITexture (defaultColour);
+				UpdateDisplayColour (defaultColour);
 				isLocked = false;
 		}
 
@@ -128,11 +131,11 @@ public class InteractiveLetter : PhonoBlocksController
 				while (flashCounter<timesToFlash) {
 		
 						if (flashCounter % 2 == mod_To_end_on) {
-								ChangeColourOfUITexture (defaultColour);
+								UpdateDisplayColour (defaultColour);
 							
 
 						} else {
-								ChangeColourOfUITexture (lockedColor);
+								UpdateDisplayColour (lockedColor);
 								
 
 						}
@@ -148,7 +151,7 @@ public class InteractiveLetter : PhonoBlocksController
 
 		}
 
-		public void ChangeColourOfUITexture (UnityEngine.Color c_)
+		public void UpdateDisplayColour (UnityEngine.Color c_)
 		{
 				if (c_ == Color.clear)
 						c_ = Color.white;
@@ -159,14 +162,22 @@ public class InteractiveLetter : PhonoBlocksController
 			
 		}
 
+		public void RevertToDefaultColour ()
+		{
+				UpdateDisplayColour (defaultColour);
+
+		}
+
 		public void ChangeColourOfTangibleCounterpartIfThereIsOne (UnityEngine.Color c_)
 		{
+				//on the screen, blank letters are just clear.
+				//but we issue the black (0,0,0) colour to the arduino.
 				if (letter [0] == ' ')
 						c_ = Color.black;
+
+
 				if (userInputRouter != null)
-				if (userInputRouter.IsArduinoMode ()) 
-                
-		
+				if (IdxAsArduinoControlledLetter != NOT_AN_ARDUINO_CONTROLLED_LETTER && userInputRouter.IsArduinoMode ()) 
 						userInputRouter.arduinoLetterInterface.ColorNthTangibleLetter (IdxAsArduinoControlledLetter, c_);
 				
 
@@ -190,13 +201,12 @@ public class InteractiveLetter : PhonoBlocksController
 
 		public void UpdateLetter (String letter_, Texture2D img_)
 		{
-				//if (idxAsArduinoControlledLetter == -2)
-				//		return;
+			
 				letter = letter_;
 
 				//de-select this cell if it was selected
-				Selectable s = gameObject.GetComponent<Selectable> ();
-				s.Select (false, true);
+				if (isSelected)
+						DeSelect ();
 			
 			
 				gameObject.GetComponent<UITexture> ().mainTexture = img_;
@@ -236,49 +246,8 @@ public class InteractiveLetter : PhonoBlocksController
 				if (defaultColour == Color.clear)
 						defaultColour = Color.white;
 				defaultColour = c_;
-				if(!IsLocked) ChangeColourOfUITexture (defaultColour);
-				
-				/*if (!GetComponent<Selectable> ().Selected) {
-					
-						Darken ();
-
-				}*/
-		}
-
-		public void ChangeStateToSignalSelected ()
-		{
-				
-				Lighten ();
-			
-		}
-	
-		public void ChangeStateToSignalDeselected ()
-		{
-			
-				Darken ();
-			
-		
-		}
-
-		void Lighten ()
-		{
-				ChangeStateToSignalUnlocked ();
-
-
-		}
-
-		void Darken ()
-		{
-				ChangeColourOfUITexture (Color.black);
-
-		}
-
-		public void ChangeStateToSignalLocked ()
-		{
-				
-				ChangeColourOfUITexture (Color.black);
-			
-
+				if (!IsLocked)
+						UpdateDisplayColour (defaultColour);
 
 		}
 
@@ -291,50 +260,57 @@ public class InteractiveLetter : PhonoBlocksController
 
 		}
 
-		public void ChangeStateToSignalUnlocked ()
+		void Update ()
 		{
-				if (defaultColour == Color.clear)
-						defaultColour = Color.white;
-				ChangeColourOfUITexture (defaultColour);
+	
+				if (!IsBlank ()) { //don't select blank letters
+						if (MouseIsOverSelectable ()) {
+					
+								if (SwipeDetector.swipeDirection == SwipeDetector.Swipe.RIGHT) {
+												
+										Select ();
+								}
+								if (SwipeDetector.swipeDirection == SwipeDetector.Swipe.LEFT) {
+										DeSelect ();				
+								}
+					
+						}
 			
-				
+				}
+		}
+	
+		bool MouseIsOverSelectable ()
+		{
+				Vector3 mouse = SwipeDetector.GetTransformedMouseCoordinates ();
+		
+				return (Vector3.Distance (mouse, gameObject.transform.position) < .3);	
+		}
+
+		public void Select ()
+		{
+		
+				isSelected = true;
+				selectHighlight.enabled = true;
+				if (LetterSelectedDeSelected != null)
+						LetterSelectedDeSelected (true, gameObject);
 		
 		}
 
-
-		/*
-	    * 
-	    * this is a hack to handle cases where the platforms cant
-	    * read the letters properly.
-	    * basically it enables the tutor to manually override the physical with a screen letter
-	    * using the keyboard. click on the letter and then go head,
-	    * type a letter from the keyboard and the system will just treat it as one...
-	    * */
-		int scaleTimer = 0;
-		int i_w, i_h, s_w, s_h;
+		public void DeSelect ()
+		{
+				isSelected = false;
+				if (selectHighlight)
+						selectHighlight.enabled = false;
+				if (LetterSelectedDeSelected != null)
+						LetterSelectedDeSelected (false, gameObject);
+		}
 
 		public void OnPress (bool pressed)
 		{
-				
-				if (pressed) {
-
-						Handler.SendMessage ("LetterClicked", gameObject, SendMessageOptions.DontRequireReceiver);
-				
-			
-				}
+				if (pressed && LetterPressed != null)
+						LetterPressed (gameObject);
 
 
-				
 		}
-
-
-
-
-
-
-	   
-
-
-
 
 }

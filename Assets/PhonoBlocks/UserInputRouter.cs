@@ -73,9 +73,7 @@ public class UserInputRouter : MonoBehaviour
 
        
 
-				if (screenMode) { //activate the onscreen keyboard object
-						//screenKeyboardController = onscreenKeyboardControllerGO.GetComponent<ScreenKeyboardController> ();
-						//screenKeyboardController.Initialize ();
+				if (screenMode) { 
 						arduinoLetterInterfaceG0.SetActive (false);
 						uniduinoG0.SetActive (false);
 
@@ -180,80 +178,6 @@ public class UserInputRouter : MonoBehaviour
 	
 
 		}
-		/*
-		public void ShowNonBlankLettersInPlacesAsHintToUser (string missingLettersHint)
-		{
-				for (int i=0; i<missingLettersHint.Length; i++) 
-						if (missingLettersHint [i] != ' ') {
-								InteractiveLetter nthLetter = arduinoAndAffixLetterController.GetNthUserControlledLetter (i).GetComponent<InteractiveLetter> ();
-								nthLetter.ChangeStateToSignalLocked ();
-								nthLetter.SwitchImageTo (LetterImageTable.instance.GetLetterImageFromLetter (missingLettersHint [i]));
-						}
-
-		}*/
-	  
-		/*
-	     * called by the selectable component.
-*/
-		public bool AcceptingSelectionOrActivation ()
-		{
-				return acceptUIInput;
-
-		}
-
-		/*
-
-		public void BlockUserInputAndTurnOffLetters (bool turnAllLettersOff)
-		{
-				//tell each letter to "shut down" (appear white) and change the colors of all the arduino letters
-				//accepting input general is false
-				//new letters are accepted but we set them to invisible
-				acceptUIInput = false;
-				if (turnAllLettersOff) {
-						LockAllSelectables ();
-					
-				
-					
-				}
-
-		}
-
-		public void ReactivateUI (bool restoreColoursOfLetters)
-		{
-				acceptUIInput = true;
-				if (restoreColoursOfLetters) {
-						UnlockAllSelectables ();
-
-						arduinoAndAffixLetterController.RecolorAllLettersWhenAnyLetterChanges (true);
-						//the user may have changed things before unlocking that require us to update the colours of the se;ectable letters.
-						UserWord newWord = arduinoAndAffixLetterController.RefreshAndRestoreColours ();
-						if (!screenMode && newWord != null)
-								arduinoLetterInterface.UpdateColoursOfTangibleLetters (newWord);
-		        
-				}
-
-
-		}*/
-
-		public void UnlockAllSelectables ()
-		{
-	
-				foreach (Selectable s in Resources.FindObjectsOfTypeAll<Selectable>()) {
-						if (s.gameObject.activeSelf)
-								s.UnLock (); 
-				}
-			
-		}
-
-		public void LockAllSelectables ()
-		{
-		
-				foreach (Selectable s in Resources.FindObjectsOfTypeAll<Selectable>()) {
-						if (s.gameObject.activeSelf)
-								s.Lock (); 
-				}
-		
-		}
 
 		public void RequestTurnOffImage ()
 		{
@@ -282,13 +206,13 @@ public class UserInputRouter : MonoBehaviour
 						if (TeacherMode ())
 								AddCurrentWordToHistory (true);//wordHistoryController.AddCurrentWordToHistory (arduinoAndAffixLetterController.GetAllUserInputLetters (false));
 						else 
-								studentActivityController.HandleSubmittedAnswer (arduinoLetterController.GetUserControlledLettersAsString (true));
+								studentActivityController.HandleSubmittedAnswer (arduinoLetterController.GetUserControlledLettersAsString (false));
 				}
 		}
 
 		public void AddCurrentWordToHistory (bool playSound)
 		{
-				wordHistoryController.AddCurrentWordToHistory (arduinoLetterController.GetAllUserInputLetters (false), playSound);
+				wordHistoryController.AddCurrentWordToHistory (arduinoLetterController.GetAllUserInputLetters (false));
 
 		}
 
@@ -318,28 +242,7 @@ public class UserInputRouter : MonoBehaviour
 
 		}
 
-		public void RequestPlayWord (string word)
-		{
-				if (acceptUIInput)
-						OSCWordReader.instance.Read (word);
 
-
-		}
-		
-		void DeselectAllSelected ()
-		{	
-				foreach (Selectable s in Resources.FindObjectsOfTypeAll<Selectable>()) {
-						if (s.gameObject.activeSelf && s.Selected)
-								s.Deselect (false); 
-				}
-		
-		}
-		//what is this method doing?
-		public void LetterClicked (GameObject cell)
-		{
-				arduinoLetterController.LetterClicked (cell);
-
-		}
 
 		public void TellUserToPlaceInitialLetters ()
 		{
