@@ -4,17 +4,18 @@ using System.Collections;
 public class HintController : PhonoBlocksController
 {
 		StudentActivityController studentActivityController;
-	public AudioClip sound_out_word;
+		public AudioClip sound_out_word;
 		GameObject hintButton;
 		int currHintIdx = -1;
-		public const int NUM_HINTS = 3;
-		int[] timesHintRequested; //
+		public const int NUM_HINTS = 2;
+
 
 		public void Initialize (GameObject hintButton)
 		{
-				timesHintRequested = new int[NUM_HINTS];
+				
 				this.hintButton = hintButton;
 				studentActivityController = gameObject.GetComponent<StudentActivityController> ();
+				sound_out_word = InstructionsAudio.instance.soundOutTheWord;
 		}
 
 		public void Reset ()
@@ -37,24 +38,26 @@ public class HintController : PhonoBlocksController
 
 		}
 
+		public bool HintButtonActive ()
+		{
+				return hintButton.activeSelf;
+
+		}
+
 		public void ProvideHint (Problem currProblem)
 		{      //maybe make this a couroutine that can "iterate" thru each hint step
 				//each of which is an audio file, except for the last which involves a visual change as wellS
-		AudioSourceController.PushClip (sound_out_word);
+				
 				switch (currHintIdx) {
 				case 0:
-						currProblem.PlayFirstHint (userInputRouter.CurrentArduinoControlledLettersAsString);
+						AudioSourceController.PushClip (sound_out_word);
 						break;
 
 				case 1:
-						currProblem.PlaySecondHint ();
+						//currProblem.PlaySecondHint ();
+			//play sounded out work.
 						break;
 
-
-				case 2:
-						currProblem.PlaySecondHint ();
-						//userInputRouter.ShowNonBlankLettersInPlacesAsHintToUser (studentActivityController.TargetLettersUserHasYetToPlace);
-						break;
 	
 				}
 			

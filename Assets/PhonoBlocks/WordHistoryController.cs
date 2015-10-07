@@ -60,8 +60,8 @@ public class WordHistoryController : PhonoBlocksController
 				int position = words.Count * wordLength;
 				foreach (InteractiveLetter l in newWord) {
 					
-					
-						GameObject letterInWord = lettersOfWordInHistory.CreateLetterBarCell (l.Letter (), l.Image (), (position++) + "", l.CurrentColor ());
+						
+						GameObject letterInWord = lettersOfWordInHistory.CreateLetterBarCell (l.Letter (), l.Image (), (position++) + "", l.DefaultColour);
 				
 
 						letterInWord.AddComponent<BoxCollider> ();

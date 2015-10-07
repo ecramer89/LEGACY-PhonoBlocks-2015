@@ -9,7 +9,15 @@ public class InteractiveLetter : PhonoBlocksController
 {
 
 		String letter;
-		UnityEngine.Color defaultColour;
+		Color defaultColour;
+
+		public Color DefaultColour {
+				get {
+
+						return defaultColour;
+				}
+		}
+
 		bool isLocked = false;
 
 		public bool IsLocked {
@@ -33,7 +41,7 @@ public class InteractiveLetter : PhonoBlocksController
 
 		public static event PressAction LetterPressed;
 
-		Color lockedColor = Color.black;
+		Color lockedColor = Color.gray;
 		UITexture selectHighlight;
 		BoxCollider trigger;
 		LetterSoundComponent lc;

@@ -21,13 +21,16 @@ public class StudentActivityController : PhonoBlocksController
 		HintController hintController;
 		ArduinoLetterController arduinoLetterController;
 		Problem currProblem;
-		public AudioClip correctOnFirstTryFeedBack;
 		char[] usersMostRecentChanges;
-		public AudioClip incorrectFeedback;
-		public AudioClip sessionIsFinished;
-		public Texture2D sessionFinishedImage;
-		public AudioClip correctFeedback;
+		AudioClip excellent;
+		AudioClip incorrectSoundEffect;
+		AudioClip notQuiteIt;
+		AudioClip offerHint;
+		AudioClip youDidIt;
+		AudioClip correctSoundEffect;
+		AudioClip removeAllLetters;
 
+		/*
 		public int NonBlankLettersThatUserHasPlaced {
 				get {
 						int result = 0;
@@ -38,7 +41,7 @@ public class StudentActivityController : PhonoBlocksController
 				}
 
 
-		}
+		}*/
 
 		public string UserChangesAsString {
 				get {
@@ -65,6 +68,15 @@ public class StudentActivityController : PhonoBlocksController
 			
 				SetUpNextProblem ();
 				InteractiveLetter.LetterSelectedDeSelected += LetterSelectDeselect;
+
+
+				excellent = InstructionsAudio.instance.excellent;
+				incorrectSoundEffect = InstructionsAudio.instance.incorrectSoundEffect;
+				notQuiteIt = InstructionsAudio.instance.notQuiteIt;
+				offerHint = InstructionsAudio.instance.offerHint;
+				youDidIt = InstructionsAudio.instance.youDidIt;
+				correctSoundEffect = InstructionsAudio.instance.correctSoundEffect;
+				removeAllLetters = InstructionsAudio.instance.removeAllLetters;
 
 	
 		}
@@ -207,11 +219,11 @@ public class StudentActivityController : PhonoBlocksController
 		{
 				if (ProblemsRepository.instance.AllProblemsDone ()) {
 						StudentsDataHandler.instance.UpdateUserSessionAndWriteAllUpdatedDataToPlayerPrefs ();
-						AudioSourceController.PushClip (sessionIsFinished);
-					
+						
 				
-				} else
+				} else {
 						SetUpNextProblem ();
+				}
 
 		}
 
@@ -228,7 +240,7 @@ public class StudentActivityController : PhonoBlocksController
 				if (hintController.UsedLastHint ()) {
 						currProblem.PlayAnswer ();
 						arduinoLetterController.PlaceWordInLetterGrid (currProblem.TargetWord (false));
-						CurrentProblemCompleted (false, UserChangesAsString);
+						CurrentProblemCompleted (false);
 				} else 
 						hintController.ProvideHint (currProblem);
 
@@ -273,17 +285,22 @@ public class StudentActivityController : PhonoBlocksController
 				return wordRelativeIndex >= currProblem.TargetWord (true).Length; 
 		}
 
-		public virtual void HandleSubmittedAnswer (string answer)
+		public virtual void HandleSubmittedAnswer ()
 		{
+				StudentsDataHandler.instance.LogEvent ("submitted_answer", UserChangesAsString, currProblem.TargetWord (false));
+				
 				currProblem.IncrementTimesAttempted ();
 	
-				if (SubmissionIsCorrect (answer)) {
+				if (IsSubmissionCorrect ()) {
 						//TO DO!!! then if this was the first time that student submitted an answer (get the data from the current student object)
 						//then play the good hint else play the less good hint
-						AudioSourceController.PushClip (correctFeedback);
+						AudioSourceController.PushClip (correctSoundEffect);
+						if (currProblem.TimesAttempted > 1)
+								AudioSourceController.PushClip (youDidIt);
+						else
+								AudioSourceController.PushClip (excellent);
 						currProblem.PlayAnswer ();
-				
-						CurrentProblemCompleted (true, answer);
+						CurrentProblemCompleted (true);
 				
 				} else {
 						HandleIncorrectAnswer ();				
@@ -294,24 +311,23 @@ public class StudentActivityController : PhonoBlocksController
 
 		protected void HandleIncorrectAnswer ()
 		{
-				hintController.ActivateHintButton ();
-		
-				AudioSourceController.PushClip (incorrectFeedback);
-		
-				if (hintController.OnLastHint ()) {
-						//AudioSourceController.PushClip (offer_answer);
-				} else {//it should not provide the hint until the user clicks the hint button
-			
-						//AudioSourceController.PushClip (offer_hint);
+				
+				AudioSourceController.PushClip (incorrectSoundEffect);
+				
+				if (!hintController.HintButtonActive ()) {
+						hintController.ActivateHintButton ();
+						AudioSourceController.PushClip (notQuiteIt);
+						AudioSourceController.PushClip (offerHint);
 				}
+
 				hintController.AdvanceHint ();
 
 		}
 
-		public void CurrentProblemCompleted (bool userSubmittedCorrectAnswer, string answer)
+		public void CurrentProblemCompleted (bool userSubmittedCorrectAnswer)
 		{
 			
-
+		     
 				state = State.REMOVE_ALL_LETTERS;
 
 				currProblem.SetTargetWordToEmpty ();
@@ -322,13 +338,13 @@ public class StudentActivityController : PhonoBlocksController
 
 				bool solvedOnFirstTry = currProblem.TimesAttempted == 1;
 				if (solvedOnFirstTry) {
-						AudioSourceController.PushClip (correctOnFirstTryFeedBack);
+						
 						userInputRouter.DisplayNewStarOnScreen ();
 
 				}
 
 
-				StudentsDataHandler.instance.RecordActivitySolved (userSubmittedCorrectAnswer, answer, solvedOnFirstTry);
+				StudentsDataHandler.instance.RecordActivitySolved (userSubmittedCorrectAnswer, UserChangesAsString, solvedOnFirstTry);
 			
 				StudentsDataHandler.instance.SaveActivityDataAndClearForNext (currProblem.TargetWord (false), currProblem.InitialWord);
 
@@ -344,18 +360,13 @@ public class StudentActivityController : PhonoBlocksController
 		
 		}
 
-
-
-		
-		//could make this faster by just checking the indexes that arent locked.
-		//you should chanhge this method so that it refers to the user controlled letters (which would be fine)
-		protected bool SubmissionIsCorrect (string answer)
+		protected bool IsSubmissionCorrect ()
 		{      
 				string target = currProblem.TargetWord (true);
 
-				bool result = answer.Trim ().Equals (target);
+				bool result = CurrentStateOfLettersMatches (target);
 
-				StudentsDataHandler.instance.LogEvent ("submitted_answer", answer, target);
+				
 				return result;
 
 		}

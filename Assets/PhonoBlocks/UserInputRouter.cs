@@ -206,7 +206,7 @@ public class UserInputRouter : MonoBehaviour
 						if (TeacherMode ())
 								AddCurrentWordToHistory (true);//wordHistoryController.AddCurrentWordToHistory (arduinoAndAffixLetterController.GetAllUserInputLetters (false));
 						else 
-								studentActivityController.HandleSubmittedAnswer (arduinoLetterController.GetUserControlledLettersAsString (false));
+								studentActivityController.HandleSubmittedAnswer ();
 				}
 		}
 

@@ -8,7 +8,7 @@ public class Problem : MonoBehaviour
 
 
 	    
-		//public const int PLACE_LETTERS_INITIAL = 0;
+
 		public const int TO_MAKE_THE_WORD = 0;
 		public const int TARGET_WORD = 1;
 		protected AudioClip[] instructions;
@@ -97,7 +97,7 @@ public class Problem : MonoBehaviour
 				this.targetWord = AppendBlanksToEnd (targetWord, UserInputRouter.numOnscreenLetterSpaces);
 				this.initialWord = AppendBlanksToFrontOrEnd (initialWord, this.targetWord);
 				CacheMissingLettersAsString ();
-				this.soundToEmphasize = soundToEmphasize;
+			
 		
 				cachedTargetWord = this.targetWord;
 
@@ -158,12 +158,12 @@ public class Problem : MonoBehaviour
 
 		protected virtual void CacheFixedInstructions (string initialWord, string targetWord)
 		{       
-				InstructionsAudio source = InstructionsAudio.instance;
+				
 				instructions = new AudioClip[2];
-				//instructions [PLACE_LETTERS_INITIAL] = source.placeInitialLettersInstruction;
-				instructions [TO_MAKE_THE_WORD] = source.makeTheWordInsructions;
-				instructions [TARGET_WORD] = AudioSourceController.GetWordFromResources (targetWord);//(AudioClip)Resources.Load ("audio/words/" + targetWord, typeof(AudioClip));//WordImageAndAudioMapAccessor.GetInstance ().GetWordData (targetWord).ParseAudio ();
-				sounded_out_word = AudioSourceController.GetSoundedOutWordFromResources (targetWord);
+				instructions [TO_MAKE_THE_WORD] = InstructionsAudio.instance.makeTheWord;
+				instructions [TARGET_WORD] = AudioSourceController.GetWordFromResources (targetWord);
+
+		//also cache the sounded out word (if we need to, we can maybe do this at the beginning- just decode the target word, and store the ls components with the problem)
 	
 		}
 
@@ -191,38 +191,22 @@ public class Problem : MonoBehaviour
 
 		}
 
-		public void PlayInstructionsToPlaceInitialLetters ()
-		{
-
-				//AudioSourceController.PushClip (instructions [PLACE_LETTERS_INITIAL]);
-
-		}
-
 		public void PlayCurrentInstruction ()
 		{
-				//if (currInstruction == PLACE_LETTERS_INITIAL)
-				//AudioSourceController.PushClip (instructions [currInstruction]);
-				//else {
+			
 				for (int i=TO_MAKE_THE_WORD; i<TARGET_WORD+1; i++) {
 							
 						if (instructions [i] != null)
 								AudioSourceController.PushClip (instructions [i]);
 				}
 
-				//}
+				
 		}
 
 		public void PlayTargetWord ()
 		{
 
 				AudioSourceController.PushClip (instructions [TARGET_WORD]);
-		}
-
-		public void PlayFirstHint (string currentWord)
-		{
-				
-				PlayFirstHint ();
-			
 		}
 
 		public void PlayFirstHint ()

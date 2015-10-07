@@ -19,7 +19,7 @@ public class UserStarGridController : PhonoBlocksController
 						MatchStarImageToGridCellDimensions (); //but if nothing is specified it defaults to make it the same size as the grid cells.
 
 
-				PlaceUserStarsInGrid ();
+				//PlaceUserStarsInGrid (); Min doesn't want the stars from previous sessions to appear on screen (just new stars)
 
 		}
 
