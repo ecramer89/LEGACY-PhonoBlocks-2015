@@ -1,17 +1,20 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PhonoBlocks\InteractiveLetter.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PhonoBlocks\InstructionsAudio.cs">
     <Files>
-      <File FileName="Assets\PhonoBlocks\InteractiveLetter.cs" Line="44" Column="33" />
-      <File FileName="Assets\PhonoBlocks\StudentActivityController.cs" Line="1" Column="1" />
+      <File FileName="Assets\PhonoBlocks\AudioSourceController.cs" Line="42" Column="3" />
+      <File FileName="Assets\PhonoBlocks\StudentActivityController.cs" Line="69" Column="64" />
       <File FileName="Assets\PhonoBlocks\ArduinoLetterController.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\LetterGridController.cs" Line="1" Column="1" />
+      <File FileName="Assets\PhonoBlocks\LetterGridController.cs" Line="53" Column="4" />
       <File FileName="Assets\PhonoBlocks\UserInputRouter.cs" Line="1" Column="1" />
       <File FileName="Assets\PhonoBlocks\ProblemsRepository.cs" Line="1" Column="1" />
       <File FileName="Assets\PhonoBlocks\StudentsDataHandler.cs" Line="1" Column="1" />
       <File FileName="Assets\PhonoBlocks\ColourCodingScheme.cs" Line="1" Column="1" />
       <File FileName="Assets\PhonoBlocks\SpeechSoundReference.cs" Line="1" Column="1" />
       <File FileName="Assets\PhonoBlocks\PhonotacticChecker.cs" Line="1" Column="1" />
+      <File FileName="Assets\PhonoBlocks\Problem.cs" Line="175" Column="4" />
+      <File FileName="Assets\PhonoBlocks\HintController.cs" Line="57" Column="16" />
+      <File FileName="Assets\PhonoBlocks\InstructionsAudio.cs" Line="17" Column="30" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

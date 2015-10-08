@@ -13,7 +13,6 @@ public class Problem : MonoBehaviour
 		public const int TARGET_WORD = 1;
 		protected AudioClip[] instructions;
 		protected string initialWord;
-		protected AudioClip soundToEmphasize;
 		protected AudioClip sounded_out_word;
 		protected int currInstruction = 0;
 		protected string cachedMissingLettersAsString;
@@ -162,9 +161,8 @@ public class Problem : MonoBehaviour
 				instructions = new AudioClip[2];
 				instructions [TO_MAKE_THE_WORD] = InstructionsAudio.instance.makeTheWord;
 				instructions [TARGET_WORD] = AudioSourceController.GetWordFromResources (targetWord);
-
-		//also cache the sounded out word (if we need to, we can maybe do this at the beginning- just decode the target word, and store the ls components with the problem)
-	
+		        
+				sounded_out_word = AudioSourceController.GetSoundedOutWordFromResources (targetWord);
 		}
 
 		protected void CacheNumberOfNonBlankInitialLetters (string initialWord)
@@ -209,16 +207,10 @@ public class Problem : MonoBehaviour
 				AudioSourceController.PushClip (instructions [TARGET_WORD]);
 		}
 
-		public void PlayFirstHint ()
+		public void PlaySoundedOutWord ()
 		{
 
 				AudioSourceController.PushClip (sounded_out_word);
-				PlayTargetWord ();
-		}
-
-		public void PlaySecondHint ()
-		{     
-				PlayFirstHint ();
 
 		}
 

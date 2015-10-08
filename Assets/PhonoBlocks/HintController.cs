@@ -54,8 +54,7 @@ public class HintController : PhonoBlocksController
 						break;
 
 				case 1:
-						//currProblem.PlaySecondHint ();
-			//play sounded out work.
+			currProblem.PlaySoundedOutWord();
 						break;
 
 	

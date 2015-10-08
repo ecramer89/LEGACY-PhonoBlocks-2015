@@ -29,19 +29,7 @@ public class StudentActivityController : PhonoBlocksController
 		AudioClip youDidIt;
 		AudioClip correctSoundEffect;
 		AudioClip removeAllLetters;
-
-		/*
-		public int NonBlankLettersThatUserHasPlaced {
-				get {
-						int result = 0;
-						for (int i=0; i<usersMostRecentChanges.Length; i++)
-								if (usersMostRecentChanges [i] != ' ')
-										result++;
-						return result;
-				}
-
-
-		}*/
+		AudioClip triumphantSoundForSessionDone;
 
 		public string UserChangesAsString {
 				get {
@@ -78,7 +66,7 @@ public class StudentActivityController : PhonoBlocksController
 				correctSoundEffect = InstructionsAudio.instance.correctSoundEffect;
 				removeAllLetters = InstructionsAudio.instance.removeAllLetters;
 
-	
+				triumphantSoundForSessionDone = InstructionsAudio.instance.allDoneSession;
 		}
 
 
@@ -219,6 +207,7 @@ public class StudentActivityController : PhonoBlocksController
 		{
 				if (ProblemsRepository.instance.AllProblemsDone ()) {
 						StudentsDataHandler.instance.UpdateUserSessionAndWriteAllUpdatedDataToPlayerPrefs ();
+						AudioSourceController.PushClip (triumphantSoundForSessionDone);
 						
 				
 				} else {

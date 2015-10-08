@@ -18,6 +18,7 @@ public class InstructionsAudio : MonoBehaviour
 		public AudioClip youDidIt;
 		public AudioClip correctSoundEffect;
 		public AudioClip removeAllLetters;
+	    public AudioClip allDoneSession;
 
 		void Awake ()
 		{

@@ -8,8 +8,7 @@ public class AudioSourceController : MonoBehaviour
 
 		static AudioSource source;
 		static readonly string RESOURCES_WORD_PATH = "audio/words/";
-		static readonly string RESOURCES_SYLLABLE_PATH = "audio/syllables/";
-		static readonly string RESOURCES_CON_LE_SYLLABLE_PATH = "audio/syllables/conle/";
+		static readonly string RESOURCES_SOUNDED_OUT_WORD_PATH = "audio/sounded_out_words/";
 		static LinkedList<AudioClip> bufferedClips = new LinkedList<AudioClip> ();
 	
 		void Start ()
@@ -20,8 +19,7 @@ public class AudioSourceController : MonoBehaviour
 
 		public static AudioClip GetSoundedOutWordFromResources (string word)
 		{
-				StringBuilder path = new StringBuilder (RESOURCES_WORD_PATH);
-				path.Append ("so_");
+				StringBuilder path = new StringBuilder (RESOURCES_SOUNDED_OUT_WORD_PATH);
 				path.Append (word);
 				return (AudioClip)Resources.Load (path.ToString (), typeof(AudioClip));
 
@@ -41,36 +39,7 @@ public class AudioSourceController : MonoBehaviour
 
 		}
 		
-		public static AudioClip GetSyllableFromResources (string syllable)
-		{
-				if (syllable.Length == 0)
-						return null;
-				AudioClip result = null;
-
-				bool candidateConLe = (syllable.Length == 3 && syllable [2] == 'e' && syllable [1] == 'l');
-				if (candidateConLe) {
-						result = (AudioClip)Resources.Load (RESOURCES_CON_LE_SYLLABLE_PATH + syllable, typeof(AudioClip));
-				}
-				if (result != null)
-						return result;
-				result = (AudioClip)Resources.Load (MakePathToSyllable (syllable), typeof(AudioClip));
-				return result;
-
-
-		}
-
-		public static string MakePathToSyllable (string syllable)
-		{
-
-				return RESOURCES_SYLLABLE_PATH + syllable [0] + "/" + syllable;
-
-
-		}
-
-
-
-
-
+		
 		//play the first, when it's done, play the second.
 		public static void PushClip (AudioClip next)
 		{ 
