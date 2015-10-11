@@ -9,6 +9,13 @@ public class ProblemsRepository : MonoBehaviour
 {   
 		Problem[] problemsForSession; //I think if we do go this way, we should change NGram class so that problems aere associated directly with them
 		int currProblem = 0;
+
+		public int ProblemsCompleted {
+				get{ return currProblem;}
+
+
+		}
+
 		public readonly int PROBLEMS_PER_SESSION = 3;
 		public readonly int TOTAL_NUMBER_OF_EXPERIMENTAL_PROBLEMS_PER_PROBLEM_TYPE;
 		ColourCodingScheme colourSchemeForSession = new NoColour ();
@@ -130,7 +137,7 @@ public class ProblemsRepository : MonoBehaviour
 
 		new string[][]{
 			new string[]{"over","water","creepy"},
-			new string[]{" "," "," "}
+			new string[]{"","",""}
 		}
 
 	

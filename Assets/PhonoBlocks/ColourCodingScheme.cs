@@ -24,7 +24,7 @@ public abstract class ColourCodingScheme: MonoBehaviour
 		
 		}
 
-		public virtual Color GetColorsForHardConsonant ()
+		public virtual Color GetColorsForHardConsonant (int indexInWord=0)
 		{
 				return Color.white;
 		}
@@ -54,7 +54,7 @@ public abstract class ColourCodingScheme: MonoBehaviour
 				return Color.white;
 		}
 	
-		public virtual Color GetColorsForStableSyllables ()
+		public virtual Color GetColoursForSyllables (int indexInWord=0)
 		{
 				return Color.white;
 		}
@@ -74,30 +74,31 @@ public abstract class ColourCodingScheme: MonoBehaviour
 				return Color.white;
 		}
 	
-		public virtual Color GetColorsForRControlledVowel (char letter)
+		public virtual Color GetColorsForRControlledVowel ()
 		{
 		
 				return Color.white;
 		}
 
-		protected virtual Color AlternatingColours ()
+		protected virtual Color AlternatingColours (int alternate)
 		{
+				//we basically distinguish between first and not first, at least for consonants and syllables.
 				if (alternate == 0)
 						return GetAlternateA ();
 				else
 						return GetAlternateB ();
-				alternate = 1 - alternate;
+				
 
 		}
 
 		protected virtual Color GetAlternateA ()
 		{
-				return Color.green;
+				return Color.cyan;
 		}
 
 		protected virtual Color GetAlternateB ()
 		{
-				return Color.cyan;
+				return Color.green;
 		}
 
 	
@@ -130,9 +131,9 @@ class OpenClosedVowel : NoColour
 	     * that we alternate blue and green should work*/
 		
 
-		public override Color GetColorsForHardConsonant ()
+		public override Color GetColorsForHardConsonant (int indexInWord=0)
 		{
-				return AlternatingColours ();
+				return AlternatingColours (indexInWord);
 		}
 
 
@@ -179,23 +180,26 @@ class ConsonantDigraphs : NoColour
 				return Color.green;
 		}
 
-		public override Color GetColorsForMiddleBlends ()
+		public override Color GetColorsForHardConsonant (int indexInWord=0)
 		{
-				return GetColorsForConsonantDigraphs ();
-		}
-
-		public override Color GetColorsForFinalBlends ()
-		{
-				return GetColorsForConsonantDigraphs ();
+				return Color.cyan;
 		}
 
 		public override Color GetColorsForInitialBlends ()
 		{
-				return GetColorsForConsonantDigraphs ();
+				return GetColorsForHardConsonant ();
 		}
-
-
-
+	
+		public override Color GetColorsForMiddleBlends ()
+		{
+				return GetColorsForHardConsonant ();
+		}
+	
+		public override Color GetColorsForFinalBlends ()
+		{
+				return GetColorsForHardConsonant ();
+		}
+	
 
 }
 
@@ -209,7 +213,7 @@ class RControlledVowel: NoColour
 				label = "rControlledVowel";
 		}
 
-		public override Color GetColorsForRControlledVowel (char vowel)
+		public override Color GetColorsForRControlledVowel ()
 		{   
 				return Color.magenta;
 		}
@@ -224,13 +228,29 @@ class VowelDigraphs : NoColour
 {
 		public VowelDigraphs () : base()
 		{
-				label = "rsyllableDivision";
+				label = "vowel Digraphs";
 		}
 
 		public override Color GetColorsForVowelDigraphs ()
 		{
 				return Color.red;
 		}
+
+		public override Color GetColorsForRControlledVowel ()
+		{   
+				return GetColorsForShortVowel (Color.black);
+		}
+
+		public override Color GetColorsForLongVowel (char vowel)
+		{
+				return GetColorsForShortVowel (Color.black);
+		}
+
+		public override Color GetColorsForShortVowel (Color currentVowelColor)
+		{      
+				return Color.gray;
+		}
+
     
 
 
@@ -249,7 +269,7 @@ class SyllableDivision : NoColour
 		
 		}
 	
-		public virtual Color GetColorsForHardConsonant ()
+		public virtual Color GetColorsForHardConsonant (int indexInWord=0)
 		{
 				return Color.magenta;
 		}
@@ -279,9 +299,9 @@ class SyllableDivision : NoColour
 				return Color.magenta;
 		}
 	
-		public virtual Color GetColorsForStableSyllables ()
+		public virtual Color GetColoursForSyllables (int indexInWord=0)
 		{
-				return AlternatingColours ();
+				return AlternatingColours (indexInWord);
 		}
 	
 		public virtual Color ModifyColorForSoftConsonant (Color color)

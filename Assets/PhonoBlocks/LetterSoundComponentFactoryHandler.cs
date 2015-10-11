@@ -157,6 +157,8 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 								return StoreLettersInComposite (new ConsonantDigraph (candidate), candidate);
 						if (SpeechSoundReference.IsVowelDigraph (candidate))
 								return StoreLettersInComposite (new VowelDigraph (candidate), candidate);
+			if (SpeechSoundReference.IsVowelR (candidate))
+				return StoreLettersInComposite (new VowelR (candidate), candidate);
 						return null;
 			
 			

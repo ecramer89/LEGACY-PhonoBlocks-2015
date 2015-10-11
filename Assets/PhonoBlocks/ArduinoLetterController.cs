@@ -10,19 +10,19 @@ public class ArduinoLetterController : PhonoBlocksController
 
 		public String EMPTY_USER_WORD;
 		List<InteractiveLetter> lettersToFlash = new List<InteractiveLetter> ();
-		private StringBuilder currUserControlledLettersAsString = new StringBuilder (); //maintains this along with the letter bar so that it's easy to quickly update and get the new colours.
+		private StringBuilder currUserControlledLettersAsStringBuilder = new StringBuilder (); //maintains this along with the letter bar so that it's easy to quickly update and get the new colours.
 		public string CurrentUserControlledLettersAsString {
 				get {
-						return currUserControlledLettersAsString.ToString ();
+						return currUserControlledLettersAsStringBuilder.ToString ();
 				}
 
 		}
 
-		private StringBuilder selectedUserControlledLettersAsString;
+		private StringBuilder selectedUserControlledLettersAsStringBuilder;
 
 		public string SelectedUserControlledLettersAsString {
 				get {
-						return selectedUserControlledLettersAsString.ToString ();
+						return selectedUserControlledLettersAsStringBuilder.ToString ();
 				}
 		
 		}
@@ -75,10 +75,10 @@ public class ArduinoLetterController : PhonoBlocksController
 				EndingIndex = endingIndexOfArduinoLetters;
 				maxUserLetters = EndingIndex + 1 - StartingIndex;
 				for (int i= 0; i<maxUserLetters; i++) 
-						currUserControlledLettersAsString.Append (" ");
+						currUserControlledLettersAsStringBuilder.Append (" ");
 						
-				EMPTY_USER_WORD = currUserControlledLettersAsString.ToString ();
-				selectedUserControlledLettersAsString = new StringBuilder (EMPTY_USER_WORD);
+				EMPTY_USER_WORD = currUserControlledLettersAsStringBuilder.ToString ();
+				selectedUserControlledLettersAsStringBuilder = new StringBuilder (EMPTY_USER_WORD);
 		
 				letterGrid = letterGridControllerGO.GetComponent<LetterGridController> ();
 				letterGrid.InitializeBlankLetterSpaces (maxUserLetters);
@@ -158,14 +158,52 @@ public class ArduinoLetterController : PhonoBlocksController
 
 		public void ChangeTheLetterOfASingleCell (int atPosition, char newLetter)
 		{
-				SaveNewLetterInStringRepresentation (newLetter, atPosition, currUserControlledLettersAsString);
+				SaveNewLetterInStringRepresentation (newLetter, atPosition, currUserControlledLettersAsStringBuilder);
 				letterGrid.UpdateLetter (atPosition, newLetter + "");
 
+		}
+
+		public void ChangeDisplayColourOfCells (Color newColour, bool onlySelected=false, int start=-1, int count=7)
+		{
+				start = (start < StartingIndex ? StartingIndex : start);
+				count = (count > MaxArduinoLetters ? MaxArduinoLetters : count);
+				if (!onlySelected) {
+						for (int i=start; i<count; i++) {
+								ChangeDisplayColourOfASingleCell (i, newColour);
+
+						}
+				} else {
+					
+						for (int i=start; i<count; i++) {
+								if (selectedUserControlledLettersAsStringBuilder [i] != ' ')
+										ChangeDisplayColourOfASingleCell (i, newColour);
+						}
+
+				}
 		}
 
 		public void ChangeDisplayColourOfASingleCell (int atPosition, Color newColour)
 		{
 				letterGrid.UpdateLetter (atPosition, newColour, false);
+		}
+
+		public void RevertLettersToDefaultColour (bool onlySelected=false, int start=-1, int count=7)
+		{
+				start = (start < StartingIndex ? StartingIndex : start);
+				count = (count > MaxArduinoLetters ? MaxArduinoLetters : count);
+				if (!onlySelected) {
+						for (int i=start; i<count; i++) {
+								RevertASingleLetterToDefaultColour (i);
+						}
+				} else {
+						for (int i=start; i<count; i++) {
+								if (selectedUserControlledLettersAsStringBuilder [i] != ' ')
+										RevertASingleLetterToDefaultColour (i);
+				
+						}
+
+				}
+
 		}
 
 		public void RevertASingleLetterToDefaultColour (int atPosition)
@@ -229,7 +267,7 @@ public class ArduinoLetterController : PhonoBlocksController
 		{
 				indexInLetterGrid -= startingIndexOfUserLetters; //re-scale to the indexes of the string that represents arduino letters only.
 		
-				return currUserControlledLettersAsString.ToString () [indexInLetterGrid] == ' ';
+				return currUserControlledLettersAsStringBuilder.ToString () [indexInLetterGrid] == ' ';
 		}
 
 		bool IsUpper (char letter)
@@ -251,7 +289,7 @@ public class ArduinoLetterController : PhonoBlocksController
 		public bool NoUserControlledLetters ()
 		{
 
-				return currUserControlledLettersAsString.ToString ().Equals (EMPTY_USER_WORD);
+				return currUserControlledLettersAsStringBuilder.ToString ().Equals (EMPTY_USER_WORD);
 		}
 	
 		UserWord GetNewColoursAndSoundsFromDecoder (LetterGridController letterGridController)
@@ -313,17 +351,17 @@ public class ArduinoLetterController : PhonoBlocksController
 				InteractiveLetter i = letterGridController.UpdateLetter (indexOfLetterBarCell, lc.Color);
 	
 
-				if (i.Selected) {
-						bool flashInteractiveLetter = flash && i.HasLetterOrSoundChanged (lc) && lc.Color == i.CurrentColor ();
-		
-						i.LetterSoundComponentIsPartOf = lc;
-		
-						if (flashInteractiveLetter) {
-								i.StartCoroutine ("Flash");
 			
-						}
-
+				bool flashInteractiveLetter = flash && i.HasLetterOrSoundChanged (lc) && lc.Color == i.CurrentColor ();
+				
+				i.LetterSoundComponentIsPartOf = lc;
+		
+				if (flashInteractiveLetter) {
+						i.StartCoroutine ("Flash");
+			
 				}
+
+				
 		}
 
 		int FindIndexOfGraphemeThatCorrespondsToLastNonBlankPhonogram (UserWord userWord)
@@ -340,9 +378,30 @@ public class ArduinoLetterController : PhonoBlocksController
 
 		int IsLetterBarEmpty ()
 		{
-				if (currUserControlledLettersAsString.ToString ().Equals (EMPTY_USER_WORD))
+				if (currUserControlledLettersAsStringBuilder.ToString ().Equals (EMPTY_USER_WORD))
 						return 0;
 				return 1;
+		
+		}
+
+		bool selectButtonOnSelection = false;
+	
+		public void SelectDeselectAllButtonPressed ()
+		{       
+				selectButtonOnSelection = !selectButtonOnSelection;	 
+				InteractiveLetter l;
+				//select or deselect all letters
+				for (int i=0, j=StartingIndex; i<currUserControlledLettersAsStringBuilder.Length; i++,j++) {
+						SaveNewLetterInStringRepresentation ((selectButtonOnSelection ? currUserControlledLettersAsStringBuilder [i] : ' '), i, selectedUserControlledLettersAsStringBuilder);
+						l = letterGrid.GetInteractiveLetter (j);
+						if (selectButtonOnSelection)
+								l.Select (false);
+						else
+								l.DeSelect (false);
+				}
+
+				//pass along to user inpur router
+				userInputRouter.HandleLetterSelection (SelectedUserControlledLettersAsString.Trim ()); //pretend that all letters are selected when we press the button
 		
 		}
 
@@ -352,16 +411,21 @@ public class ArduinoLetterController : PhonoBlocksController
 				if (selectedLetter.name.Length == 1) {
 						int position = Int32.Parse (selectedLetter.name);
 						if (wasSelected) {
+								SaveNewLetterInStringRepresentation (letter, position, selectedUserControlledLettersAsStringBuilder);
 
-								SaveNewLetterInStringRepresentation (letter, position, selectedUserControlledLettersAsString);
 
 						} else {
 
-								SaveNewLetterInStringRepresentation (' ', position, selectedUserControlledLettersAsString);
+								SaveNewLetterInStringRepresentation (' ', position, selectedUserControlledLettersAsStringBuilder);
 						}
+						
+						userInputRouter.HandleLetterSelection (SelectedUserControlledLettersAsString);    
 		
 				}
 		}
+
+
+
 	
 
 	

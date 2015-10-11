@@ -12,6 +12,7 @@ using System.Collections.Generic;
 public class UserInputRouter : MonoBehaviour
 {
 		static readonly string RESOURCES_WORD_IMAGE_PATH = "WordImages/";
+		static readonly int DELAY_BEFORE_REGISTER_WHOLE_WORD_SELECTION = 60; //60/second
 		public GameObject sessionParametersOB;
 		bool screenMode;
 		public static UserInputRouter global;
@@ -224,9 +225,9 @@ public class UserInputRouter : MonoBehaviour
 		}
 
 		//show stars acquired during a session (but not yet stored in player prefs and not yet displayed initially) during the activity.
-		public void DisplayNewStarOnScreen ()
+		public void DisplayNewStarOnScreen (int at)
 		{
-				userStarController.AddNewUserStar (true);
+				userStarController.AddNewUserStar (true,at);
 		}
 	                                              
 
@@ -243,6 +244,54 @@ public class UserInputRouter : MonoBehaviour
 		}
 
 
+		//called by the button that treats all words as selected and by the selection/deselection swipe action received by the arduinoletter controller.
+		//
+		int selectTimer = -1;
+
+		void Update ()
+		{
+				if (selectTimer > 0)
+						selectTimer--;
+				if (selectTimer == 0) {
+						if (!wholeWordWasSelected) {
+								if (!SessionsDirector.DelegateControlToStudentActivityController || studentActivityController.StringMatchesTarget (selectedLetters)) {
+										if (AudioSourceController.PushClip (AudioSourceController.GetWordFromResources (selectedLetters))) {					
+												arduinoLetterController.ChangeDisplayColourOfCells (SessionsDirector.colourCodingScheme.GetColorsForWholeWord (), true);
+												wholeWordWasSelected = true;
+												
+										}
+				
+								}
+
+						} else {
+								arduinoLetterController.RevertLettersToDefaultColour ();
+								//and if there is a sounded out word, then play it
+								AudioSourceController.PushClip (AudioSourceController.GetSoundedOutWordFromResources (arduinoLetterController.CurrentUserControlledLettersAsString.Trim ()));
+								wholeWordWasSelected = false;
+
+
+						}
+						selectTimer = -1;
+
+				}
+		}
+
+		string selectedLetters = "";
+		bool wholeWordWasSelected = false;
+
+		public void HandleLetterSelection (string selectedLetters)
+		{ 
+				
+				this.selectedLetters = selectedLetters.Trim ();
+				selectTimer = DELAY_BEFORE_REGISTER_WHOLE_WORD_SELECTION;
+
+		}
+
+		public void RequestReturnToMainMenu ()
+		{
+				SessionsDirector.instance.ReturnToMainMenu ();
+
+		}
 
 		public void TellUserToPlaceInitialLetters ()
 		{

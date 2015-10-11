@@ -7,6 +7,7 @@ public abstract class LetterSoundComponent : MonoBehaviour
 	
 		protected PhonotacticChecker.Phonotactics[] rules;
 		protected bool violatesPhonotactics;
+		protected int placeInWord;
 	
 		public bool ViolatesPhonotactics {
 				get {
@@ -167,12 +168,13 @@ public abstract class LetterSoundComponent : MonoBehaviour
 		protected virtual void ModifyColorBySound ()
 		{
 				if (soundType == SILENT)
-						color = SessionsDirector.colourCodingScheme.GetColourForSilent (asString[0]);
+						color = SessionsDirector.colourCodingScheme.GetColourForSilent (asString [0]);
 		
 		}
 	
 		public void Update (UserWord context, int placeOfSelf, bool checkPhonotactics)
 		{
+				this.placeInWord = placeOfSelf;
 				if (checkPhonotactics)
 						CheckPhonotactics (context, placeOfSelf);
 				ApplyColor ();
@@ -305,7 +307,7 @@ public class Consonant : Letter
 	
 		protected override void ApplyLetterSoundUnitColor ()
 		{
-				color = SessionsDirector.colourCodingScheme.GetColorsForHardConsonant ();
+				color = SessionsDirector.colourCodingScheme.GetColorsForHardConsonant (placeInWord);
 		
 		
 		}
@@ -364,7 +366,7 @@ public class Vowel : Letter
 	
 		protected override void ApplyLetterSoundUnitColor ()
 		{
-				color = (soundType == R_CONTROLLED ? SessionsDirector.colourCodingScheme.GetColorsForRControlledVowel (LetterAt (0)) : SessionsDirector.colourCodingScheme.GetColorsForLongVowel (LetterAt (0)));
+				color = SessionsDirector.colourCodingScheme.GetColorsForLongVowel (LetterAt (0));
 				//color = SessionManager.activeColourScheme.GetColorsForLongVowel (LetterAt (0)); //for the experiment I'm not worrying about r controlled.
 				//we are only distinguishing between long and short.
 		
@@ -424,6 +426,22 @@ public class Blend : LetterSoundComposite
 	
 }
 
+
+public class VowelR: LetterSoundComposite
+{
+	public VowelR (string asString) : base(asString, SpeechSoundReference.GetRulesForConsonantDigraph(asString))
+	{
+	}
+	
+	protected override void ApplyColorToComposite ()
+	{
+		color = SessionsDirector.colourCodingScheme.GetColorsForRControlledVowel ();
+		
+	}
+	
+	
+}
+
 public class ConsonantDigraph : LetterSoundComposite
 {
 		public ConsonantDigraph (string asString) : base(asString, SpeechSoundReference.GetRulesForConsonantDigraph(asString))
@@ -464,7 +482,7 @@ public class StableSyllable : LetterSoundComposite
 		protected override void ApplyColorToComposite ()
 		{
 		
-				color = SessionsDirector.colourCodingScheme.GetColorsForStableSyllables ();
+				color = SessionsDirector.colourCodingScheme.GetColoursForSyllables ();
 		
 		}
 	

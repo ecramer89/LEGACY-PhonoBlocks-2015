@@ -6,6 +6,7 @@ public class UserStarGridController : PhonoBlocksController
 
 		public GameObject userStarsGridOb;
 		public Texture2D userStarImg;
+		public Texture2D userStarOutlineImg;
 		public int starWidth;
 		public int starHeight;
 		int timesToFlash = 4;
@@ -19,23 +20,25 @@ public class UserStarGridController : PhonoBlocksController
 						MatchStarImageToGridCellDimensions (); //but if nothing is specified it defaults to make it the same size as the grid cells.
 
 
-				//PlaceUserStarsInGrid (); Min doesn't want the stars from previous sessions to appear on screen (just new stars)
+				PlaceUserStarOutlinesInGrid (); 
 
 		}
 
-		void PlaceUserStarsInGrid ()
+		void PlaceUserStarOutlinesInGrid ()
 		{
-				int numStars = SessionsDirector.numStarsOfCurrentUser;
+				int numStars = ProblemsRepository.instance.PROBLEMS_PER_SESSION;
 				for (int i=0; i<numStars; i++) {
 						CreateStarCellInGrid ();
+
 				}
 	
 				userStarsGridOb.GetComponent<UIGrid> ().Reposition ();
 		}
 
-		public void AddNewUserStar (bool flash)
+		public void AddNewUserStar (bool flash, int at)
 		{
-				UITexture newCellTexture = CreateStarCellInGrid ();
+				UITexture newCellTexture = userStarsGridOb.transform.GetChild (at).GetComponent<UITexture> ();
+				newCellTexture.mainTexture = userStarImg;
 				userStarsGridOb.GetComponent<UIGrid> ().Reposition ();
 				if (flash) {
 						toFlash = newCellTexture;
@@ -54,12 +57,12 @@ public class UserStarGridController : PhonoBlocksController
 
 		public UITexture CreateStarCellInGrid ()
 		{      
-				Texture2D tex2dCopy = CopyAndScaleTexture (starWidth, starHeight, userStarImg);
+				Texture2D tex2dCopy = CopyAndScaleTexture (starWidth, starHeight, userStarOutlineImg);
 				UITexture ut = NGUITools.AddChild<UITexture> (userStarsGridOb);
 				ut.material = new Material (Shader.Find ("Unlit/Transparent Colored"));
 				ut.shader = Shader.Find ("Unlit/Transparent Colored");
 				ut.mainTexture = tex2dCopy;
-			
+			    
 				ut.MakePixelPerfect ();
 				return ut;
 			

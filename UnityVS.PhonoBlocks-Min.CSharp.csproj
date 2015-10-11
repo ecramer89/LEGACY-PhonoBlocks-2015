@@ -99,7 +99,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\InputField.cs" />
     <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipItems.cs" />
     <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipRandomItem.cs" />
     <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\UICursor.cs" />
@@ -218,7 +217,6 @@
     <Compile Include="Assets\NGUI\Scripts\UI\UITiledSprite.cs" />
     <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
     <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
-    <Compile Include="Assets\Permanent.cs" />
     <Compile Include="Assets\PhonoBlocks\ArduinoLetterController.cs" />
     <Compile Include="Assets\PhonoBlocks\ArduinoUnityInterface.cs" />
     <Compile Include="Assets\PhonoBlocks\AudioSourceController.cs" />
@@ -226,6 +224,7 @@
     <Compile Include="Assets\PhonoBlocks\ColourCodingScheme.cs" />
     <Compile Include="Assets\PhonoBlocks\ContentButton.cs" />
     <Compile Include="Assets\PhonoBlocks\HintController.cs" />
+    <Compile Include="Assets\PhonoBlocks\InputField.cs" />
     <Compile Include="Assets\PhonoBlocks\InstructionsAudio.cs" />
     <Compile Include="Assets\PhonoBlocks\InteractiveLetter.cs" />
     <Compile Include="Assets\PhonoBlocks\LetterGridController.cs" />
@@ -233,6 +232,7 @@
     <Compile Include="Assets\PhonoBlocks\LetterSoundComponent.cs" />
     <Compile Include="Assets\PhonoBlocks\LetterSoundComponentFactoryHandler.cs" />
     <Compile Include="Assets\PhonoBlocks\LockedPositionHandler.cs" />
+    <Compile Include="Assets\PhonoBlocks\Permanent.cs" />
     <Compile Include="Assets\PhonoBlocks\PhonoBlocksController.cs" />
     <Compile Include="Assets\PhonoBlocks\PhonotacticChecker.cs" />
     <Compile Include="Assets\PhonoBlocks\Problem.cs" />

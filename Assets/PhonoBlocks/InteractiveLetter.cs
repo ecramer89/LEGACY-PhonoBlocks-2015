@@ -42,6 +42,7 @@ public class InteractiveLetter : PhonoBlocksController
 		public static event PressAction LetterPressed;
 
 		Color lockedColor = Color.gray;
+		Color flashOff = Color.black;
 		UITexture selectHighlight;
 		BoxCollider trigger;
 		LetterSoundComponent lc;
@@ -143,7 +144,7 @@ public class InteractiveLetter : PhonoBlocksController
 							
 
 						} else {
-								UpdateDisplayColour (lockedColor);
+								UpdateDisplayColour (flashOff);
 								
 
 						}
@@ -272,6 +273,7 @@ public class InteractiveLetter : PhonoBlocksController
 		{
 	
 				if (!IsBlank ()) { //don't select blank letters
+						
 						if (MouseIsOverSelectable ()) {
 					
 								if (SwipeDetector.swipeDirection == SwipeDetector.Swipe.RIGHT) {
@@ -294,23 +296,27 @@ public class InteractiveLetter : PhonoBlocksController
 				return (Vector3.Distance (mouse, gameObject.transform.position) < .3);	
 		}
 
-		public void Select ()
+		public void Select (bool notifyObservers=true)
 		{
-		
-				isSelected = true;
-				selectHighlight.enabled = true;
-				if (LetterSelectedDeSelected != null)
-						LetterSelectedDeSelected (true, gameObject);
+				if (!isSelected && !IsBlank ()) {
+
+						isSelected = true;
+						selectHighlight.enabled = true;
+						if (notifyObservers && LetterSelectedDeSelected != null)
+								LetterSelectedDeSelected (true, gameObject);
+				}
 		
 		}
 
-		public void DeSelect ()
+		public void DeSelect (bool notifyObservers=true)
 		{
-				isSelected = false;
-				if (selectHighlight)
-						selectHighlight.enabled = false;
-				if (LetterSelectedDeSelected != null)
-						LetterSelectedDeSelected (false, gameObject);
+				if (isSelected) {
+						isSelected = false;
+						if (selectHighlight)
+								selectHighlight.enabled = false;
+						if (notifyObservers && LetterSelectedDeSelected != null)
+								LetterSelectedDeSelected (false, gameObject);
+				}
 		}
 
 		public void OnPress (bool pressed)

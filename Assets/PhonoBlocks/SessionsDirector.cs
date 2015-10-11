@@ -11,10 +11,10 @@ public class SessionsDirector : MonoBehaviour
 		//change this between students
 {
 
-		
+		public static SessionsDirector instance;
 		public static ColourCodingScheme colourCodingScheme = new RControlledVowel ();
 		public INTERFACE_TYPE INTERFACE;
-	    
+
  
 
 		public enum INTERFACE_TYPE
@@ -80,6 +80,7 @@ public class SessionsDirector : MonoBehaviour
 		public GameObject teacherModeButton;
 		public GameObject studentModeButton;
 		public GameObject studentNameInputField;
+		public GameObject returnToModeSelectButton;
 		public GameObject dataTables;
 		InputField studentName;
 		public AudioClip noDataForStudentName;
@@ -100,17 +101,35 @@ public class SessionsDirector : MonoBehaviour
 
 		void Start ()
 		{   
-				assessmentStartTime = DateTime.Now;
-				activitySelectionButtons.SetActive (false);
+				instance = this;
 				SpeechSoundReference.Initialize ();
-
-
 				studentName = studentNameInputField.GetComponent<InputField> ();
-
-
-
+				SetupModeSelectionMenu ();
 
 		}
+
+		void SetupModeSelectionMenu ()
+		{
+				returnToModeSelectButton.SetActive (false);
+				assessmentStartTime = DateTime.Now;
+				activitySelectionButtons.SetActive (false);
+				studentModeButton.SetActive (true);
+				teacherModeButton.SetActive (true);
+
+		}
+
+		public void ReturnToMainMenu ()
+		{
+				
+				if (!Application.loadedLevelName.Equals ("MainMenu"))
+						Application.LoadLevel ("MainMenu");
+				SetupModeSelectionMenu (); //do this after; need to override the onLevelLoaded callbacks of the main menu widgets
+
+		}
+
+
+
+	                                   
 
 
 		//Teacher mode is the current "sandbox" mode, which just defaults to rthe colour scheme chosen at the head of this file.
@@ -119,6 +138,7 @@ public class SessionsDirector : MonoBehaviour
 		{
 				mode = Mode.TEACHER;
 				activitySelectionButtons.SetActive (true);
+				returnToModeSelectButton.SetActive (true);
 				studentModeButton.SetActive (false);
 				teacherModeButton.SetActive (false);
 				studentNameInputField.SetActive (false);
@@ -151,8 +171,9 @@ public class SessionsDirector : MonoBehaviour
 			
 								SetParametersForStudentMode (studentActivityControllerOB);
 								UnityEngine.Object.DontDestroyOnLoad (studentActivityControllerOB);
-			
+								returnToModeSelectButton.SetActive (true);
 								Application.LoadLevel ("Activity");
+								
 						} else {
 								AudioSourceController.PushClip (noDataForStudentName);
 			

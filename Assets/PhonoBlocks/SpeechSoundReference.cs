@@ -15,6 +15,7 @@ public class SpeechSoundReference : MonoBehaviour
 		static SpeechSoundLookup<char> vowels_ = new SpeechSoundLookup<char> ();
 		static SpeechSoundLookup<char> consonants_ = new SpeechSoundLookup<char> ();
 		static SpeechSoundLookup<string> consonant_digraphs_ = new SpeechSoundLookup<string> ();
+		static SpeechSoundLookup<string> vowel_rs = new SpeechSoundLookup<string> ();
 		static SpeechSoundLookup<string> vowel_digraphs_ = new SpeechSoundLookup<string> ();
 		static SpeechSoundLookup<string> stable_syllables_ = new SpeechSoundLookup<string> ();
 		static SpeechSoundLookup<string> special_units = new SpeechSoundLookup<string> ();
@@ -164,6 +165,7 @@ public class SpeechSoundReference : MonoBehaviour
 		{
 
 				AddVowels ();
+				AddVowelRs ();
 				AddConsonants ();
 				AddBlends ();
 				AddConsonantDigraphs ();
@@ -267,6 +269,7 @@ public class SpeechSoundReference : MonoBehaviour
 		static void AddVowelDigraphs ()
 		{
 				vowel_digraphs_.Add ("ea");
+				vowel_digraphs_.Add ("ai");
 				vowel_digraphs_.Add ("ae");
 				vowel_digraphs_.Add ("aa");
 				vowel_digraphs_.Add ("ee");
@@ -276,6 +279,15 @@ public class SpeechSoundReference : MonoBehaviour
 				vowel_digraphs_.Add ("ou");
 				vowel_digraphs_.Add ("ay");
 				vowel_digraphs_.Add ("oa");
+		}
+
+		static void AddVowelRs ()
+		{
+				vowel_rs.Add ("er");
+				vowel_rs.Add ("ur");
+				vowel_rs.Add ("or");
+				vowel_rs.Add ("ir");
+				vowel_rs.Add ("ar");
 		}
 
 		static void AddStableSyllables ()
@@ -345,6 +357,17 @@ public class SpeechSoundReference : MonoBehaviour
 						Initialize ();
 				return consonant_digraphs_.Contains (candidate);
 
+		}
+		
+		public static bool IsVowelR (string candidate)
+		{
+				if (candidate.Length > 2)
+						return false;
+		
+				if (!initialized)
+						Initialize ();
+				return vowel_rs.Contains (candidate);
+		
 		}
 	
 		public static bool IsVowelDigraph (string candidate)

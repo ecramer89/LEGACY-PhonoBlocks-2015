@@ -41,10 +41,14 @@ public class AudioSourceController : MonoBehaviour
 		
 		
 		//play the first, when it's done, play the second.
-		public static void PushClip (AudioClip next)
+		//return true if the argument clip was not null; false otherwise
+		public static bool PushClip (AudioClip next)
 		{ 
-				if (next != null)
+				if (next != null) {
 						bufferedClips.AddLast (next);
+						return true;
+				}
+				return false;
 
 
 		}

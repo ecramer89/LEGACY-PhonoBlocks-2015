@@ -21,6 +21,13 @@ public class StudentActivityController : PhonoBlocksController
 		HintController hintController;
 		ArduinoLetterController arduinoLetterController;
 		Problem currProblem;
+
+		public bool StringMatchesTarget (string s)
+		{
+				return s.Equals (currProblem.TargetWord (true));
+
+		}
+
 		char[] usersMostRecentChanges;
 		AudioClip excellent;
 		AudioClip incorrectSoundEffect;
@@ -55,7 +62,7 @@ public class StudentActivityController : PhonoBlocksController
 				hintController.Initialize (hintButton);
 			
 				SetUpNextProblem ();
-				InteractiveLetter.LetterSelectedDeSelected += LetterSelectDeselect;
+
 
 
 				excellent = InstructionsAudio.instance.excellent;
@@ -67,47 +74,6 @@ public class StudentActivityController : PhonoBlocksController
 				removeAllLetters = InstructionsAudio.instance.removeAllLetters;
 
 				triumphantSoundForSessionDone = InstructionsAudio.instance.allDoneSession;
-		}
-
-
-		//impose "reflection"- if the child waits three seconds after swiping,
-		//then check the word
-		//and if it works
-		//colour pink and play sound
-		int selectTimer = -1;
-
-		public void LetterSelectDeselect (bool wasSelected, GameObject selectedLetter)
-		{     
-				selectTimer = 60 * 3; 
-
-		}
-
-		bool wholeWordIsColoured = true;
-
-		void Update ()
-		{
-				if (selectTimer > 0)
-						selectTimer--;
-				if (selectTimer == 0) {
-						string selectedletters = arduinoLetterController.SelectedUserControlledLettersAsString.Trim ();
-						bool matchesTargetWord = selectedletters.Equals (currProblem.TargetWord (true));
-						if (matchesTargetWord) {
-								currProblem.PlayTargetWord ();
-								wholeWordIsColoured = true;
-								for (int i=0; i<selectedletters.Length; i++)
-										arduinoLetterController.ChangeDisplayColourOfASingleCell (i, SessionsDirector.colourCodingScheme.GetColorsForWholeWord ());
-						} else if (wholeWordIsColoured) {
-								for (int i=0; i<selectedletters.Length; i++) {
-										arduinoLetterController.RevertASingleLetterToDefaultColour (i);
-								}
-								wholeWordIsColoured = false;
-				
-						}
-			        
-						selectTimer = -1;
-				}
-
-
 		}
 
 		public void SetUpNextProblem ()
@@ -196,11 +162,7 @@ public class StudentActivityController : PhonoBlocksController
 						}
 					
 				}
-						
-						
-
-				
-
+	
 		}
 
 		void HandleEndOfActivity ()
@@ -327,8 +289,8 @@ public class StudentActivityController : PhonoBlocksController
 
 				bool solvedOnFirstTry = currProblem.TimesAttempted == 1;
 				if (solvedOnFirstTry) {
-						
-						userInputRouter.DisplayNewStarOnScreen ();
+		
+						userInputRouter.DisplayNewStarOnScreen (ProblemsRepository.instance.ProblemsCompleted-1);
 
 				}
 
