@@ -1,23 +1,19 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PhonoBlocks\LetterSoundComponent.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PhonoBlocks\ProblemsRepository.cs">
     <Files>
-      <File FileName="Assets\PhonoBlocks\StudentActivityController.cs" Line="281" Column="8" />
-      <File FileName="Assets\PhonoBlocks\AudioSourceController.cs" Line="44" Column="66" />
-      <File FileName="Assets\PhonoBlocks\ArduinoLetterController.cs" Line="358" Column="3" />
+      <File FileName="Assets\PhonoBlocks\ColourCodingScheme.cs" Line="134" Column="4" />
+      <File FileName="Assets\PhonoBlocks\StudentActivityController.cs" Line="280" Column="4" />
+      <File FileName="Assets\PhonoBlocks\AudioSourceController.cs" Line="1" Column="1" />
+      <File FileName="Assets\PhonoBlocks\ArduinoLetterController.cs" Line="355" Column="92" />
       <File FileName="Assets\PhonoBlocks\LetterGridController.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\UserInputRouter.cs" Line="225" Column="4" />
-      <File FileName="Assets\PhonoBlocks\ProblemsRepository.cs" Line="41" Column="4" />
-      <File FileName="Assets\PhonoBlocks\ColourCodingScheme.cs" Line="248" Column="2" />
-      <File FileName="Assets\PhonoBlocks\Problem.cs" Line="9" Column="2" />
-      <File FileName="Assets\PhonoBlocks\HintController.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\SessionsDirector.cs" Line="17" Column="2" />
-      <File FileName="Assets\PhonoBlocks\Permanent.cs" Line="22" Column="1" />
-      <File FileName="Assets\PhonoBlocks\UserStarGridController.cs" Line="43" Column="17" />
-      <File FileName="Assets\PhonoBlocks\SpeechSoundsAudio.cs" Line="13" Column="2" />
-      <File FileName="Assets\PhonoBlocks\SpeechSoundReference.cs" Line="372" Column="2" />
-      <File FileName="Assets\PhonoBlocks\LetterSoundComponent.cs" Line="227" Column="50" />
-      <File FileName="Assets\PhonoBlocks\LetterSoundComponentFactoryHandler.cs" Line="149" Column="6" />
+      <File FileName="Assets\PhonoBlocks\UserInputRouter.cs" Line="1" Column="1" />
+      <File FileName="Assets\PhonoBlocks\ProblemsRepository.cs" Line="201" Column="12" />
+      <File FileName="Assets\PhonoBlocks\Problem.cs" Line="1" Column="1" />
+      <File FileName="Assets\PhonoBlocks\InteractiveLetter.cs" Line="1" Column="1" />
+      <File FileName="Assets\PhonoBlocks\LetterSoundComponent.cs" Line="448" Column="2" />
+      <File FileName="Assets\PhonoBlocks\SessionsDirector.cs" Line="153" Column="4" />
+      <File FileName="Assets\PhonoBlocks\ArduinoUnityInterface.cs" Line="401" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

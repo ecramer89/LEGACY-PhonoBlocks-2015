@@ -39,17 +39,17 @@ public abstract class ColourCodingScheme: MonoBehaviour
 				return Color.white;
 		}
 	
-		public virtual Color GetColorsForInitialBlends ()
+		public virtual Color GetColorsForInitialBlends (int letterInBlendPos=0)
 		{
 				return Color.white;
 		}
 	
-		public virtual Color GetColorsForMiddleBlends ()
+		public virtual Color GetColorsForMiddleBlends (int letterInBlendPos=0)
 		{
 				return Color.white;
 		}
 	
-		public virtual Color GetColorsForFinalBlends ()
+		public virtual Color GetColorsForFinalBlends (int letterInBlendPos=0)
 		{
 				return Color.white;
 		}
@@ -107,7 +107,38 @@ public abstract class ColourCodingScheme: MonoBehaviour
 
 //Colour coding schemes for Min's Study:
 
+class ConsonantBlends : NoColour
+{
 
+		public ConsonantBlends (): base()
+		{
+
+				label = "Blends";
+
+		}
+
+		public override Color GetColorsForInitialBlends (int letterInBlendPos=0)
+		{
+				
+				return (letterInBlendPos == 0 ? Color.cyan : Color.green);
+		}
+	
+		public override Color GetColorsForMiddleBlends (int letterInBlendPos=0)
+		{
+
+				return GetColorsForInitialBlends (letterInBlendPos);
+		}
+	
+		public override Color GetColorsForFinalBlends (int letterInBlendPos=0)
+		{
+			
+				return GetColorsForInitialBlends (letterInBlendPos);
+		}
+
+
+
+
+}
 
 class OpenClosedVowel : NoColour
 {
@@ -185,17 +216,17 @@ class ConsonantDigraphs : NoColour
 				return Color.cyan;
 		}
 
-		public override Color GetColorsForInitialBlends ()
+		public override Color GetColorsForInitialBlends (int letterInBlendPos=0)
 		{
 				return GetColorsForHardConsonant ();
 		}
 	
-		public override Color GetColorsForMiddleBlends ()
+		public override Color GetColorsForMiddleBlends (int letterInBlendPos=0)
 		{
 				return GetColorsForHardConsonant ();
 		}
 	
-		public override Color GetColorsForFinalBlends ()
+		public override Color GetColorsForFinalBlends (int letterInBlendPos=0)
 		{
 				return GetColorsForHardConsonant ();
 		}
@@ -263,67 +294,12 @@ class SyllableDivision : NoColour
 				label = "syllableDivision";
 		}
 
-		public virtual Color GetColorsForLongVowel (char vowel)
-		{
-				return Color.magenta;
-		
-		}
-	
-		public virtual Color GetColorsForHardConsonant (int indexInWord=0)
-		{
-				return Color.magenta;
-		}
-	
-		public virtual Color GetColourForSilent (char letter)
-		{
-				return Color.magenta;
-		}
-	
-		public virtual Color GetColorsForShortVowel (Color currentVowelColor)
-		{
-				return Color.magenta;
-		}
-	
-		public virtual Color GetColorsForInitialBlends ()
-		{
-				return Color.magenta;
-		}
-	
-		public virtual Color GetColorsForMiddleBlends ()
-		{
-				return Color.magenta;
-		}
-	
-		public virtual Color GetColorsForFinalBlends ()
-		{
-				return Color.magenta;
-		}
-	
 		public virtual Color GetColoursForSyllables (int indexInWord=0)
 		{
 				return AlternatingColours (indexInWord);
 		}
 	
-		public virtual Color ModifyColorForSoftConsonant (Color color)
-		{
-				return Color.magenta;
-		}
-	
-		public virtual Color GetColorsForConsonantDigraphs ()
-		{
-				return Color.magenta;
-		}
-	
-		public virtual Color GetColorsForVowelDigraphs ()
-		{
-				return Color.magenta;
-		}
-	
-		public virtual Color GetColorsForRControlledVowel (char letter)
-		{
-		
-				return Color.magenta;
-		}
+
 	
 
 	

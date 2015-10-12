@@ -401,7 +401,7 @@ public class ArduinoUnityInterface : PhonoBlocksController
 		
 				for (int positionOfLetter=0; positionOfLetter<newWord.Count; positionOfLetter++) {
 						LetterSoundComponent p = newWord.Get (positionOfLetter);
-						Color color = p.Color;
+						Color color = p.GetColour();
                     
 
 						// int positionOfLetter_ = NUM_LETTER_POSITIONS - positionOfLetter;

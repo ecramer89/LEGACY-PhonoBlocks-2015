@@ -348,11 +348,11 @@ public class ArduinoLetterController : PhonoBlocksController
 		void UpdateInterfaceLetters (LetterSoundComponent lc, LetterGridController letterGridController, int indexOfLetterBarCell, bool flash)
 		{
 				
-				InteractiveLetter i = letterGridController.UpdateLetter (indexOfLetterBarCell, lc.Color);
+				InteractiveLetter i = letterGridController.UpdateLetter (indexOfLetterBarCell, lc.GetColour());
 	
 
 			
-				bool flashInteractiveLetter = flash && i.HasLetterOrSoundChanged (lc) && lc.Color == i.CurrentColor ();
+				bool flashInteractiveLetter = flash && i.HasLetterOrSoundChanged (lc) && lc.GetColour() == i.CurrentColor ();
 				
 				i.LetterSoundComponentIsPartOf = lc;
 		

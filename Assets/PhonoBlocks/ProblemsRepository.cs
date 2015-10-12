@@ -35,6 +35,7 @@ public class ProblemsRepository : MonoBehaviour
 				MAGIC_E,
 				SYLLABLE_DIVISION,
 				CONSONANT_DIGRAPHS,
+				CONSONANT_BLENDS,
 				R_CONTROLLED_VOWEL,
 				VOWEL_DIGRAPHS
 
@@ -49,6 +50,9 @@ public class ProblemsRepository : MonoBehaviour
 			
 				case ProblemType.CONSONANT_DIGRAPHS:
 						return new ConsonantDigraphs ();
+
+				case ProblemType.CONSONANT_BLENDS:
+						return new ConsonantBlends ();
 					
 				case ProblemType.MAGIC_E:
 						return new VowelInfluenceERule ();
@@ -191,6 +195,8 @@ public class ProblemsRepository : MonoBehaviour
 						return;
 				case 2:
 				case 3:
+						colourSchemeForSession = new ConsonantBlends ();
+						return;
 				case 4:
 				case 5:
 						colourSchemeForSession = new ConsonantDigraphs ();

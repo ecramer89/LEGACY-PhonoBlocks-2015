@@ -150,7 +150,8 @@ public class SessionsDirector : MonoBehaviour
 		{
 
 				colourCodingScheme = ProblemsRepository.instance.GetColourCodingSchemeGivenProblemType (problemType);
-				
+			
+
 				Application.LoadLevel ("Activity");
 		}
 
