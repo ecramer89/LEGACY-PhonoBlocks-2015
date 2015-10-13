@@ -8,13 +8,51 @@ public abstract class ColourCodingScheme: MonoBehaviour
 		//establish colours for all generally relevant LetterSoundComponents.
 		//we can do so by adjusting the singleton (LetterSoundComponent Color Map)
 
-
+		protected Color green;
+		protected Color blue;
+		protected Color red;
+		protected Color pink;
+		protected Color yellow;
+		protected Color gray;
 		public string label;
 		protected int alternate = 0;
 
+		public ColourCodingScheme ()
+		{
+				green = Color.green;
+				green.r = (float)95 / (float)255;
+				green.b = (float)127 / (float)255;
+				green.g = (float)180 / (float)255;
+				blue = Color.blue;
+				blue.r = (float)105 / (float)255;
+				blue.g = (float)210 / (float)255;
+				blue.b = (float)231 / (float)255;
+				red = Color.red;
+				red.g = (float)58 / (float)255;
+				red.b = (float)68 / (float)255;
+				pink = Color.red;
+				pink.r = (float)247 / (float)255;
+				pink.g = (float)98 / (float)255;
+				pink.b = (float)162 / (float)255;
+				yellow = Color.yellow;
+				yellow.r = (float)249 / (float)255;
+				yellow.g = (float)249 / (float)255;
+				yellow.b = (float)98 / (float)255;
+				gray = Color.gray;
+				gray.r = (float)(gray.r * 1.2);
+				gray.g = gray.r;
+				gray.b = gray.r;
+		}
+
+		public virtual Color GetColorsForOff ()
+		{
+				return gray;
+		
+		}
+
 		public virtual Color GetColorsForWholeWord ()
 		{
-				return Color.magenta;
+				return pink;
 		
 		}
 	
@@ -93,12 +131,12 @@ public abstract class ColourCodingScheme: MonoBehaviour
 
 		protected virtual Color GetAlternateA ()
 		{
-				return Color.cyan;
+				return blue;
 		}
 
 		protected virtual Color GetAlternateB ()
 		{
-				return Color.green;
+				return green;
 		}
 
 	
@@ -119,31 +157,27 @@ class ConsonantBlends : NoColour
 
 		public override Color GetColorsForConsonantDigraphs ()
 		{
-				return Color.green;
+				return green;
 		}
-
-		public override Color GetColorsForHardConsonant (int indexInWord=0)
-		{
-				return Color.cyan;
-		}
-
+	
 		public override Color GetColorsForInitialBlends (int letterInBlendPos=0)
 		{
-				
-				return Color.green;
+				return GetColorsForConsonantDigraphs ();
+				//return AlternatingColours (letterInBlendPos);
 		}
 	
 		public override Color GetColorsForMiddleBlends (int letterInBlendPos=0)
 		{
-
-				return GetColorsForInitialBlends (letterInBlendPos);
+				return GetColorsForConsonantDigraphs ();
+				//return AlternatingColours (letterInBlendPos);
 		}
 	
 		public override Color GetColorsForFinalBlends (int letterInBlendPos=0)
 		{
-			
-				return GetColorsForInitialBlends (letterInBlendPos);
+				return GetColorsForConsonantDigraphs ();
+				//return AlternatingColours (letterInBlendPos);
 		}
+
 
 
 
@@ -160,12 +194,12 @@ class OpenClosedVowel : NoColour
 
 		public override Color GetColorsForShortVowel (Color currentVowelColor)
 		{
-				return Color.yellow;
+				return yellow;
 		}
 
 		public override Color GetColorsForLongVowel (char vowel)
 		{
-				return Color.red;
+				return red;
 		}
 
 		/* Min wants each consonant in the word to have a different colour. Most of the words she uses are CVC, so the rule
@@ -192,7 +226,7 @@ class VowelInfluenceERule : NoColour
 
 		public override Color GetColorsForLongVowel (char vowel)
 		{
-				return Color.red;
+				return red;
 		}
 
 		public override Color GetColourForSilent (char letter)
@@ -218,27 +252,22 @@ class ConsonantDigraphs : NoColour
 
 		public override Color GetColorsForConsonantDigraphs ()
 		{
-				return Color.green;
-		}
-
-		public override Color GetColorsForHardConsonant (int indexInWord=0)
-		{
-				return Color.cyan;
+				return green;
 		}
 
 		public override Color GetColorsForInitialBlends (int letterInBlendPos=0)
 		{
-				return GetColorsForHardConsonant ();
+				return AlternatingColours (letterInBlendPos);
 		}
 	
 		public override Color GetColorsForMiddleBlends (int letterInBlendPos=0)
 		{
-				return GetColorsForHardConsonant ();
+				return AlternatingColours (letterInBlendPos);
 		}
 	
 		public override Color GetColorsForFinalBlends (int letterInBlendPos=0)
 		{
-				return GetColorsForHardConsonant ();
+				return AlternatingColours (letterInBlendPos);
 		}
 	
 
@@ -247,7 +276,7 @@ class ConsonantDigraphs : NoColour
 
 //changes to parent
 //colour r controlled vowels purple
-class RControlledVowel: NoColour
+class RControlledVowel: VowelDigraphs
 {
 		public RControlledVowel () : base()
 		{
@@ -256,8 +285,16 @@ class RControlledVowel: NoColour
 
 		public override Color GetColorsForRControlledVowel ()
 		{   
-				return Color.magenta;
+				return red;
 		}
+
+		public override Color GetColorsForVowelDigraphs ()
+		{
+				return gray;
+		}
+
+
+
 
 	
 
@@ -274,7 +311,7 @@ class VowelDigraphs : NoColour
 
 		public override Color GetColorsForVowelDigraphs ()
 		{
-				return Color.red;
+				return red;
 		}
 
 		public override Color GetColorsForRControlledVowel ()
@@ -289,7 +326,7 @@ class VowelDigraphs : NoColour
 
 		public override Color GetColorsForShortVowel (Color currentVowelColor)
 		{      
-				return Color.gray;
+				return gray;
 		}
 
     
@@ -307,12 +344,6 @@ class SyllableDivision : NoColour
 		public override Color GetColoursForSyllables (int indexInWord=0)
 		{     
 				return AlternatingColours (indexInWord);
-		}
-
-		public override Color GetColorsForWholeWord ()
-		{
-				return Color.magenta;
-		
 		}
 	
 		public override Color GetColorsForLongVowel (char vowel)

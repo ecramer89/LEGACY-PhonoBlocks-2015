@@ -41,7 +41,7 @@ public class InteractiveLetter : PhonoBlocksController
 
 		public static event PressAction LetterPressed;
 
-		Color lockedColor = Color.gray;
+		Color lockedColor = Color.clear;
 		Color flashOff = Color.black;
 		UITexture selectHighlight;
 		Color selectColor = Color.clear;
@@ -51,6 +51,14 @@ public class InteractiveLetter : PhonoBlocksController
 				selectColor = newColor;
 
 
+		}
+
+		public Color  SelectColour {
+				get {
+						return selectColor;
+				}
+		
+		
 		}
 
 		BoxCollider trigger;
@@ -111,6 +119,8 @@ public class InteractiveLetter : PhonoBlocksController
 
 		public void Lock ()
 		{
+				if (lockedColor == Color.clear)
+						lockedColor = SessionsDirector.colourCodingScheme.GetColorsForOff ();
 				UpdateDisplayColour (lockedColor);
 				isLocked = true;
 		}
@@ -210,6 +220,8 @@ public class InteractiveLetter : PhonoBlocksController
 			
 		}
 
+
+		//update the letter images; then after they make any change it will just update them all again
 		public void UpdateLetterImage (Texture2D img_)
 		{
 				gameObject.GetComponent<UITexture> ().mainTexture = img_;

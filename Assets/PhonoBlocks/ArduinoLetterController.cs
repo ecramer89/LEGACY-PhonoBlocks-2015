@@ -187,6 +187,14 @@ public class ArduinoLetterController : PhonoBlocksController
 				letterGrid.UpdateLetter (atPosition, newColour, false);
 		}
 
+		void ChangeTheImageOfASingleCell (int atPosition, Texture2D newImage)
+		{
+				InteractiveLetter i = letterGrid.GetInteractiveLetter (atPosition);
+				i.SwitchImageTo (newImage);
+
+
+		}
+
 		public void RevertLettersToDefaultColour (bool onlySelected=false, int start=-1, int count=7)
 		{
 				start = (start < StartingIndex ? StartingIndex : start);
@@ -211,7 +219,7 @@ public class ArduinoLetterController : PhonoBlocksController
 				InteractiveLetter l = letterGrid.GetLetterCell (atPosition).GetComponent<InteractiveLetter> ();
 				l.RevertToDefaultColour ();
 		}
-	
+		//updates letters and images of letter cells
 		public void PlaceWordInLetterGrid (string word)
 		{
 
@@ -221,6 +229,19 @@ public class ArduinoLetterController : PhonoBlocksController
 				}
 		
 				 
+		}
+
+		//just updates the display images of the cells
+		public void DisplayWordInLetterGrid (string word)
+		{
+		
+				for (int i=0, j=startingIndexOfUserLetters; i<word.Length; i++,j++) {
+						
+						ChangeTheImageOfASingleCell (j, LetterImageTable.instance.GetLetterImageFromLetter (word.Substring (i, 1) [0]));
+			
+				}
+		
+		
 		}
 
 		public void ReplaceEachLetterWithBlank ()
@@ -355,7 +376,7 @@ public class ArduinoLetterController : PhonoBlocksController
 						i.SetSelectColour (lc.GetColour ());
 
 				} else {
-						i=letterGridController.UpdateLetter (indexOfLetterBarCell, lc.GetColour ());
+						i = letterGridController.UpdateLetter (indexOfLetterBarCell, lc.GetColour ());
 
 				}
 

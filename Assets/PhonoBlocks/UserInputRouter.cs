@@ -35,6 +35,7 @@ public class UserInputRouter : MonoBehaviour
 		public GameObject wordHistoryControllerGO;
 		public GameObject arduinoLetterInterfaceG0;
 		public GameObject uniduinoG0;
+		public GameObject replayInstructionsButton;
 		public GameObject checkedWordImageControllerGO;
 		public GameObject hintButtonGO;
 		public SessionsDirector sessionManager;
@@ -91,8 +92,6 @@ public class UserInputRouter : MonoBehaviour
 
 
 
-	
-
 				totalLengthOfUserInputWord = numOnscreenLetterSpaces;
 	
 				arduinoLetterController = arduinoLetterControllerGO.GetComponent<ArduinoLetterController> ();
@@ -114,7 +113,7 @@ public class UserInputRouter : MonoBehaviour
 					
 						sessionManager = sessionParametersOB.GetComponent<SessionsDirector> ();
 						if (SessionsDirector.DelegateControlToStudentActivityController) {
-							
+							      
 								studentActivityControllerGO = sessionManager.studentActivityControllerOB;
 								studentActivityController = studentActivityControllerGO.GetComponent<StudentActivityController> ();
 				            
@@ -124,6 +123,7 @@ public class UserInputRouter : MonoBehaviour
 								userStarController.Initialize ();
 			
 						} else {
+								replayInstructionsButton.SetActive (false);
 								userStarControllerGO.SetActive (false);
 						}
 		    	
@@ -183,6 +183,13 @@ public class UserInputRouter : MonoBehaviour
 		public void RequestTurnOffImage ()
 		{
 				checkedWordImageController.EndDisplay ();
+		}
+
+		public void DisplayLettersOf (string word)
+		{
+
+				arduinoLetterController.DisplayWordInLetterGrid (word);
+
 		}
 
 		//

@@ -9,7 +9,6 @@ public class HintController : PhonoBlocksController
 		int currHintIdx = -1;
 		public const int NUM_HINTS = 2;
 
-
 		public void Initialize (GameObject hintButton)
 		{
 				
@@ -48,13 +47,17 @@ public class HintController : PhonoBlocksController
 		{      //maybe make this a couroutine that can "iterate" thru each hint step
 				//each of which is an audio file, except for the last which involves a visual change as wellS
 				
+		userInputRouter.DisplayLettersOf (currProblem.TargetWord (false));
+
+		       
 				switch (currHintIdx) {
 				case 0:
+			            
 						AudioSourceController.PushClip (sound_out_word);
 						break;
 
 				case 1:
-			currProblem.PlaySoundedOutWord();
+						currProblem.PlaySoundedOutWord ();
 						break;
 
 	

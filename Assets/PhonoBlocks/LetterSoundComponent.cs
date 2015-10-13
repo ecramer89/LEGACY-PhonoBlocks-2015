@@ -430,7 +430,7 @@ public class Blend : LetterSoundComposite
 						color = SessionsDirector.colourCodingScheme.GetColorsForMiddleBlends ();
 		
 				}
-				/*
+/*
 				if (preferredPosition == SpeechSoundReference.INITIAL_BLEND) {
 						colors [0] = SessionsDirector.colourCodingScheme.GetColorsForInitialBlends (0);
 						colors [1] = SessionsDirector.colourCodingScheme.GetColorsForInitialBlends (1);
@@ -440,12 +440,12 @@ public class Blend : LetterSoundComposite
 				} else {
 						colors [0] = SessionsDirector.colourCodingScheme.GetColorsForMiddleBlends (0);
 						colors [1] = SessionsDirector.colourCodingScheme.GetColorsForMiddleBlends (1);
-				}*/
+				}
 
-
+*/
 	
 		}
-/*
+	/*
 		public override Color GetColour ()
 		{
 				colorIdx = 1 - colorIdx;

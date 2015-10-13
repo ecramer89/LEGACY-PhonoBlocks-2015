@@ -285,7 +285,7 @@ public class StudentActivityController : PhonoBlocksController
 
 				currProblem.SetTargetWordToEmpty ();
 				userInputRouter.AddCurrentWordToHistory (false);
-				arduinoLetterController.LockAllLetters ();
+				//arduinoLetterController.LockAllLetters ();
 		   
 				userInputRouter.RequestDisplayImage (currProblem.TargetWord (true), false, true);
 

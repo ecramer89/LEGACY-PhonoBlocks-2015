@@ -1,0 +1,33 @@
+2015-10-13 13:38:46Z,activity,change_letter,c,0
+2015-10-13 13:38:47Z,activity,change_letter,a,1
+2015-10-13 13:38:51Z,activity,change_letter,r,3
+2015-10-13 13:38:52Z,activity,change_letter,r,2
+2015-10-13 13:38:54Z,activity,change_letter, ,4
+2015-10-13 13:38:56Z,activity,change_letter, ,3
+2015-10-13 13:39:08Z,activity,submitted_answer,car   ,car   
+2015-10-13 13:39:22Z,activity,change_letter, ,0
+2015-10-13 13:39:23Z,activity,change_letter, ,1
+2015-10-13 13:39:24Z,activity,change_letter, ,2
+2015-10-13 13:39:29Z,activity,change_letter, ,0
+2015-10-13 13:39:31Z,activity,change_letter,j,0
+2015-10-13 13:39:33Z,activity,change_letter,a,1
+2015-10-13 13:39:36Z,activity,change_letter,a,2
+2015-10-13 13:39:39Z,activity,submitted_answer,jaa   ,jar   
+2015-10-13 13:39:46Z,activity,requested_hint,0,NA
+2015-10-13 13:40:24Z,activity,change_letter,r,2
+2015-10-13 13:40:25Z,activity,submitted_answer,jar   ,jar   
+2015-10-13 13:40:28Z,activity,change_letter, ,0
+2015-10-13 13:40:29Z,activity,change_letter, ,1
+2015-10-13 13:40:30Z,activity,change_letter, ,2
+2015-10-13 13:40:57Z,activity,change_letter,f,0
+2015-10-13 13:40:58Z,activity,change_letter,a,1
+2015-10-13 13:41:00Z,activity,change_letter,r,2
+2015-10-13 13:41:03Z,activity,submitted_answer,far   ,fir   
+2015-10-13 13:41:14Z,activity,change_letter,r,1
+2015-10-13 13:41:16Z,activity,change_letter,u,1
+2015-10-13 13:41:20Z,activity,submitted_answer,fur   ,fir   
+2015-10-13 13:41:30Z,activity,change_letter,i,1
+2015-10-13 13:41:37Z,activity,submitted_answer,fir   ,fir   
+2015-10-13 13:41:39Z,activity,change_letter, ,0
+2015-10-13 13:41:40Z,activity,change_letter, ,2
+2015-10-13 13:41:41Z,activity,change_letter, ,1
