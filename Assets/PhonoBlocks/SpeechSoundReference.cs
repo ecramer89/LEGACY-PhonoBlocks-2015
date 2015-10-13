@@ -7,7 +7,7 @@ public class SpeechSoundReference : MonoBehaviour
 
 		public static readonly int MAX_BLEND_LENGTH = 3;
 		public static readonly int MAX_STABLE_SYLLABLE_LENGTH = 4;
-		public static readonly int MIN_STABLE_SYLLABLE_LENGTH = 3;
+		public static readonly int MIN_STABLE_SYLLABLE_LENGTH = 2;
 		public static readonly int NOT_A_BLEND = -1;
 		public static readonly int MIDDLE_BLEND = 0;
 		public static readonly int FINAL_BLEND = 2;
@@ -297,7 +297,7 @@ public class SpeechSoundReference : MonoBehaviour
 				stable_syllables_.Add ("er");
 				stable_syllables_.Add ("wa");
 				stable_syllables_.Add ("ter");
-				stable_syllables_.Add ("slee");
+				stable_syllables_.Add ("cree");
 				stable_syllables_.Add ("py");
 
 
@@ -317,8 +317,8 @@ public class SpeechSoundReference : MonoBehaviour
 
 		public static bool IsStableSyllable (string candidate)
 		{
-				if (candidate.Length > MAX_STABLE_SYLLABLE_LENGTH || candidate.Length < MIN_STABLE_SYLLABLE_LENGTH)
-						return false;
+				//if (candidate.Length > MAX_STABLE_SYLLABLE_LENGTH || candidate.Length < MIN_STABLE_SYLLABLE_LENGTH)
+						//return false;
 		
 				if (!initialized)
 						Initialize ();

@@ -296,7 +296,7 @@ public class ArduinoLetterController : PhonoBlocksController
 		{
 			
 
-				return LetterSoundComponentFactoryManager.Decode (GetUserControlledLettersAsString (false));
+				return LetterSoundComponentFactoryManager.Decode (GetUserControlledLettersAsString (false), SessionsDirector.instance.IsSyllableDivisionMode);
 		
 		}
 
@@ -348,11 +348,20 @@ public class ArduinoLetterController : PhonoBlocksController
 		void UpdateInterfaceLetters (LetterSoundComponent lc, LetterGridController letterGridController, int indexOfLetterBarCell, bool flash)
 		{
 				
-				InteractiveLetter i = letterGridController.UpdateLetter (indexOfLetterBarCell, lc.GetColour());
-	
+				InteractiveLetter i;
+				if (SessionsDirector.instance.IsSyllableDivisionMode) {
+						i = letterGridController.GetInteractiveLetter (indexOfLetterBarCell);
+						i.UpdateDefaultColour (SessionsDirector.colourCodingScheme.GetColorsForWholeWord ());
+						i.SetSelectColour (lc.GetColour ());
+
+				} else {
+						i=letterGridController.UpdateLetter (indexOfLetterBarCell, lc.GetColour ());
+
+				}
+
 
 			
-				bool flashInteractiveLetter = flash && i.HasLetterOrSoundChanged (lc) && lc.GetColour() == i.CurrentColor ();
+				bool flashInteractiveLetter = flash && i.HasLetterOrSoundChanged (lc) && lc.GetColour () == i.CurrentColor ();
 				
 				i.LetterSoundComponentIsPartOf = lc;
 		
@@ -361,7 +370,9 @@ public class ArduinoLetterController : PhonoBlocksController
 			
 				}
 
-				
+
+			
+						
 		}
 
 		int FindIndexOfGraphemeThatCorrespondsToLastNonBlankPhonogram (UserWord userWord)
@@ -394,6 +405,8 @@ public class ArduinoLetterController : PhonoBlocksController
 				for (int i=0, j=StartingIndex; i<currUserControlledLettersAsStringBuilder.Length; i++,j++) {
 						SaveNewLetterInStringRepresentation ((selectButtonOnSelection ? currUserControlledLettersAsStringBuilder [i] : ' '), i, selectedUserControlledLettersAsStringBuilder);
 						l = letterGrid.GetInteractiveLetter (j);
+						
+
 						if (selectButtonOnSelection)
 								l.Select (false);
 						else

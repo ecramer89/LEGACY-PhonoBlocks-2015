@@ -9,9 +9,9 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 		static bool checkPhonotactics = false;
 		static SyllableFactory syllableFactory = new SyllableFactory ();
 
-		public static UserWord Decode (string word)
+		public static UserWord Decode (string word, bool bySyllables=false)
 		{
-				return syllableFactory.Parse (word);
+				return syllableFactory.Parse (word, bySyllables);
 		}
 
 
@@ -19,7 +19,7 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 		{
 				protected static VowelConsonantFactory vowelConsonantFactory = new VowelConsonantFactory ();
 		
-		public abstract UserWord Parse (string context, bool bySyllables=false);
+				public abstract UserWord Parse (string context, bool bySyllables=false);
 
 		}
 		
@@ -48,7 +48,7 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 						return result;
 				}
 
-		public override UserWord Parse (string input,bool bySyllables=false)
+				public override UserWord Parse (string input, bool bySyllables=false)
 				{
 						return null;
 				}
@@ -72,8 +72,15 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 
 						preSyllable = new List<LetterSoundComponent> ();
 						int numBlanksToRestore = word.Length - substringToDecode.Length;
-						preSyllable = ParseBlendsDigraphsAndLetters (substringToDecode);
-						IdentifyVowelSoundsAndPhonotacticErrorsBySyllable (preSyllable); //we need to check the phonotactics after we have collected ad appended
+						if (bySyllables) {
+								preSyllable = ParseSyllables (substringToDecode);
+						}
+						if (!bySyllables || preSyllable.Count == 0) {
+								preSyllable = ParseBlendsDigraphsAndLetters (substringToDecode);
+								IdentifyVowelSoundsAndPhonotacticErrorsBySyllable (preSyllable);
+						}
+						//we need to check the phonotactics after we have collected ad appended
+
 						UserWord userWord = new UserWord (preSyllable);
 				
 						userWord.ApplyColoursToLetterSoundComponents (checkPhonotactics); 
@@ -103,6 +110,67 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 
 				}
 
+				//only used in syllable division activity where either you form the two syllables (and they both become coloured) OR
+				//you form just letters
+				public List<LetterSoundComponent> ParseSyllables (string word)
+				{
+						
+						List<LetterSoundComponent> units = new List<LetterSoundComponent> ();
+						LetterSoundComponent first_syllable = null;
+						LetterSoundComponent second_syllable = null;
+						//find first syllable
+						int length_of_first_syllable = SpeechSoundReference.MAX_STABLE_SYLLABLE_LENGTH;
+						while (length_of_first_syllable>=SpeechSoundReference.MIN_STABLE_SYLLABLE_LENGTH) {
+								if (length_of_first_syllable < word.Length) {
+										string longest_syllable = word.Substring (0, length_of_first_syllable);
+									
+										first_syllable = TryMakeSyllable (longest_syllable);
+
+										if (!ReferenceEquals (first_syllable, null)) {
+										
+												break;
+										}
+								}
+								length_of_first_syllable--;
+
+						}
+						//find second syllable if we found a first syllable, otherwise return the result of the general algorithm.
+
+						if (!ReferenceEquals (first_syllable, null)) {
+								int length_of_rest = word.Length - length_of_first_syllable;
+						
+								if (length_of_rest >= SpeechSoundReference.MIN_STABLE_SYLLABLE_LENGTH) {
+										string candidate_syllable = word.Substring (length_of_first_syllable, length_of_rest);
+									
+										second_syllable = TryMakeSyllable (candidate_syllable);
+										if (!ReferenceEquals (second_syllable, null)) {
+										
+
+												units.Add (first_syllable);
+												units.Add (second_syllable);
+										
+
+										}
+						
+								}
+						}
+
+						return units;
+			            
+
+				}
+
+				LetterSoundComposite TryMakeSyllable (string candidate)
+				{
+						bool isSyll = SpeechSoundReference.IsStableSyllable (candidate);
+						if (isSyll) {
+						
+								return StoreLettersInComposite (new StableSyllable (candidate), candidate);
+
+						}
+						return null;
+				}
+
 				List<LetterSoundComponent> FindUnitsOfLength (int lengthOfTargetComponent, string word)
 				{
 					
@@ -115,7 +183,7 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 								while (inWord+lengthOfTargetComponent<=word.Length) {
 										string candidate = word.Substring (inWord, lengthOfTargetComponent);
 
-										LetterSoundComponent pivot = TryMakeLetterSoundComponent (candidate);
+										LetterSoundComponent pivot = TryMakeDigraphOrBlend (candidate);
 								
 										if (!ReferenceEquals (pivot, null)) 
 												return Combine (FindUnitsOfLength (lengthOfTargetComponent - 1, word.Substring (0, inWord)), pivot, FindUnitsOfLength (lengthOfTargetComponent, word.Substring (inWord + lengthOfTargetComponent, word.Length - (inWord + lengthOfTargetComponent))));
@@ -138,18 +206,19 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 
 				}
 
-				LetterSoundComponent TryMakeLetterSoundComponent (string candidate)
+				LetterSoundComponent TryMakeDigraphOrBlend (string candidate)
 				{
 						
 						if (candidate.Length > 1)
-								return TryMakeBlendOrDigraph (candidate);
+								return TryMakeTwoLetterSpeechSound (candidate);
 						else
 								return vowelConsonantFactory.TryMakeLetters (candidate) [0];
 		
 				}
 
-				LetterSoundComposite TryMakeBlendOrDigraph (string candidate)
+				LetterSoundComposite TryMakeTwoLetterSpeechSound (string candidate)
 				{
+					
 						int blendType = SpeechSoundReference.IsBlendAndWhichType (candidate);
 						if (blendType != SpeechSoundReference.NOT_A_BLEND) 
 								return StoreLettersInComposite (new Blend (candidate, blendType), candidate);
@@ -157,8 +226,9 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 								return StoreLettersInComposite (new ConsonantDigraph (candidate), candidate);
 						if (SpeechSoundReference.IsVowelDigraph (candidate))
 								return StoreLettersInComposite (new VowelDigraph (candidate), candidate);
-			if (SpeechSoundReference.IsVowelR (candidate))
-				return StoreLettersInComposite (new VowelR (candidate), candidate);
+						if (SpeechSoundReference.IsVowelR (candidate))
+								return StoreLettersInComposite (new VowelR (candidate), candidate);
+						
 						return null;
 			
 			
@@ -437,7 +507,7 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 			
 				}
 
-		public UserWord Parse (string context,bool bySyllables=false)
+				public UserWord Parse (string context, bool bySyllables=false)
 				{
 						return null;
 				}

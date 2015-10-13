@@ -204,19 +204,20 @@ public class UserInputRouter : MonoBehaviour
 				if (acceptUIInput) {
 						if (arduinoLetterController.NoUserControlledLetters ())
 								return;
-						if (TeacherMode ())
-								AddCurrentWordToHistory (true);//wordHistoryController.AddCurrentWordToHistory (arduinoAndAffixLetterController.GetAllUserInputLetters (false));
-						else 
+						if (TeacherMode ()) {
+								AddCurrentWordToHistory (true);
+						} else 
 								studentActivityController.HandleSubmittedAnswer ();
 				}
 		}
 
-		public void AddCurrentWordToHistory (bool playSound)
+		public void AddCurrentWordToHistory (bool playSoundsAndShowImage)
 		{
-				wordHistoryController.AddCurrentWordToHistory (arduinoLetterController.GetAllUserInputLetters (false));
+
+				wordHistoryController.AddCurrentWordToHistory (arduinoLetterController.GetAllUserInputLetters (false), playSoundsAndShowImage);
 
 		}
-
+		
 		public void ClearWordHistory ()
 		{
 				wordHistoryController.ClearWordHistory ();
@@ -227,7 +228,7 @@ public class UserInputRouter : MonoBehaviour
 		//show stars acquired during a session (but not yet stored in player prefs and not yet displayed initially) during the activity.
 		public void DisplayNewStarOnScreen (int at)
 		{
-				userStarController.AddNewUserStar (true,at);
+				userStarController.AddNewUserStar (true, at);
 		}
 	                                              
 
@@ -256,7 +257,8 @@ public class UserInputRouter : MonoBehaviour
 						if (!wholeWordWasSelected) {
 								if (!SessionsDirector.DelegateControlToStudentActivityController || studentActivityController.StringMatchesTarget (selectedLetters)) {
 										if (AudioSourceController.PushClip (AudioSourceController.GetWordFromResources (selectedLetters))) {					
-												arduinoLetterController.ChangeDisplayColourOfCells (SessionsDirector.colourCodingScheme.GetColorsForWholeWord (), true);
+												if (!SessionsDirector.instance.IsSyllableDivisionMode)
+														arduinoLetterController.ChangeDisplayColourOfCells (SessionsDirector.colourCodingScheme.GetColorsForWholeWord (), true);
 												wholeWordWasSelected = true;
 												
 										}

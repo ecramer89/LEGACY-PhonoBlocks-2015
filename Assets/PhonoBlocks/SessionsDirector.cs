@@ -13,6 +13,15 @@ public class SessionsDirector : MonoBehaviour
 
 		public static SessionsDirector instance;
 		public static ColourCodingScheme colourCodingScheme = new RControlledVowel ();
+
+		public bool IsSyllableDivisionMode {
+				get {
+						return colourCodingScheme.label.Equals ("syllableDivision");
+
+				}
+
+		}
+
 		public INTERFACE_TYPE INTERFACE;
 
  
@@ -80,7 +89,7 @@ public class SessionsDirector : MonoBehaviour
 		public GameObject teacherModeButton;
 		public GameObject studentModeButton;
 		public GameObject studentNameInputField;
-		public GameObject returnToModeSelectButton;
+		//public GameObject returnToModeSelectButton;
 		public GameObject dataTables;
 		InputField studentName;
 		public AudioClip noDataForStudentName;
@@ -100,7 +109,7 @@ public class SessionsDirector : MonoBehaviour
 
 
 		void Start ()
-		{   
+		{     
 				instance = this;
 				SpeechSoundReference.Initialize ();
 				studentName = studentNameInputField.GetComponent<InputField> ();
@@ -110,11 +119,12 @@ public class SessionsDirector : MonoBehaviour
 
 		void SetupModeSelectionMenu ()
 		{
-				returnToModeSelectButton.SetActive (false);
+				//returnToModeSelectButton.SetActive (false);
 				assessmentStartTime = DateTime.Now;
 				activitySelectionButtons.SetActive (false);
 				studentModeButton.SetActive (true);
 				teacherModeButton.SetActive (true);
+				studentNameInputField.SetActive (false);
 
 		}
 
@@ -138,7 +148,7 @@ public class SessionsDirector : MonoBehaviour
 		{
 				mode = Mode.TEACHER;
 				activitySelectionButtons.SetActive (true);
-				returnToModeSelectButton.SetActive (true);
+				//returnToModeSelectButton.SetActive (true);
 				studentModeButton.SetActive (false);
 				teacherModeButton.SetActive (false);
 				studentNameInputField.SetActive (false);
@@ -154,32 +164,35 @@ public class SessionsDirector : MonoBehaviour
 
 				Application.LoadLevel ("Activity");
 		}
-
+	    
 		public void SelectStudentMode ()
 		{
-				string nameEntered = studentName.stringToEdit.Trim ().ToLower ();
-				if (nameEntered.Length > 0) {
+				if (studentNameInputField.activeSelf) {
+						string nameEntered = studentName.stringToEdit.Trim ().ToLower ();
+						if (nameEntered.Length > 0) {
 		
-						nameEntered = CreateNewFileIfNeeded (nameEntered);
+								nameEntered = CreateNewFileIfNeeded (nameEntered);
 
 
-						bool wasStoredDataForName = StudentsDataHandler.instance.LoadStudentData (nameEntered);
+								bool wasStoredDataForName = StudentsDataHandler.instance.LoadStudentData (nameEntered);
 
 		
-						if (wasStoredDataForName) {
-								mode = Mode.STUDENT;
-								studentActivityControllerOB = (GameObject)GameObject.Instantiate (studentActivityControllerOB);
+								if (wasStoredDataForName) {
+										mode = Mode.STUDENT;
+										studentActivityControllerOB = (GameObject)GameObject.Instantiate (studentActivityControllerOB);
 			
-								SetParametersForStudentMode (studentActivityControllerOB);
-								UnityEngine.Object.DontDestroyOnLoad (studentActivityControllerOB);
-								returnToModeSelectButton.SetActive (true);
-								Application.LoadLevel ("Activity");
+										SetParametersForStudentMode (studentActivityControllerOB);
+										UnityEngine.Object.DontDestroyOnLoad (studentActivityControllerOB);
+										//returnToModeSelectButton.SetActive (true);
+										Application.LoadLevel ("Activity");
 								
-						} else {
-								AudioSourceController.PushClip (noDataForStudentName);
+								} else {
+										AudioSourceController.PushClip (noDataForStudentName);
 			
+								}
 						}
-				}
+				} else
+						studentNameInputField.SetActive(true);
 		
 		}
 

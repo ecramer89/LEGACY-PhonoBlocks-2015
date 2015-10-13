@@ -44,6 +44,15 @@ public class InteractiveLetter : PhonoBlocksController
 		Color lockedColor = Color.gray;
 		Color flashOff = Color.black;
 		UITexture selectHighlight;
+		Color selectColor = Color.clear;
+
+		public void SetSelectColour (Color newColor)
+		{
+				selectColor = newColor;
+
+
+		}
+
 		BoxCollider trigger;
 		LetterSoundComponent lc;
 		int flashCounter = 0;
@@ -301,7 +310,10 @@ public class InteractiveLetter : PhonoBlocksController
 				if (!isSelected && !IsBlank ()) {
 
 						isSelected = true;
-						selectHighlight.enabled = true;
+						if (selectColor == Color.clear)
+								selectHighlight.enabled = true;
+						else
+								UpdateDisplayColour (selectColor);
 						if (notifyObservers && LetterSelectedDeSelected != null)
 								LetterSelectedDeSelected (true, gameObject);
 				}
@@ -312,8 +324,11 @@ public class InteractiveLetter : PhonoBlocksController
 		{
 				if (isSelected) {
 						isSelected = false;
-						if (selectHighlight)
-								selectHighlight.enabled = false;
+						if (selectColor == Color.clear) {
+								if (selectHighlight)
+										selectHighlight.enabled = false;
+						} else
+								UpdateDisplayColour (defaultColour);
 						if (notifyObservers && LetterSelectedDeSelected != null)
 								LetterSelectedDeSelected (false, gameObject);
 				}

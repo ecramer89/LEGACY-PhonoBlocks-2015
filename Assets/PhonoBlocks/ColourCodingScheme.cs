@@ -106,7 +106,7 @@ public abstract class ColourCodingScheme: MonoBehaviour
 
 
 //Colour coding schemes for Min's Study:
-
+//also consonant digraphs
 class ConsonantBlends : NoColour
 {
 
@@ -117,10 +117,20 @@ class ConsonantBlends : NoColour
 
 		}
 
+		public override Color GetColorsForConsonantDigraphs ()
+		{
+				return Color.green;
+		}
+
+		public override Color GetColorsForHardConsonant (int indexInWord=0)
+		{
+				return Color.cyan;
+		}
+
 		public override Color GetColorsForInitialBlends (int letterInBlendPos=0)
 		{
 				
-				return (letterInBlendPos == 0 ? Color.cyan : Color.green);
+				return Color.green;
 		}
 	
 		public override Color GetColorsForMiddleBlends (int letterInBlendPos=0)
@@ -294,11 +304,75 @@ class SyllableDivision : NoColour
 				label = "syllableDivision";
 		}
 
-		public virtual Color GetColoursForSyllables (int indexInWord=0)
-		{
+		public override Color GetColoursForSyllables (int indexInWord=0)
+		{     
 				return AlternatingColours (indexInWord);
 		}
+
+		public override Color GetColorsForWholeWord ()
+		{
+				return Color.magenta;
+		
+		}
 	
+		public override Color GetColorsForLongVowel (char vowel)
+		{
+				return GetColorsForWholeWord ();
+		
+		}
+	
+		public override Color GetColorsForHardConsonant (int indexInWord=0)
+		{
+				return GetColorsForWholeWord ();
+		}
+	
+		public override Color GetColourForSilent (char letter)
+		{
+				return GetColorsForWholeWord ();
+		}
+	
+		public override Color GetColorsForShortVowel (Color currentVowelColor)
+		{
+				return GetColorsForWholeWord ();
+		}
+	
+		public override Color GetColorsForInitialBlends (int letterInBlendPos=0)
+		{
+				return GetColorsForWholeWord ();
+		}
+	
+		public override Color GetColorsForMiddleBlends (int letterInBlendPos=0)
+		{
+				return GetColorsForWholeWord ();
+		}
+	
+		public override Color GetColorsForFinalBlends (int letterInBlendPos=0)
+		{
+				return GetColorsForWholeWord ();
+		}
+	
+		public override Color ModifyColorForSoftConsonant (Color color)
+		{
+				return GetColorsForWholeWord ();
+		}
+	
+		public override Color GetColorsForConsonantDigraphs ()
+		{
+				return GetColorsForWholeWord ();
+		}
+	
+		public override Color GetColorsForVowelDigraphs ()
+		{
+				return GetColorsForWholeWord ();
+		}
+	
+		public override Color GetColorsForRControlledVowel ()
+		{
+		
+				return GetColorsForWholeWord ();
+		}
+	
+
 
 	
 

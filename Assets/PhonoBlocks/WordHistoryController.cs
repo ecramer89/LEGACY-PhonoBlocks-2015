@@ -47,9 +47,13 @@ public class WordHistoryController : PhonoBlocksController
 	
 		}
 
-		public void AddCurrentWordToHistory (List<InteractiveLetter> currentWord)
+		public void AddCurrentWordToHistory (List<InteractiveLetter> currentWord, bool playSoundAndShowImage=false)
 		{
 				Word newWord = CreateNewWordAndAddToList (AddLettersOfNewWordToHistory (currentWord));
+				if (playSoundAndShowImage) {		
+						AudioSourceController.PushClip (newWord.Sound);
+						userInputRouter.RequestDisplayImage (newWord.AsString, true);
+				}
 	
 			
 		}

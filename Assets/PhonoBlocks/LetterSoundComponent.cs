@@ -421,6 +421,17 @@ public class Blend : LetterSoundComposite
 		{
 
 				if (preferredPosition == SpeechSoundReference.INITIAL_BLEND) {
+						color = SessionsDirector.colourCodingScheme.GetColorsForInitialBlends ();
+		
+				} else if (preferredPosition == SpeechSoundReference.FINAL_BLEND) {
+						color = SessionsDirector.colourCodingScheme.GetColorsForFinalBlends ();
+		
+				} else {
+						color = SessionsDirector.colourCodingScheme.GetColorsForMiddleBlends ();
+		
+				}
+				/*
+				if (preferredPosition == SpeechSoundReference.INITIAL_BLEND) {
 						colors [0] = SessionsDirector.colourCodingScheme.GetColorsForInitialBlends (0);
 						colors [1] = SessionsDirector.colourCodingScheme.GetColorsForInitialBlends (1);
 				} else if (preferredPosition == SpeechSoundReference.FINAL_BLEND) {
@@ -429,18 +440,18 @@ public class Blend : LetterSoundComposite
 				} else {
 						colors [0] = SessionsDirector.colourCodingScheme.GetColorsForMiddleBlends (0);
 						colors [1] = SessionsDirector.colourCodingScheme.GetColorsForMiddleBlends (1);
-				}
+				}*/
 
 
 	
 		}
-
+/*
 		public override Color GetColour ()
 		{
 				colorIdx = 1 - colorIdx;
 				return colors [colorIdx];
 				
-		}
+		}*/
 	
 	
 	
@@ -502,7 +513,7 @@ public class StableSyllable : LetterSoundComposite
 		protected override void ApplyColorToComposite ()
 		{
 		
-				color = SessionsDirector.colourCodingScheme.GetColoursForSyllables ();
+				color = SessionsDirector.colourCodingScheme.GetColoursForSyllables (placeInWord);
 		
 		}
 
