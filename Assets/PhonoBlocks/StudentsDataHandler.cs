@@ -51,7 +51,9 @@ public class StudentsDataHandler : MonoBehaviour
 						get {
 								return currSession;
 						}
-		
+						set {
+								currSession=value;
+						}
 				}
 
 
@@ -158,14 +160,16 @@ public class StudentsDataHandler : MonoBehaviour
 		{
 				string expWideParams = studentData.Substring (0, templateForExperimentWideParams.Length);
 		        
-				int currSession = CharAsInt (expWideParams [idxOfCurrentSessionInTemplate]);
+				int lastSession = CharAsInt (expWideParams [idxOfCurrentSessionInTemplate]);
 				int numStars = CharAsInt (expWideParams [idxOfNumStarsInTemplate]);
-				StudentData data = new StudentData (studentName, currSession, numStars);
+				StudentData data = new StudentData (studentName, lastSession, numStars);
 				if (ThereIsDataFromEarlierSessions (studentData))
 						data.dataFromPreviouslyCompletedActivities = studentData.Substring (templateForExperimentWideParams.Length, studentData.Length - templateForExperimentWideParams.Length);
 				return data;
 
 		}
+
+
 
 		public bool ThereIsDataFromEarlierSessions (string studentData)
 		{
@@ -220,9 +224,10 @@ public class StudentsDataHandler : MonoBehaviour
 
 		public void UpdateUserSessionAndWriteAllUpdatedDataToPlayerPrefs ()
 		{       //update the current session number so that next time we retrieve this students data we set up the right session
-				int nextSession = currUser.CurrentSession + 1;
+				//int nextSession = currUser.CurrentSession + 1; Min wants it to be such that she picks which activities the students do,
+		//so for now will just save the session they did this time into the current session field (will communicate basically the last session)
 				
-				string experimentWideParametersOfStudent = UpdateSavedSessionAsString (nextSession, currUser.numStars);
+				string experimentWideParametersOfStudent = UpdateSavedSessionAsString (currUser.CurrentSession, currUser.numStars);
 				StringBuilder studentData = new StringBuilder (experimentWideParametersOfStudent);
 				//nbe sure to save the activity data after each activity and just re-save the data when done
 				studentData.Append (currUser.dataFromPreviouslyCompletedActivities);
@@ -240,6 +245,12 @@ public class StudentsDataHandler : MonoBehaviour
 				return 0;
 	
 		}
+
+		public void UpdateUsersSession(int currentSession){
+			if (!ReferenceEquals (currUser, null))
+				currUser.CurrentSession=currentSession;
+		}
+
 
 		public int GetUsersNumStars ()
 		{

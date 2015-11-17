@@ -7,7 +7,7 @@ using System;
 //but isn't responsible for using this data to do anything.
 public class InteractiveLetter : PhonoBlocksController
 {
-
+    //changed file!
 		String letter;
 		Color defaultColour;
 
@@ -196,13 +196,21 @@ public class InteractiveLetter : PhonoBlocksController
 
 		}
 
+    bool IsLockedColour(UnityEngine.Color c_)
+    {
+        
+        return c_.r == lockedColor.r && c_.g == lockedColor.g && c_.b == lockedColor.b;
+    }
+
 		public void ChangeColourOfTangibleCounterpartIfThereIsOne (UnityEngine.Color c_)
 		{
-				//on the screen, blank letters are just clear.
-				//but we issue the black (0,0,0) colour to the arduino.
-				if (letter [0] == ' ')
+        if (lockedColor == Color.clear)
+            lockedColor = SessionsDirector.colourCodingScheme.GetColorsForOff();
+        //on the screen, blank letters are just clear.
+        //but we issue the black (0,0,0) colour to the arduino.
+        if (letter [0] == ' '||IsLockedColour(c_))
 						c_ = Color.black;
-
+       
 
 				if (userInputRouter != null)
 				if (IdxAsArduinoControlledLetter != NOT_AN_ARDUINO_CONTROLLED_LETTER && userInputRouter.IsArduinoMode ()) 

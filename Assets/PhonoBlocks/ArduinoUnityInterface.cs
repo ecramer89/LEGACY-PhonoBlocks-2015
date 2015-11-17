@@ -333,7 +333,7 @@ public class ArduinoUnityInterface : PhonoBlocksController
 
 				if (stateOfPlatformInputPins [position] [0] == Arduino.LOW && stateOfPlatformInputPins [position] [1] == Arduino.LOW) 
 						letter = 'U';
-				if (stateOfPlatformInputPins [position] [1] == Arduino.LOW && stateOfPlatformInputPins [position] [2] == Arduino.LOW) 
+				if (stateOfPlatformInputPins [position] [0] == Arduino.LOW && stateOfPlatformInputPins [position] [2] == Arduino.LOW) 
 						letter = 'C';
 
 				if (stateOfPlatformInputPins [position] [0] == Arduino.LOW && stateOfPlatformInputPins [position] [4] == Arduino.LOW) 
@@ -365,7 +365,7 @@ public class ArduinoUnityInterface : PhonoBlocksController
 						letter = 'Q'; 
 
 
-				if (stateOfPlatformInputPins [position] [3] == Arduino.LOW && stateOfPlatformInputPins [position] [2] == Arduino.LOW) 
+				if (stateOfPlatformInputPins [position] [3] == Arduino.LOW && stateOfPlatformInputPins [position] [1] == Arduino.LOW) 
 						letter = 'Z';  
 
 

@@ -14,6 +14,12 @@ public class SessionsDirector : MonoBehaviour
 		public static SessionsDirector instance;
 		public static ColourCodingScheme colourCodingScheme = new RControlledVowel ();
 
+		public bool IsMagicERule {
+				get {
+						return colourCodingScheme.label.Equals ("vowelInfluenceE");
+				}
+		}
+
 		public bool IsSyllableDivisionMode {
 				get {
 						return colourCodingScheme.label.Equals ("syllableDivision");
@@ -85,6 +91,7 @@ public class SessionsDirector : MonoBehaviour
 
 		public GameObject studentActivityControllerOB;
 		public GameObject activitySelectionButtons;
+		public GameObject sessionSelectionButtons;
 		//public GameObject modeSelectionScreen;
 		public GameObject teacherModeButton;
 		public GameObject studentModeButton;
@@ -119,9 +126,10 @@ public class SessionsDirector : MonoBehaviour
 
 		void SetupModeSelectionMenu ()
 		{
-				//returnToModeSelectButton.SetActive (false);
+				
 				assessmentStartTime = DateTime.Now;
 				activitySelectionButtons.SetActive (false);
+				sessionSelectionButtons.SetActive (false);
 				studentModeButton.SetActive (true);
 				teacherModeButton.SetActive (true);
 				studentNameInputField.SetActive (false);
@@ -133,7 +141,7 @@ public class SessionsDirector : MonoBehaviour
 				
 				if (!Application.loadedLevelName.Equals ("MainMenu"))
 						Application.LoadLevel ("MainMenu");
-				SetupModeSelectionMenu (); //do this after; need to override the onLevelLoaded callbacks of the main menu widgets
+				SetupModeSelectionMenu ();
 
 		}
 
@@ -143,12 +151,10 @@ public class SessionsDirector : MonoBehaviour
 
 
 		//Teacher mode is the current "sandbox" mode, which just defaults to rthe colour scheme chosen at the head of this file.
-		//!!TO DO: change startTeacherMode so that the acrtive colour scheme depends upon the button that the teacher pressed.
 		public void SelectTeacherMode ()
 		{
 				mode = Mode.TEACHER;
 				activitySelectionButtons.SetActive (true);
-				//returnToModeSelectButton.SetActive (true);
 				studentModeButton.SetActive (false);
 				teacherModeButton.SetActive (false);
 				studentNameInputField.SetActive (false);
@@ -164,7 +170,25 @@ public class SessionsDirector : MonoBehaviour
 
 				Application.LoadLevel ("Activity");
 		}
-	    
+
+		public void SetSessionForPracticeMode (int session)
+		{
+
+				currentUserSession = session;
+				SetParametersForStudentMode (studentActivityControllerOB);
+				Application.LoadLevel ("Activity");
+
+		}
+
+		public void LoadSessionSelectionScreen ()
+		{
+			sessionSelectionButtons.SetActive (true);
+			studentModeButton.SetActive (false);
+			teacherModeButton.SetActive (false);
+			studentNameInputField.SetActive (false);
+		}
+
+
 		public void SelectStudentMode ()
 		{
 				if (studentNameInputField.activeSelf) {
@@ -181,10 +205,10 @@ public class SessionsDirector : MonoBehaviour
 										mode = Mode.STUDENT;
 										studentActivityControllerOB = (GameObject)GameObject.Instantiate (studentActivityControllerOB);
 			
-										SetParametersForStudentMode (studentActivityControllerOB);
+										
 										UnityEngine.Object.DontDestroyOnLoad (studentActivityControllerOB);
-										//returnToModeSelectButton.SetActive (true);
-										Application.LoadLevel ("Activity");
+									
+										LoadSessionSelectionScreen ();
 								
 								} else {
 										AudioSourceController.PushClip (noDataForStudentName);
@@ -192,7 +216,7 @@ public class SessionsDirector : MonoBehaviour
 								}
 						}
 				} else
-						studentNameInputField.SetActive(true);
+						studentNameInputField.SetActive (true);
 		
 		}
 
@@ -217,14 +241,15 @@ public class SessionsDirector : MonoBehaviour
 
 		public void SetParametersForStudentMode (GameObject studentActivityController)
 		{
-				currentUserSession = StudentsDataHandler.instance.GetUsersSession ();
-				numStarsOfCurrentUser = StudentsDataHandler.instance.GetUsersNumStars ();
-			
-				ProblemsRepository.instance.Initialize (currentUserSession);
-			
-				colourCodingScheme = ProblemsRepository.instance.ActiveColourScheme;
+			StudentsDataHandler.instance.UpdateUsersSession (currentUserSession);
 
-				StudentActivityController sc = studentActivityControllerOB.GetComponent<StudentActivityController> ();
+			numStarsOfCurrentUser = StudentsDataHandler.instance.GetUsersNumStars ();
+			                                
+			ProblemsRepository.instance.Initialize (currentUserSession);
+			
+			colourCodingScheme = ProblemsRepository.instance.ActiveColourScheme;
+			
+			StudentActivityController sc = studentActivityControllerOB.GetComponent<StudentActivityController> ();
 
 		}
 

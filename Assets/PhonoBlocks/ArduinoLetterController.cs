@@ -366,6 +366,16 @@ public class ArduinoLetterController : PhonoBlocksController
 				}
 		}
 
+
+
+    bool IsVowel(char letter)
+    {
+        return letter == 'a' || letter == 'e' || letter == 'o' || letter == 'u' || letter == 'i';
+
+
+    }
+
+
 		void UpdateInterfaceLetters (LetterSoundComponent lc, LetterGridController letterGridController, int indexOfLetterBarCell, bool flash)
 		{
 				
@@ -380,10 +390,13 @@ public class ArduinoLetterController : PhonoBlocksController
 
 				}
 
+        char letter = lc.AsString[0];
+        bool flashInteractiveLetter = SessionsDirector.instance.IsMagicERule && IsVowel(lc.AsString[0]);
+            flashInteractiveLetter&= flash && i.HasLetterOrSoundChanged (lc) && lc.GetColour () == i.CurrentColor ();
+		       		
 
-			
-				bool flashInteractiveLetter = flash && i.HasLetterOrSoundChanged (lc) && lc.GetColour () == i.CurrentColor ();
-				
+
+
 				i.LetterSoundComponentIsPartOf = lc;
 		
 				if (flashInteractiveLetter) {

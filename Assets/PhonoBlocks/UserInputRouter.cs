@@ -12,8 +12,10 @@ using System.Collections.Generic;
 public class UserInputRouter : MonoBehaviour
 {
 		static readonly string RESOURCES_WORD_IMAGE_PATH = "WordImages/";
-		static readonly int DELAY_BEFORE_REGISTER_WHOLE_WORD_SELECTION = 60; //60/second
-		public GameObject sessionParametersOB;
+		static readonly int DELAY_BEFORE_REGISTER_WHOLE_WORD_SELECTION = 30; //60/second
+    static readonly int DELAY_BEFORE_REMOVE_HINT_LETTERS = 180; //60/second
+    int hintLetterTimer = -1;
+    public GameObject sessionParametersOB;
 		bool screenMode;
 		public static UserInputRouter global;
 		public static int totalLengthOfUserInputWord;
@@ -187,6 +189,7 @@ public class UserInputRouter : MonoBehaviour
 
 		public void DisplayLettersOf (string word)
 		{
+        hintLetterTimer = DELAY_BEFORE_REMOVE_HINT_LETTERS;
 
 				arduinoLetterController.DisplayWordInLetterGrid (word);
 
@@ -283,6 +286,26 @@ public class UserInputRouter : MonoBehaviour
 						selectTimer = -1;
 
 				}
+
+
+        if (hintLetterTimer > 0) hintLetterTimer--;
+        if(hintLetterTimer==0)
+        {
+           
+            arduinoLetterController.PlaceWordInLetterGrid(arduinoLetterController.CurrentUserControlledLettersAsString);
+            arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters(true);
+            //replace colours and letters that are there
+            hintLetterTimer = -1;
+        }
+
+
+
+
+
+
+
+
+
 		}
 
 		string selectedLetters = "";

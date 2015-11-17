@@ -229,7 +229,16 @@ class VowelInfluenceERule : NoColour
 				return red;
 		}
 
-		public override Color GetColourForSilent (char letter)
+    public override Color GetColorsForShortVowel(Color currentVowelColor)
+    {
+        return yellow;
+    }
+
+   
+
+
+
+    public override Color GetColourForSilent (char letter)
 		{
 				if (letter == 'e')
 						return GetColorsForLongVowel ('e'); //silent e colour matches long vowel it influences.
