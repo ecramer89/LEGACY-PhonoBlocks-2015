@@ -7,17 +7,67 @@ using System;
 //but isn't responsible for using this data to do anything.
 public class InteractiveLetter : PhonoBlocksController
 {
-
+    //changed file!
 		String letter;
-		UnityEngine.Color defaultColour;
-		Color lockedColor = Color.black;
+		Color defaultColour;
+
+		public Color DefaultColour {
+				get {
+
+						return defaultColour;
+				}
+		}
+
+		bool isLocked = false;
+
+		public bool IsLocked {
+				get {
+						return isLocked;
+				}
+		}
+
+		bool isSelected = false;
+
+		public bool Selected {
+				get {
+						return isSelected;
+				}
+		}
+
+		public delegate void SelectAction (bool wasSelected,GameObject o);
+
+		public static event SelectAction LetterSelectedDeSelected;
+		public delegate void PressAction (GameObject o);
+
+		public static event PressAction LetterPressed;
+
+		Color lockedColor = Color.clear;
+		Color flashOff = Color.black;
 		UITexture selectHighlight;
+		Color selectColor = Color.clear;
+
+		public void SetSelectColour (Color newColor)
+		{
+				selectColor = newColor;
+
+
+		}
+
+		public Color  SelectColour {
+				get {
+						return selectColor;
+				}
+		
+		
+		}
+
 		BoxCollider trigger;
 		LetterSoundComponent lc;
 		int flashCounter = 0;
-		int timesToFlash = 3;
-		float secondsDelayBetweenFlashes = .3f;
-		int idxAsArduinoControlledLetter;
+		int timesToFlash = 5;
+		float secondsDelayBetweenFlashes = .2f;
+		const int NOT_AN_ARDUINO_CONTROLLED_LETTER = -1;
+		int idxAsArduinoControlledLetter = NOT_AN_ARDUINO_CONTROLLED_LETTER; //i.e., if it's a word history controlled letter. you have to "opt in" to be an arduino controlled letter.
 
 		public int IdxAsArduinoControlledLetter {
 				set {
@@ -28,12 +78,6 @@ public class InteractiveLetter : PhonoBlocksController
 				get {
 						return idxAsArduinoControlledLetter;
 				}
-		}
-
-		public bool IsAnArduinoControlledLetter ()
-		{
-        return true;
-
 		}
 
 		public LetterSoundComponent LetterSoundComponentIsPartOf {
@@ -73,22 +117,22 @@ public class InteractiveLetter : PhonoBlocksController
 
 		}
 
-		public GameObject Handler {
-				get {
-						return GetComponent<Selectable> ().Handler;
+		public void Lock ()
+		{
+				if (lockedColor == Color.clear)
+						lockedColor = SessionsDirector.colourCodingScheme.GetColorsForOff ();
+				UpdateDisplayColour (lockedColor);
+				isLocked = true;
+		}
 
-				}
-
-				set {
-						GetComponent<Selectable> ().Handler = value;
-
-				}
-
+		public void UnLock ()
+		{
+				UpdateDisplayColour (defaultColour);
+				isLocked = false;
 		}
 
 		public String Letter ()
 		{
-
 				return letter;
 		}
 	
@@ -110,16 +154,16 @@ public class InteractiveLetter : PhonoBlocksController
 		public IEnumerator Flash ()
 		{
 
-
+				int mod_To_end_on = (timesToFlash % 2 == 0 ? 1 : 0);
 	
 				while (flashCounter<timesToFlash) {
 		
-						if (flashCounter % 2 == 0) {
-								ChangeColourOfUITexture (defaultColour);
+						if (flashCounter % 2 == mod_To_end_on) {
+								UpdateDisplayColour (defaultColour);
 							
 
 						} else {
-								ChangeColourOfUITexture (lockedColor);
+								UpdateDisplayColour (flashOff);
 								
 
 						}
@@ -135,7 +179,7 @@ public class InteractiveLetter : PhonoBlocksController
 
 		}
 
-		public void ChangeColourOfUITexture (UnityEngine.Color c_)
+		public void UpdateDisplayColour (UnityEngine.Color c_)
 		{
 				if (c_ == Color.clear)
 						c_ = Color.white;
@@ -146,14 +190,30 @@ public class InteractiveLetter : PhonoBlocksController
 			
 		}
 
+		public void RevertToDefaultColour ()
+		{
+				UpdateDisplayColour (defaultColour);
+
+		}
+
+    bool IsLockedColour(UnityEngine.Color c_)
+    {
+        
+        return c_.r == lockedColor.r && c_.g == lockedColor.g && c_.b == lockedColor.b;
+    }
+
 		public void ChangeColourOfTangibleCounterpartIfThereIsOne (UnityEngine.Color c_)
 		{
-				if (letter [0] == ' ')
+        if (lockedColor == Color.clear)
+            lockedColor = SessionsDirector.colourCodingScheme.GetColorsForOff();
+        //on the screen, blank letters are just clear.
+        //but we issue the black (0,0,0) colour to the arduino.
+        if (letter [0] == ' '||IsLockedColour(c_))
 						c_ = Color.black;
+       
+
 				if (userInputRouter != null)
-				if (userInputRouter.IsArduinoMode()) 
-                
-		
+				if (IdxAsArduinoControlledLetter != NOT_AN_ARDUINO_CONTROLLED_LETTER && userInputRouter.IsArduinoMode ()) 
 						userInputRouter.arduinoLetterInterface.ColorNthTangibleLetter (IdxAsArduinoControlledLetter, c_);
 				
 
@@ -169,26 +229,26 @@ public class InteractiveLetter : PhonoBlocksController
 		}
 
 
-    public void UpdateLetterImage(Texture2D img_)
-    {
-        gameObject.GetComponent<UITexture>().mainTexture = img_;
-
-
-    }
-
-    public void UpdateLetter (String letter_, Texture2D img_)
+		//update the letter images; then after they make any change it will just update them all again
+		public void UpdateLetterImage (Texture2D img_)
 		{
-				if (idxAsArduinoControlledLetter == -2)
-						return;
+				gameObject.GetComponent<UITexture> ().mainTexture = img_;
+
+
+		}
+
+		public void UpdateLetter (String letter_, Texture2D img_)
+		{
+			
 				letter = letter_;
 
-				Selectable s = gameObject.GetComponent<Selectable> ();
-				s.Select (false, true);
+				//de-select this cell if it was selected
+				if (isSelected)
+						DeSelect ();
 			
-				if (s.Locked)
-						gameObject.GetComponent<UITexture> ().mainTexture = img_;
-				else
-						gameObject.GetComponent<UITexture> ().mainTexture = img_;
+			
+				gameObject.GetComponent<UITexture> ().mainTexture = img_;
+			
 
 		}
 
@@ -224,49 +284,8 @@ public class InteractiveLetter : PhonoBlocksController
 				if (defaultColour == Color.clear)
 						defaultColour = Color.white;
 				defaultColour = c_;
-				ChangeColourOfUITexture (defaultColour);
-				
-				if (!GetComponent<Selectable> ().Selected) {
-					
-						Darken ();
-
-				}
-		}
-
-		public void ChangeStateToSignalSelected ()
-		{
-				
-				Lighten ();
-			
-		}
-	
-		public void ChangeStateToSignalDeselected ()
-		{
-			
-				Darken ();
-			
-		
-		}
-
-		void Lighten ()
-		{
-				ChangeStateToSignalUnlocked ();
-
-
-		}
-
-		void Darken ()
-		{
-				ChangeColourOfUITexture (Color.black);
-
-		}
-
-		public void ChangeStateToSignalLocked ()
-		{
-				
-				ChangeColourOfUITexture (Color.black);
-			
-
+				if (!IsLocked)
+						UpdateDisplayColour (defaultColour);
 
 		}
 
@@ -279,50 +298,68 @@ public class InteractiveLetter : PhonoBlocksController
 
 		}
 
-		public void ChangeStateToSignalUnlocked ()
+		void Update ()
 		{
-				if (defaultColour == Color.clear)
-						defaultColour = Color.white;
-				ChangeColourOfUITexture (defaultColour);
+	
+				if (!IsBlank ()) { //don't select blank letters
+						
+						if (MouseIsOverSelectable ()) {
+					
+								if (SwipeDetector.swipeDirection == SwipeDetector.Swipe.RIGHT) {
+												
+										Select ();
+								}
+								if (SwipeDetector.swipeDirection == SwipeDetector.Swipe.LEFT) {
+										DeSelect ();				
+								}
+					
+						}
 			
-				
+				}
+		}
+	
+		bool MouseIsOverSelectable ()
+		{
+				Vector3 mouse = SwipeDetector.GetTransformedMouseCoordinates ();
+		
+				return (Vector3.Distance (mouse, gameObject.transform.position) < .3);	
+		}
+
+		public void Select (bool notifyObservers=true)
+		{
+				if (!isSelected && !IsBlank ()) {
+
+						isSelected = true;
+						if (selectColor == Color.clear)
+								selectHighlight.enabled = true;
+						else
+								UpdateDisplayColour (selectColor);
+						if (notifyObservers && LetterSelectedDeSelected != null)
+								LetterSelectedDeSelected (true, gameObject);
+				}
 		
 		}
 
-
-		/*
-	    * 
-	    * this is a hack to handle cases where the platforms cant
-	    * read the letters properly.
-	    * basically it enables the tutor to manually override the physical with a screen letter
-	    * using the keyboard. click on the letter and then go head,
-	    * type a letter from the keyboard and the system will just treat it as one...
-	    * */
-		int scaleTimer = 0;
-		int i_w, i_h, s_w, s_h;
+		public void DeSelect (bool notifyObservers=true)
+		{
+				if (isSelected) {
+						isSelected = false;
+						if (selectColor == Color.clear) {
+								if (selectHighlight)
+										selectHighlight.enabled = false;
+						} else
+								UpdateDisplayColour (defaultColour);
+						if (notifyObservers && LetterSelectedDeSelected != null)
+								LetterSelectedDeSelected (false, gameObject);
+				}
+		}
 
 		public void OnPress (bool pressed)
 		{
-				
-				if (pressed) {
-
-						Handler.SendMessage ("LetterClicked", gameObject, SendMessageOptions.DontRequireReceiver);
-				
-			
-				}
+				if (pressed && LetterPressed != null)
+						LetterPressed (gameObject);
 
 
-				
 		}
-
-
-
-
-
-
-	   
-
-
-
 
 }

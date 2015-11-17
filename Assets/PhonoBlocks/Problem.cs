@@ -8,23 +8,34 @@ public class Problem : MonoBehaviour
 
 
 	    
-		public const int PLACE_LETTERS_INITIAL = 0;
-		public const int TO_MAKE_THE_WORD = 1;
-		public const int TARGET_WORD = 2;
 
-
+		public const int TO_MAKE_THE_WORD = 0;
+		public const int TARGET_WORD = 1;
 		protected AudioClip[] instructions;
 		protected string initialWord;
-		protected AudioClip soundToEmphasize;
 		protected AudioClip sounded_out_word;
 		protected int currInstruction = 0;
 		protected string cachedMissingLettersAsString;
 		protected static string emptyWord = "";
+		protected int timesAttempted;
+
+		public int TimesAttempted {
+				get {
+						return timesAttempted;
+				}
+		}
+
+		public void IncrementTimesAttempted ()
+		{
+				timesAttempted++;
+
+
+		}
 
 		public static string EmptyWord ()
 		{
 				if (emptyWord.Length == 0)
-						CacheEmptyWord (UserInputRouter.numArduinoControlledLetters);
+						CacheEmptyWord (UserInputRouter.numOnscreenLetterSpaces);
 				return emptyWord;
 
 		}
@@ -73,36 +84,32 @@ public class Problem : MonoBehaviour
 
 		}
 
-	public Problem (string initialWord, string targetWord)
-	{
-		initialWord=Clean (initialWord); 
-		targetWord=Clean(targetWord);
+		public Problem (string initialWord, string targetWord)
+		{
+				initialWord = Clean (initialWord); 
+				targetWord = Clean (targetWord);
 
 
-		CacheFixedInstructions (initialWord, targetWord);
-		CacheNumberOfNonBlankInitialLetters (initialWord);
-		cachedTrimmedTargetWord = targetWord;
-		this.targetWord = AppendBlanksToEnd (targetWord, UserInputRouter.numArduinoControlledLetters);
-		this.initialWord = AppendBlanksToFrontOrEnd (initialWord, this.targetWord);
-		CacheMissingLettersAsString ();
-		this.soundToEmphasize = soundToEmphasize;
+				CacheFixedInstructions (initialWord, targetWord);
+				CacheNumberOfNonBlankInitialLetters (initialWord);
+				cachedTrimmedTargetWord = targetWord;
+				this.targetWord = AppendBlanksToEnd (targetWord, UserInputRouter.numOnscreenLetterSpaces);
+				this.initialWord = AppendBlanksToFrontOrEnd (initialWord, this.targetWord);
+				CacheMissingLettersAsString ();
+			
 		
-		cachedTargetWord = this.targetWord;
+				cachedTargetWord = this.targetWord;
 
 
-		Debug.Log ("initial word Length: " + initialWord.Length);
+
 		
 		
-	}
+		}
 
-
-	string Clean(string word){
-		return word.Trim ().ToLower ();
-	}
-
-
-
-
+		string Clean (string word)
+		{
+				return word.Trim ().ToLower ();
+		}
 
 		static void CacheEmptyWord (int numArduinoControlledLetters)
 		{      
@@ -118,7 +125,7 @@ public class Problem : MonoBehaviour
 		public void SetTargetWordToEmpty ()
 		{
 				if (emptyWord.Length == 0)
-						CacheEmptyWord (UserInputRouter.numArduinoControlledLetters);
+						CacheEmptyWord (UserInputRouter.numOnscreenLetterSpaces);
 				
 				targetWord = emptyWord;
 
@@ -135,7 +142,7 @@ public class Problem : MonoBehaviour
 		{
 				StringBuilder cachedMissingLettersAsString = new StringBuilder ();
 
-		           for (int i=0; i<initialWord.Length; i++) {
+				for (int i=0; i<initialWord.Length; i++) {
 						if (initialWord [i] != targetWord [i])
 								cachedMissingLettersAsString.Append (targetWord [i]);
 						else
@@ -150,13 +157,12 @@ public class Problem : MonoBehaviour
 
 		protected virtual void CacheFixedInstructions (string initialWord, string targetWord)
 		{       
-				InstructionsAudio source = InstructionsAudio.instance;
-				instructions = new AudioClip[3];
-				instructions [PLACE_LETTERS_INITIAL] = source.placeInitialLettersInstruction;
-				instructions [TO_MAKE_THE_WORD] = source.makeTheWordInsructions;
-				instructions [TARGET_WORD] = AudioSourceController.GetWordFromResources (targetWord);//(AudioClip)Resources.Load ("audio/words/" + targetWord, typeof(AudioClip));//WordImageAndAudioMapAccessor.GetInstance ().GetWordData (targetWord).ParseAudio ();
+				
+				instructions = new AudioClip[2];
+				instructions [TO_MAKE_THE_WORD] = InstructionsAudio.instance.makeTheWord;
+				instructions [TARGET_WORD] = AudioSourceController.GetWordFromResources (targetWord);
+		        
 				sounded_out_word = AudioSourceController.GetSoundedOutWordFromResources (targetWord);
-	
 		}
 
 		protected void CacheNumberOfNonBlankInitialLetters (string initialWord)
@@ -168,36 +174,31 @@ public class Problem : MonoBehaviour
 
 		}
 
+		/* return a new string that is identical to targetWord except that apppended to the end are numArduinoControlledLetters-targetWord.length blanks*/
 		protected string AppendBlanksToEnd (string targetWord, int numArduinoControlledLetters)
 		{
 				StringBuilder s = new StringBuilder (targetWord);
-				for (int i=s.Length; i<numArduinoControlledLetters; i++)
+
+				for (int i=targetWord.Length; i<numArduinoControlledLetters; i++)
 						s.Append (' ');
 
-				return s.ToString ();
+				string afterAppendBlank = s.ToString ();
+	
+				return afterAppendBlank;
 
-
-		}
-
-		public void PlayInstructionsToPlaceInitialLetters ()
-		{
-
-				AudioSourceController.PushClip (instructions [PLACE_LETTERS_INITIAL]);
 
 		}
 
 		public void PlayCurrentInstruction ()
 		{
-				if (currInstruction == PLACE_LETTERS_INITIAL)
-						AudioSourceController.PushClip (instructions [currInstruction]);
-				else {
-						for (int i=TO_MAKE_THE_WORD; i<TARGET_WORD+1; i++) {
+			
+				for (int i=TO_MAKE_THE_WORD; i<TARGET_WORD+1; i++) {
 							
-								if (instructions [i] != null)
-										AudioSourceController.PushClip (instructions [i]);
-						}
-
+						if (instructions [i] != null)
+								AudioSourceController.PushClip (instructions [i]);
 				}
+
+				
 		}
 
 		public void PlayTargetWord ()
@@ -205,25 +206,11 @@ public class Problem : MonoBehaviour
 
 				AudioSourceController.PushClip (instructions [TARGET_WORD]);
 		}
-		
 
-		public void PlayFirstHint (string currentWord)
-		{
-				
-				PlayFirstHint ();
-			
-		}
-
-		public void PlayFirstHint ()
+		public void PlaySoundedOutWord ()
 		{
 
 				AudioSourceController.PushClip (sounded_out_word);
-				PlayTargetWord ();
-		}
-
-		public void PlaySecondHint ()
-		{     
-				PlayFirstHint ();
 
 		}
 
@@ -242,13 +229,12 @@ public class Problem : MonoBehaviour
 
 				}
 		}
-	  
-
 
 		protected string AppendBlanksToFrontOrEnd (string initialWord, string targetWord)
 		{
 			
 				StringBuilder s = new StringBuilder (initialWord);
+
 				int numBlanksToAppendToFront = FindDifferenceInIndexesOfFirstMatchingLetter (initialWord, targetWord);
 				for (int i=0; i<numBlanksToAppendToFront; i++) {
 						s.Insert (0, ' ');
@@ -258,7 +244,9 @@ public class Problem : MonoBehaviour
 				for (int i=0; i<numBlanksToAppendToEnd; i++)
 						s.Append (' ');
 
-				return s.ToString ();
+				string afterAppendBlank = s.ToString ();
+	
+				return afterAppendBlank;
 
 
 		}

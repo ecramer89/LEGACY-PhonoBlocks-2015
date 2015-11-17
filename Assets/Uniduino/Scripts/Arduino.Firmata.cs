@@ -137,7 +137,7 @@ namespace Uniduino
             _serialPort.StopBits = StopBits.One;
 			_serialPort.ReadTimeout = 1; // since on windows we *cannot* have a separate read thread
 			_serialPort.WriteTimeout = 1000;
-			
+
 			
 			// HAX: cant use compile time flags here, so cache result in a variable
 			if (UnityEngine.Application.platform.ToString().StartsWith("Windows"))

@@ -1,21 +1,17 @@
 using UnityEngine;
 using System.Collections;
 
-
-
-
 /* We will make this into a class that allows teachers to pick the prolbem type, versus the session*/
 public class ContentButton : MonoBehaviour
 {
 
-		public GameObject sessionManagerOB;
-		SessionManager sessionManager;
-		//public ProblemManager.Name problemType;
-		ProblemManager problemTypeData;
+		public GameObject sessionsDirectorOB;
+		SessionsDirector sessionsDirector;
+		public ProblemsRepository.ProblemType problemType;
 
 		void Start ()
 		{
-				sessionManager = sessionManagerOB.GetComponent<SessionManager> ();
+				sessionsDirector = sessionsDirectorOB.GetComponent<SessionsDirector> ();
 
 		}
 
@@ -24,8 +20,7 @@ public class ContentButton : MonoBehaviour
             
 				if (pressed) {
 					
-
-						//sessionManager.IncreaseNumberOfProblemsOfType (problemType);
+						sessionsDirector.SetContentForTeacherMode (problemType);
 				}
 			
 

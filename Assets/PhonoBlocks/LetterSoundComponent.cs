@@ -1,12 +1,13 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 public abstract class LetterSoundComponent : MonoBehaviour
 {
 	
-		protected PhonotacticsManager.Phonotactics[] rules;
+		protected PhonotacticChecker.Phonotactics[] rules;
 		protected bool violatesPhonotactics;
+		protected int placeInWord;
 	
 		public bool ViolatesPhonotactics {
 				get {
@@ -79,7 +80,7 @@ public abstract class LetterSoundComponent : MonoBehaviour
 		
 		}
 	
-		public LetterSoundComponent (string asString, PhonotacticsManager.Phonotactics[] rules)
+		public LetterSoundComponent (string asString, PhonotacticChecker.Phonotactics[] rules)
 		{
 				this.asString = asString;
 		
@@ -113,12 +114,13 @@ public abstract class LetterSoundComponent : MonoBehaviour
 		
 		}
 	
-		protected Color color;
+		protected Color color = Color.white;
 	
-		public Color Color {
-				get {
-						return color;
-				}
+		public virtual Color GetColour ()
+		{       
+			
+				return color;
+				
 		
 		
 		}
@@ -161,18 +163,19 @@ public abstract class LetterSoundComponent : MonoBehaviour
 		//we by default will apply the error color to all children regardless of other considertions.
 		public virtual void ApplyErrorColor ()
 		{
-				color = SessionManager.activeColourScheme.GetErrorColor ();
+				//color = SessionsDirector.colourCodingScheme.GetErrorColor ();
 		}
 	
 		protected virtual void ModifyColorBySound ()
 		{
 				if (soundType == SILENT)
-						color = SessionManager.activeColourScheme.GetColourForSilent (color);
+						color = SessionsDirector.colourCodingScheme.GetColourForSilent (asString [0]);
 		
 		}
 	
 		public void Update (UserWord context, int placeOfSelf, bool checkPhonotactics)
 		{
+				this.placeInWord = placeOfSelf;
 				if (checkPhonotactics)
 						CheckPhonotactics (context, placeOfSelf);
 				ApplyColor ();
@@ -181,7 +184,7 @@ public abstract class LetterSoundComponent : MonoBehaviour
 	
 		public void CheckPhonotactics (UserWord context, int placeOfSelf)
 		{       
-				foreach (PhonotacticsManager.Phonotactics rule in rules)
+				foreach (PhonotacticChecker.Phonotactics rule in rules)
 						if (rule (context.LetterSoundUnits, this, placeOfSelf)) {
 								violatesPhonotactics = true;
 								context.PhonotacticViolation (this, placeOfSelf); //alert the context (cache the fact that we're in error straight away)
@@ -220,7 +223,7 @@ public abstract class LetterSoundComposite : LetterSoundComponent
 				}
 		}
 	
-		public LetterSoundComposite (string asString, PhonotacticsManager.Phonotactics[] rules) : base(asString, rules)
+		public LetterSoundComposite (string asString, PhonotacticChecker.Phonotactics[] rules) : base(asString, rules)
 		{
 				children = new List<LetterSoundComponent> ();
 		}
@@ -237,25 +240,30 @@ public abstract class LetterSoundComposite : LetterSoundComponent
 		{
 				ApplyColorToComposite ();
 				foreach (LetterSoundComponent child in children)
-						child.TryApplyColor (color);
+						child.TryApplyColor (GetColour ());
 		
 		}
 	
 		public override void ApplyErrorColor ()
 		{
-				color = SessionManager.activeColourScheme.GetErrorColor ();
+				//color = SessionsDirector.colourCodingScheme.GetErrorColor ();
 				foreach (LetterSoundComponent child in children)
 						child.ApplyErrorColor ();
 		}
 	
 		protected abstract void ApplyColorToComposite ();
+
+		
 }
 
 public abstract class Letter : LetterSoundComponent
 {
-		public Letter (string asString, PhonotacticsManager.Phonotactics[] rules): base(asString, rules)
+		public Letter (string asString, PhonotacticChecker.Phonotactics[] rules): base(asString, rules)
 		{
 		}
+
+
+
 	
 }
 
@@ -305,7 +313,7 @@ public class Consonant : Letter
 	
 		protected override void ApplyLetterSoundUnitColor ()
 		{
-				color = SessionManager.activeColourScheme.GetColorsForHardConsonant ();
+				color = SessionsDirector.colourCodingScheme.GetColorsForHardConsonant (placeInWord);
 		
 		
 		}
@@ -314,7 +322,7 @@ public class Consonant : Letter
 		{
 				base.ModifyColorBySound ();
 				if (soundType == SOFT)
-						color = SessionManager.activeColourScheme.ModifyColorForSoftConsonant (color);
+						color = SessionsDirector.colourCodingScheme.ModifyColorForSoftConsonant (color);
 		
 		}
 }
@@ -364,7 +372,7 @@ public class Vowel : Letter
 	
 		protected override void ApplyLetterSoundUnitColor ()
 		{
-				color = (soundType == R_CONTROLLED ? SessionManager.activeColourScheme.GetColorsForRControlledVowel (LetterAt (0)) : SessionManager.activeColourScheme.GetColorsForLongVowel (LetterAt (0)));
+				color = SessionsDirector.colourCodingScheme.GetColorsForLongVowel (LetterAt (0));
 				//color = SessionManager.activeColourScheme.GetColorsForLongVowel (LetterAt (0)); //for the experiment I'm not worrying about r controlled.
 				//we are only distinguishing between long and short.
 		
@@ -374,7 +382,7 @@ public class Vowel : Letter
 		{
 				base.ModifyColorBySound ();
 				if (soundType == SHORT) {
-						color = SessionManager.activeColourScheme.GetColorsForShortVowel (color);
+						color = SessionsDirector.colourCodingScheme.GetColorsForShortVowel (color);
 						//				Debug.Log (SessionManager.activeColourScheme.label + " " + color);
 
 				}
@@ -401,6 +409,8 @@ public class Blank : Letter
 public class Blend : LetterSoundComposite
 {
 		int preferredPosition;
+		Color[] colors = new Color[2];
+		int colorIdx = 1;
 
 		public Blend (string asString, int preferredPosition) : base(asString, SpeechSoundReference.GetRulesForBlend(asString,preferredPosition))
 		{
@@ -409,17 +419,57 @@ public class Blend : LetterSoundComposite
 	
 		protected override void ApplyColorToComposite ()
 		{
-				
-				if (preferredPosition == SpeechSoundReference.INITIAL_BLEND)
-						color = SessionManager.activeColourScheme.GetColorsForInitialBlends ();
-				else if (preferredPosition == SpeechSoundReference.FINAL_BLEND)
-						color = SessionManager.activeColourScheme.GetColorsForFinalBlends ();
-				else
-						color = SessionManager.activeColourScheme.GetColorsForMiddleBlends ();
+
+				if (preferredPosition == SpeechSoundReference.INITIAL_BLEND) {
+						color = SessionsDirector.colourCodingScheme.GetColorsForInitialBlends ();
+		
+				} else if (preferredPosition == SpeechSoundReference.FINAL_BLEND) {
+						color = SessionsDirector.colourCodingScheme.GetColorsForFinalBlends ();
+		
+				} else {
+						color = SessionsDirector.colourCodingScheme.GetColorsForMiddleBlends ();
+		
+				}
+/*
+				if (preferredPosition == SpeechSoundReference.INITIAL_BLEND) {
+						colors [0] = SessionsDirector.colourCodingScheme.GetColorsForInitialBlends (0);
+						colors [1] = SessionsDirector.colourCodingScheme.GetColorsForInitialBlends (1);
+				} else if (preferredPosition == SpeechSoundReference.FINAL_BLEND) {
+						colors [0] = SessionsDirector.colourCodingScheme.GetColorsForFinalBlends (0);
+						colors [1] = SessionsDirector.colourCodingScheme.GetColorsForFinalBlends (1);
+				} else {
+						colors [0] = SessionsDirector.colourCodingScheme.GetColorsForMiddleBlends (0);
+						colors [1] = SessionsDirector.colourCodingScheme.GetColorsForMiddleBlends (1);
+				}
+
+*/
 	
 		}
+	/*
+		public override Color GetColour ()
+		{
+				colorIdx = 1 - colorIdx;
+				return colors [colorIdx];
+				
+		}*/
 	
 	
+	
+	
+}
+
+public class VowelR: LetterSoundComposite
+{
+		public VowelR (string asString) : base(asString, SpeechSoundReference.GetRulesForConsonantDigraph(asString))
+		{
+		}
+	
+		protected override void ApplyColorToComposite ()
+		{
+				color = SessionsDirector.colourCodingScheme.GetColorsForRControlledVowel ();
+		
+		}
+
 	
 	
 }
@@ -432,11 +482,10 @@ public class ConsonantDigraph : LetterSoundComposite
 	
 		protected override void ApplyColorToComposite ()
 		{
-				color = SessionManager.activeColourScheme.GetColorsForConsonantDigraphs ();
+				color = SessionsDirector.colourCodingScheme.GetColorsForConsonantDigraphs ();
 		
 		}
-	
-	
+
 }
 
 public class VowelDigraph : LetterSoundComposite
@@ -448,10 +497,10 @@ public class VowelDigraph : LetterSoundComposite
 		protected override void ApplyColorToComposite ()
 		{
 				//color = (soundType == R_CONTROLLED ? SessionManager.activeColourScheme.GetColorsForRControlledVowel (LetterAt (0)) : color = SessionManager.activeColourScheme.GetColorsForVowelDigraphs ());
-				color = SessionManager.activeColourScheme.GetColorsForVowelDigraphs (); //for the experiment I'm not worrying about r controlled.
+				color = SessionsDirector.colourCodingScheme.GetColorsForVowelDigraphs (); //for the experiment I'm not worrying about r controlled.
 				//we are only distinguishing between long and short.
 		}
-	
+
 	
 }
 
@@ -464,10 +513,10 @@ public class StableSyllable : LetterSoundComposite
 		protected override void ApplyColorToComposite ()
 		{
 		
-				color = SessionManager.activeColourScheme.GetColorsForStableSyllables ();
+				color = SessionsDirector.colourCodingScheme.GetColoursForSyllables (placeInWord);
 		
 		}
-	
+
 	
 	
 }

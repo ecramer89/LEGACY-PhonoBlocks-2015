@@ -6,7 +6,7 @@
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
 	<RootNamespace></RootNamespace>
-	<ProjectGuid>{B2C9C64A-9C4D-A9E0-74D5-0F9577A17822}</ProjectGuid>
+	<ProjectGuid>{40F6E4CB-020D-4F66-F1D5-C61EDCA6EF03}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<AssemblyName>Assembly-CSharp-Editor-firstpass</AssemblyName>
@@ -73,13 +73,11 @@
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (AlphaClip) .shader" />
      <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (AlphaClip).shader" />
-     <None Include="Assets\EasyTouchBundle\EasyTouchControls\ReleaseNotes.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (AlphaClip).shader" />
      <None Include="Assets\NGUI\Resources\Shaders\GUI - Text Shader (AlphaClip).shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
      <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Dynamic Font (SoftClip).shader" />
-     <None Include="Assets\EasyTouchBundle\Readme.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (SoftClip).shader" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (SoftClip).shader" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored.shader" />
@@ -90,18 +88,13 @@
      <None Include="Assets\recorded_raw.xml" />
      <None Include="Assets\NGUI\Examples\Other\French.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed).shader" />
-     <None Include="Assets\EasyTouchBundle\EasyTouchControls\Readme.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Additive Colored.shader" />
-     <None Include="Assets\EasyTouchBundle\EasyTouch\RealseNotes.txt" />
      <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Header.txt" />
      <None Include="Assets\NGUI\Examples\Shaders\Refractive.shader" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Depth.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Normal.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (SoftClip).shader" />
      <None Include="Assets\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
- <Reference Include="Assembly-UnityScript-firstpass">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
- </Reference>
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>
@@ -118,37 +111,37 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll</HintPath>
  </Reference>
  <Reference Include="Jayrock">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/Jayrock.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/Jayrock.dll</HintPath>
  </Reference>
  <Reference Include="Jayrock.Json">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/Jayrock.Json.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/Jayrock.Json.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Data">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/Mono.Data.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/Mono.Data.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Data.Sqlite">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/Mono.Data.Sqlite.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/Mono.Data.Sqlite.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Data.SqliteClient">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/Mono.Data.SqliteClient.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/Mono.Data.SqliteClient.dll</HintPath>
  </Reference>
  <Reference Include="System.Configuration">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/System.Configuration.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/System.Configuration.dll</HintPath>
  </Reference>
  <Reference Include="System.Data">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/System.Data.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/System.Data.dll</HintPath>
  </Reference>
  <Reference Include="System.EnterpriseServices">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/System.EnterpriseServices.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/System.EnterpriseServices.dll</HintPath>
  </Reference>
  <Reference Include="System.Security">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/System.Security.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/System.Security.dll</HintPath>
  </Reference>
  <Reference Include="uLinkEditor">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/Editor/uLink/Assembly/uLinkEditor.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/Editor/uLink/Assembly/uLinkEditor.dll</HintPath>
  </Reference>
  <Reference Include="uLink">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/uLink/Assembly/uLink.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/uLink/Assembly/uLink.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
@@ -192,7 +185,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{4385F5CE-C209-E3D3-E689-1F3AB0E530B2}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+      <Project>{7C75CA9F-AD62-B15B-159B-24D85A135BA9}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
+      <Project>{23D068B0-AEA1-0647-2344-6E6B69773E10}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

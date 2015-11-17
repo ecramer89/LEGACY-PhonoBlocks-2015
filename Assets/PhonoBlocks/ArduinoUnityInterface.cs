@@ -9,7 +9,7 @@ using System.Text;
 //sends the letter data to the arduinoLettersController.
 //for now it will just print an array of letters.
 
-//..receives new color data bvack from the controller and uses it to update the arduino letters.
+//..receives new color data back from the controller and uses it to update the arduino letters.
 //(implement this later)
 public class ArduinoUnityInterface : PhonoBlocksController
 {
@@ -20,18 +20,13 @@ public class ArduinoUnityInterface : PhonoBlocksController
 		public Arduino arduino;
 		public static bool communicationWithArduinoAchieved = false; //begin the main program because arduino has finished connecting/configuring.
 		public GameObject arduinoLetterControllerOb;
+
+
 		const int NUM_VALUES_PER_COLOR = 3;
 		const int NUM_PINS_PER_LETTER_POSITION = 7;
 		const int NUM_LETTER_POSITIONS = 7;
-		//const int SEVENTH_SLOT_INACTIVE = 1; //the seventh slot is not functioning so we need to adjust the positions to ignore this.
+
 		const char BLANK = ' ';
-
-
-
-   
-
-
-
 		int[][] ledOutputPins = new int[][]{
 
             
@@ -45,9 +40,6 @@ public class ArduinoUnityInterface : PhonoBlocksController
         new int[]{5,6,7}
     
 	};
-
-
-	
 		static int eye = 49;
 		int[][] platformInputPins = new int[][]{
         new int[]{7,7,7,7,7,7,7}, //inactive first slot (index 0)
@@ -100,8 +92,6 @@ public class ArduinoUnityInterface : PhonoBlocksController
 				arduino.Setup (ConfigurePins);
 		}
 
-
-
 		void ConfigurePins ()
 		{
 				//Initialize the input Pins
@@ -109,10 +99,10 @@ public class ArduinoUnityInterface : PhonoBlocksController
 				for (int y=1; y<NUM_LETTER_POSITIONS; y++) {
 						for (int i=0; i<NUM_PINS_PER_LETTER_POSITION; i++) {
        
-                    arduino.pinMode(platformInputPins[y][i], PinMode.INPUT);
-                    arduino.digitalWrite(platformInputPins[y][i], Arduino.HIGH);
+								arduino.pinMode (platformInputPins [y] [i], PinMode.INPUT);
+								arduino.digitalWrite (platformInputPins [y] [i], Arduino.HIGH);
            
-                arduino.reportDigital ((byte)(platformInputPins [y] [i] / 8), (byte)1);
+								arduino.reportDigital ((byte)(platformInputPins [y] [i] / 8), (byte)1);
                                 
 						}
 				}
@@ -136,7 +126,7 @@ public class ArduinoUnityInterface : PhonoBlocksController
 		{
 				communicationWithArduinoAchieved = true;
 				timeOfLastCheck = Time.time;
-				if (userInputRouter != null && SessionManager.DelegateControlToStudentActivityController)
+				if (userInputRouter != null && SessionsDirector.DelegateControlToStudentActivityController)
 						userInputRouter.TellUserToPlaceInitialLetters ();
 				for (int i=0; i<ledOutputPins.Length; i++)
 						ShutOffAt (i);
@@ -191,8 +181,7 @@ public class ArduinoUnityInterface : PhonoBlocksController
 				}
 		
 
-	}
-
+		}
 
 		int testPosition;
 
@@ -218,10 +207,10 @@ public class ArduinoUnityInterface : PhonoBlocksController
 
 		}
 
-		public void ColorNthTangibleLetter (int rawPosition, Color color)
+		public void ColorNthTangibleLetter (int position, Color color)
 		{
       
-				ApplyNewColorTo (ConvertPositionBetweenArduinoAndScreen (rawPosition), color);
+				ApplyNewColorTo (position, color);
 			
 
 		}
@@ -244,12 +233,9 @@ public class ArduinoUnityInterface : PhonoBlocksController
 
 						
 						arduino.digitalWrite (pin, CategoricalColorChannel (color, colorChannel));
-						//Debug.Log ("position " + position + " pin # " + ledOutputPins [position] [rescaledChannel] + " " + valueAtChannel + " " + ParseLetter (position));
+						Debug.Log ("position " + position + " pin # " + ledOutputPins [position] [rescaledChannel] + " " + valueAtChannel + " " + ParseLetter (position));
 				}
-
-
-
-
+	
 		}
 
 		bool WasAChange ()
@@ -261,46 +247,40 @@ public class ArduinoUnityInterface : PhonoBlocksController
 		{
 
         
-        arduinoLetterControllerOb.GetComponent<ArduinoLetterController>().UserChangedALetter(change.letter, (change.position));
+				arduinoLetterControllerOb.GetComponent<ArduinoLetterController> ().ReceiveNewUserInputLetter (change.letter, (AdjustArduinoPositionForScreen (change.position)));
         
-    }
+		}
 
-		int ConvertPositionBetweenArduinoAndScreen (int rawpos)
+		int AdjustArduinoPositionForScreen (int arduinoPlatformPosition)
 		{
-     
-        return rawpos;
+				//starts counting at 1; screen starts counting at 0
+				return arduinoPlatformPosition - 1;
 
 		}
 
+		void SearchForAndSaveChangedLetterAndPosition ()
+		{
 
-    void SearchForAndSaveChangedLetterAndPosition()
-    {
-
-        change.letter = SAME;
+				change.letter = SAME;
 
   
-        //for (int letterPlatformPosition=0; letterPlatformPosition<NUM_LETTER_POSITIONS; letterPlatformPosition++) {
+				//for (int letterPlatformPosition=0; letterPlatformPosition<NUM_LETTER_POSITIONS; letterPlatformPosition++) {
 
-        //skip 0th index. Min has not connected the letter inputs at the 0th position (the colour circuit is connected though)
-        for (int letterPlatformPosition = 1; letterPlatformPosition < NUM_LETTER_POSITIONS; letterPlatformPosition++)
-        //for (int letterPlatformPosition = 0; letterPlatformPosition < NUM_LETTER_POSITIONS; letterPlatformPosition++)
-        {
-            for (int pin = 0; pin < NUM_PINS_PER_LETTER_POSITION; pin++)
-            {
-                if (LetterAtPositionChanged(letterPlatformPosition, pin))
-                { //change of state
-                    RememberChangedPinStatesOfPositionThatExperiencedChange(letterPlatformPosition, pin);
-                    SaveChangeAsArduinoLetterData(letterPlatformPosition);
-                    return;
-                }
-            }
-        }
+				//skip 0th index. Min has not connected the letter inputs at the 0th position (the colour circuit is connected though)
+				for (int letterPlatformPosition = 1; letterPlatformPosition < NUM_LETTER_POSITIONS; letterPlatformPosition++) {
+						//for (int letterPlatformPosition = 0; letterPlatformPosition < NUM_LETTER_POSITIONS; letterPlatformPosition++)
+						for (int pin = 0; pin < NUM_PINS_PER_LETTER_POSITION; pin++) {
+								if (LetterAtPositionChanged (letterPlatformPosition, pin)) { //change of state
+										RememberChangedPinStatesOfPositionThatExperiencedChange (letterPlatformPosition, pin);
+										SaveChangeAsArduinoLetterData (letterPlatformPosition);
+										return;
+								}
+						}
+				}
 
-    }
+		}
 
-
-
-    void RememberChangedPinStatesOfPositionThatExperiencedChange (int position, int fromPin)
+		void RememberChangedPinStatesOfPositionThatExperiencedChange (int position, int fromPin)
 		{
 				for (; fromPin<stateOfPlatformInputPins[position].Length; fromPin++)
 						stateOfPlatformInputPins [position] [fromPin] = arduino.digitalRead (platformInputPins [position] [fromPin]);
@@ -316,7 +296,7 @@ public class ArduinoUnityInterface : PhonoBlocksController
 		//the letter at a position has changed if any of its pins have changed state.
 		bool LetterAtPositionChanged (int position, int pin)
 		{
-        return arduino.digitalRead(platformInputPins[position][pin]) != stateOfPlatformInputPins[position][pin];// && position <4;
+				return arduino.digitalRead (platformInputPins [position] [pin]) != stateOfPlatformInputPins [position] [pin];// && position <4;
 
 		}
 	 
@@ -336,9 +316,7 @@ public class ArduinoUnityInterface : PhonoBlocksController
 						//if(position!=3)  //hack because the pins are malfunctioning. april 21 2015.
 						letter = 'I';
 				}
-				if (stateOfPlatformInputPins [position] [3] == Arduino.LOW) {
-						letter = 'N'; 
-				}
+			
 				if (stateOfPlatformInputPins [position] [4] == Arduino.LOW) {
 						letter = 'O';
 				}
@@ -355,10 +333,9 @@ public class ArduinoUnityInterface : PhonoBlocksController
 
 				if (stateOfPlatformInputPins [position] [0] == Arduino.LOW && stateOfPlatformInputPins [position] [1] == Arduino.LOW) 
 						letter = 'U';
-				if (stateOfPlatformInputPins [position] [1] == Arduino.LOW && stateOfPlatformInputPins [position] [2] == Arduino.LOW) 
+				if (stateOfPlatformInputPins [position] [0] == Arduino.LOW && stateOfPlatformInputPins [position] [2] == Arduino.LOW) 
 						letter = 'C';
-				if (stateOfPlatformInputPins [position] [0] == Arduino.LOW && stateOfPlatformInputPins [position] [3] == Arduino.LOW) 
-						letter = 'L';
+
 				if (stateOfPlatformInputPins [position] [0] == Arduino.LOW && stateOfPlatformInputPins [position] [4] == Arduino.LOW) 
 						letter = 'D';
 				if (stateOfPlatformInputPins [position] [0] == Arduino.LOW && stateOfPlatformInputPins [position] [5] == Arduino.LOW) 
@@ -369,28 +346,41 @@ public class ArduinoUnityInterface : PhonoBlocksController
 						letter = 'M';   
 				if (stateOfPlatformInputPins [position] [6] == Arduino.LOW && stateOfPlatformInputPins [position] [4] == Arduino.LOW) 
 						letter = 'W';   
-				if (stateOfPlatformInputPins [position] [6] == Arduino.LOW && stateOfPlatformInputPins [position] [3] == Arduino.LOW) 
-						letter = 'F';   
+	  
 				if (stateOfPlatformInputPins [position] [6] == Arduino.LOW && stateOfPlatformInputPins [position] [2] == Arduino.LOW) 
 						letter = 'G';
 				if (stateOfPlatformInputPins [position] [6] == Arduino.LOW && stateOfPlatformInputPins [position] [1] == Arduino.LOW) 
 						letter = 'P';
 				if (stateOfPlatformInputPins [position] [5] == Arduino.LOW && stateOfPlatformInputPins [position] [4] == Arduino.LOW) 
 						letter = 'Y'; 
-				if (stateOfPlatformInputPins [position] [5] == Arduino.LOW && stateOfPlatformInputPins [position] [3] == Arduino.LOW) 
-						letter = 'B'; 
+
 				if (stateOfPlatformInputPins [position] [5] == Arduino.LOW && stateOfPlatformInputPins [position] [2] == Arduino.LOW) 
 						letter = 'V'; 
 				if (stateOfPlatformInputPins [position] [5] == Arduino.LOW && stateOfPlatformInputPins [position] [1] == Arduino.LOW) 
 						letter = 'J'; 
-				if (stateOfPlatformInputPins [position] [4] == Arduino.LOW && stateOfPlatformInputPins [position] [3] == Arduino.LOW) 
-						letter = 'K'; 
+			
 				if (stateOfPlatformInputPins [position] [4] == Arduino.LOW && stateOfPlatformInputPins [position] [2] == Arduino.LOW) 
 						letter = 'X'; 
 				if (stateOfPlatformInputPins [position] [4] == Arduino.LOW && stateOfPlatformInputPins [position] [1] == Arduino.LOW) 
 						letter = 'Q'; 
-				if (stateOfPlatformInputPins [position] [3] == Arduino.LOW && stateOfPlatformInputPins [position] [2] == Arduino.LOW) 
+
+
+				if (stateOfPlatformInputPins [position] [3] == Arduino.LOW && stateOfPlatformInputPins [position] [1] == Arduino.LOW) 
 						letter = 'Z';  
+
+
+				//Detect the triple pins 
+		 
+				if (stateOfPlatformInputPins [position] [0] == Arduino.LOW && stateOfPlatformInputPins [position] [2] == Arduino.LOW && stateOfPlatformInputPins [position] [3] == Arduino.LOW) 
+						letter = 'K'; 
+				if (stateOfPlatformInputPins [position] [0] == Arduino.LOW && stateOfPlatformInputPins [position] [4] == Arduino.LOW && stateOfPlatformInputPins [position] [5] == Arduino.LOW) 
+						letter = 'L';
+				if (stateOfPlatformInputPins [position] [5] == Arduino.LOW && stateOfPlatformInputPins [position] [4] == Arduino.LOW && stateOfPlatformInputPins [position] [2] == Arduino.LOW) 
+						letter = 'B'; 
+				if (stateOfPlatformInputPins [position] [6] == Arduino.LOW && stateOfPlatformInputPins [position] [2] == Arduino.LOW && stateOfPlatformInputPins [position] [0] == Arduino.LOW) 
+						letter = 'F'; 
+				if (stateOfPlatformInputPins [position] [6] == Arduino.LOW && stateOfPlatformInputPins [position] [1] == Arduino.LOW && stateOfPlatformInputPins [position] [0] == Arduino.LOW) 
+						letter = 'N'; 
 
 				return letter;
 		}
@@ -403,20 +393,20 @@ public class ArduinoUnityInterface : PhonoBlocksController
 
 
        
-        //the word will have at most 6 letters.
-        //we need to put these letters in the indexes 1 to 6
+		//the word will have at most 6 letters.
+		//we need to put these letters in the indexes 1 to 6
 		public void UpdateColoursOfTangibleLetters (UserWord newWord)
 		{
 		
 		
 				for (int positionOfLetter=0; positionOfLetter<newWord.Count; positionOfLetter++) {
 						LetterSoundComponent p = newWord.Get (positionOfLetter);
-						Color color = p.Color;
+						Color color = p.GetColour();
                     
 
-            // int positionOfLetter_ = NUM_LETTER_POSITIONS - positionOfLetter;
-           positionOfLetter = positionOfLetter+1;
-            ApplyNewColorTo (positionOfLetter, color);
+						// int positionOfLetter_ = NUM_LETTER_POSITIONS - positionOfLetter;
+						positionOfLetter = positionOfLetter + 1;
+						ApplyNewColorTo (positionOfLetter, color);
 
 			
 				}

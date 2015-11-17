@@ -9,14 +9,16 @@ public class InstructionsAudio : MonoBehaviour
 {
 
 		public static InstructionsAudio instance;
-
-		//first index --> "add one letter", second, "add two letters, " etc.
-
-		public AudioClip placeInitialLettersInstruction;
-		public AudioClip removeAllLettersInstruction;
-		public AudioClip makeTheWordInsructions;
-	    public AudioClip readTheWordInsructions;
-
+		public AudioClip makeTheWord;
+		public AudioClip soundOutTheWord;
+		public AudioClip excellent;
+		public AudioClip incorrectSoundEffect;
+		public AudioClip notQuiteIt;
+		public AudioClip offerHint;
+		public AudioClip youDidIt;
+		public AudioClip correctSoundEffect;
+		public AudioClip removeAllLetters;
+	    public AudioClip allDoneSession;
 
 		void Awake ()
 		{

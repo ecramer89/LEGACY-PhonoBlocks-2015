@@ -9,9 +9,11 @@ public class LetterImageTable : MonoBehaviour
 		public Texture2D selectLetterImage;
 		public Texture2D test;
 		public Texture2D without_line_blank;
+		public Texture2D letter_underline;
 		public static Texture2D DebugImage;
 		public static Texture2D LockedLetterImage ;
 		public static Texture2D BlankLetterImage;
+		public static Texture2D LetterUnderlineImage;
 		public static Texture2D SelectLetterImage;
 		public Texture2D[] LETTER_IMAGES = new Texture2D[27];
 		public const int BLANK_IDX = 26;
@@ -29,6 +31,7 @@ public class LetterImageTable : MonoBehaviour
 		{
 				SelectLetterImage = selectLetterImage;
 				LockedLetterImage = lockedLetterImage;
+				LetterUnderlineImage = letter_underline;
 				DebugImage = test;
 				BlankLetterImage = LETTER_IMAGES [BLANK_IDX];
 			
@@ -55,9 +58,9 @@ public class LetterImageTable : MonoBehaviour
 
 				}
 
-		if (letter == '_')
-			return without_line_blank;
-		return getBlankLetterImage ();
+				if (letter == '_')
+						return without_line_blank;
+				return getBlankLetterImage ();
 
 			
 		}

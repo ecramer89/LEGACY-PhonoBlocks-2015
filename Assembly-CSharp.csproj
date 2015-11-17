@@ -6,7 +6,7 @@
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
 	<RootNamespace></RootNamespace>
-	<ProjectGuid>{D42E2CEA-5DEC-2446-6950-C0EB1F36AD52}</ProjectGuid>
+	<ProjectGuid>{3FADB7D3-8B20-7E7D-E934-4332AB274D5D}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<AssemblyName>Assembly-CSharp</AssemblyName>
@@ -45,74 +45,6 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\BlinkyLightBehaviour.cs" />
-     <Compile Include="Assets\DataManager.cs" />
-     <Compile Include="Assets\DecoderTest.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\AdvancedExamples\AutoSelect\MultiLayerTouch.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\AdvancedExamples\AutoSelect\MultiLayerUI.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\AdvancedExamples\MultiCamera\MultiCameraTouch.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\AdvancedExamples\MultiCamera\MultiCameraUI.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\GameExemple\RTSExample\CubeSelect.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\GameExemple\RTSExample\RTSCamera.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\GameExemple\RunBall\Ball.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\GameExemple\RunBall\BallRunPlayer.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\GameExemple\RunBall\ThirdPersonCamera.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\LoadExamples.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\SimpleExamples\MultiFinger\FingerTouch.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\SimpleExamples\MultiFinger\MutliFingersScreenTouch.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\SimpleExamples\OneFinger\DoubleTapMe.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\SimpleExamples\OneFinger\DragMe.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\SimpleExamples\OneFinger\LongTapMe.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\SimpleExamples\OneFinger\Swipe.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\SimpleExamples\OneFinger\TapMe.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\SimpleExamples\OneFinger\TouchMe.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\SimpleExamples\TwoFingers\PinchMe.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\SimpleExamples\TwoFingers\TooglePickMethodUI.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\SimpleExamples\TwoFingers\TwistMe.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\SimpleExamples\TwoFingers\TwoDoubleTapMe.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\SimpleExamples\TwoFingers\TwoDragMe.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\SimpleExamples\TwoFingers\TwoLongTapMe.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\SimpleExamples\TwoFingers\TwoSwipe.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\SimpleExamples\TwoFingers\TwoTapMe.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\SimpleExamples\TwoFingers\TwoTouchMe.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\UnityUI\UICompatibility\ETWindow.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\UnityUI\UICompatibility\GlobalEasyTouchEvent.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\UnityUI\UICompatibility\UICompatibility.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\UnityUI\UICompatibility\UIWindow.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\UnityUI\UITwistPinch\UIDrag.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\UnityUI\UITwistPinch\UIPinch.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Example\UnityUI\UITwistPinch\UITwist.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Plugins\BaseFinger.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Plugins\Component\EasyTouchTrigger.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Plugins\ECamera.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Plugins\EasyTouch.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Plugins\EasyTouchInput.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Plugins\Finger.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Plugins\Gesture.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouch\Plugins\TwoFingerGesture.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Examples\Button-Event-Input\ButtonInputUI.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Examples\Button-Event-Input\ButtonUIEvent.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Examples\ControlEventInput\ControlUIEvent.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Examples\ControlEventInput\ControlUIInput.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Examples\DPadClassicalTime\DPadParameterUI.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Examples\FPSExample\FPSPlayerControl.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Examples\FPSExample\ImpactEffect.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Examples\JoystickParameter\AxisXUi.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Examples\LoadLevelScript.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Examples\TouchPad-Event-Input\TouchPadUIEvent.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Examples\_Medias\SliderText.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Plugins\ComponentExtensions.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Plugins\ETCArea.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Plugins\ETCAxis.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Plugins\ETCBase.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Plugins\ETCButton.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Plugins\ETCDPad.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Plugins\ETCInput.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Plugins\ETCJoystick.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Plugins\ETCSingleton.cs" />
-     <Compile Include="Assets\EasyTouchBundle\EasyTouchControls\Plugins\ETCTouchPad.cs" />
-     <Compile Include="Assets\FrontCameraController.cs" />
-     <Compile Include="Assets\InputField.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipItems.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipRandomItem.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\UICursor.cs" />
@@ -231,54 +163,40 @@
      <Compile Include="Assets\NGUI\Scripts\UI\UITiledSprite.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
-     <Compile Include="Assets\Permanent.cs" />
-     <Compile Include="Assets\PhonoBlocks\ArduinoAffixLetterController.cs" />
      <Compile Include="Assets\PhonoBlocks\ArduinoLetterController.cs" />
      <Compile Include="Assets\PhonoBlocks\ArduinoUnityInterface.cs" />
      <Compile Include="Assets\PhonoBlocks\AudioSourceController.cs" />
      <Compile Include="Assets\PhonoBlocks\CheckedWordImageController.cs" />
      <Compile Include="Assets\PhonoBlocks\ColourCodingScheme.cs" />
      <Compile Include="Assets\PhonoBlocks\ContentButton.cs" />
-     <Compile Include="Assets\PhonoBlocks\ErrorAudios.cs" />
      <Compile Include="Assets\PhonoBlocks\HintController.cs" />
+     <Compile Include="Assets\PhonoBlocks\InputField.cs" />
      <Compile Include="Assets\PhonoBlocks\InstructionsAudio.cs" />
      <Compile Include="Assets\PhonoBlocks\InteractiveLetter.cs" />
      <Compile Include="Assets\PhonoBlocks\LetterGridController.cs" />
      <Compile Include="Assets\PhonoBlocks\LetterImageTable.cs" />
      <Compile Include="Assets\PhonoBlocks\LetterSoundComponent.cs" />
-     <Compile Include="Assets\PhonoBlocks\LetterSoundComponentFactoryManager.cs" />
+     <Compile Include="Assets\PhonoBlocks\LetterSoundComponentFactoryHandler.cs" />
      <Compile Include="Assets\PhonoBlocks\LockedPositionHandler.cs" />
-     <Compile Include="Assets\PhonoBlocks\OSCWordReader.cs" />
-     <Compile Include="Assets\PhonoBlocks\Osc.cs" />
+     <Compile Include="Assets\PhonoBlocks\Permanent.cs" />
      <Compile Include="Assets\PhonoBlocks\PhonoBlocksController.cs" />
-     <Compile Include="Assets\PhonoBlocks\PhonotacticsManager.cs" />
+     <Compile Include="Assets\PhonoBlocks\PhonotacticChecker.cs" />
      <Compile Include="Assets\PhonoBlocks\Problem.cs" />
-     <Compile Include="Assets\PhonoBlocks\ProblemManager.cs" />
-     <Compile Include="Assets\PhonoBlocks\ScreenKeyboardController.cs" />
-     <Compile Include="Assets\PhonoBlocks\Selectable.cs" />
-     <Compile Include="Assets\PhonoBlocks\SessionManager.cs" />
+     <Compile Include="Assets\PhonoBlocks\ProblemsRepository.cs" />
+     <Compile Include="Assets\PhonoBlocks\SessionButton.cs" />
+     <Compile Include="Assets\PhonoBlocks\SessionsDirector.cs" />
      <Compile Include="Assets\PhonoBlocks\SpeechSoundReference.cs" />
      <Compile Include="Assets\PhonoBlocks\SpeechSoundsAudio.cs" />
      <Compile Include="Assets\PhonoBlocks\StudentActivityController.cs" />
-     <Compile Include="Assets\PhonoBlocks\StudentDataManager.cs" />
+     <Compile Include="Assets\PhonoBlocks\StudentsDataHandler.cs" />
      <Compile Include="Assets\PhonoBlocks\SwipeDetector.cs" />
      <Compile Include="Assets\PhonoBlocks\UDPPacketIO.cs" />
      <Compile Include="Assets\PhonoBlocks\UserInputRouter.cs" />
+     <Compile Include="Assets\PhonoBlocks\UserStarGridController.cs" />
      <Compile Include="Assets\PhonoBlocks\UserWord.cs" />
      <Compile Include="Assets\PhonoBlocks\Word.cs" />
      <Compile Include="Assets\PhonoBlocks\WordHistoryController.cs" />
-     <Compile Include="Assets\PhonoBlocks\WordImageAndAudioMapAccessor.cs" />
-     <Compile Include="Assets\PhonoBlocks\WordImages.cs" />
-     <Compile Include="Assets\PushButton.cs" />
-     <Compile Include="Assets\ReadButtonBehaviour.cs" />
-     <Compile Include="Assets\Scripts\DropReceiver.cs" />
      <Compile Include="Assets\Scripts\TextureScale.cs" />
-     <Compile Include="Assets\SecretButton.cs" />
-     <Compile Include="Assets\SecretButtonManager.cs" />
-     <Compile Include="Assets\Session.cs" />
-     <Compile Include="Assets\SpeechRecorder.cs" />
-     <Compile Include="Assets\TestPlayerPrefs.cs" />
-     <Compile Include="Assets\Token.cs" />
      <Compile Include="Assets\Uniduino\Scripts\Arduino.Firmata.cs" />
      <Compile Include="Assets\Uniduino\Scripts\Arduino.cs" />
      <Compile Include="Assets\Uniduino\Scripts\SerialPortProxy.cs" />
@@ -291,13 +209,6 @@
      <Compile Include="Assets\Uniduino\Tutorials\Servo\Servo.cs" />
      <Compile Include="Assets\Uniduino\Tutorials\Servo\ServoSlideControl.cs" />
      <Compile Include="Assets\Uniduino\UniduinoTestPanel\UniduinoTestPanel.cs" />
-     <Compile Include="Assets\User.cs" />
-     <Compile Include="Assets\UserController.cs" />
-     <Compile Include="Assets\UserGridController.cs" />
-     <Compile Include="Assets\UserImage.cs" />
-     <Compile Include="Assets\UserManagementController.cs" />
-     <Compile Include="Assets\UserManager.cs" />
-     <Compile Include="Assets\test.cs" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Depth Cutout.shader" />
      <None Include="Assets\NGUI\Examples\Models\Orc\Orc Skin.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo20.txt" />
@@ -310,13 +221,11 @@
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (AlphaClip) .shader" />
      <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (AlphaClip).shader" />
-     <None Include="Assets\EasyTouchBundle\EasyTouchControls\ReleaseNotes.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (AlphaClip).shader" />
      <None Include="Assets\NGUI\Resources\Shaders\GUI - Text Shader (AlphaClip).shader" />
      <None Include="Assets\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
      <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Dynamic Font (SoftClip).shader" />
-     <None Include="Assets\EasyTouchBundle\Readme.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed) (SoftClip).shader" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (SoftClip).shader" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored.shader" />
@@ -327,18 +236,13 @@
      <None Include="Assets\recorded_raw.xml" />
      <None Include="Assets\NGUI\Examples\Other\French.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed).shader" />
-     <None Include="Assets\EasyTouchBundle\EasyTouchControls\Readme.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Additive Colored.shader" />
-     <None Include="Assets\EasyTouchBundle\EasyTouch\RealseNotes.txt" />
      <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Header.txt" />
      <None Include="Assets\NGUI\Examples\Shaders\Refractive.shader" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Depth.shader" />
      <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Normal.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (SoftClip).shader" />
      <None Include="Assets\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
- <Reference Include="Assembly-UnityScript-firstpass">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
@@ -346,34 +250,34 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
  <Reference Include="Jayrock">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/Jayrock.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/Jayrock.dll</HintPath>
  </Reference>
  <Reference Include="Jayrock.Json">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/Jayrock.Json.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/Jayrock.Json.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Data">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/Mono.Data.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/Mono.Data.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Data.Sqlite">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/Mono.Data.Sqlite.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/Mono.Data.Sqlite.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Data.SqliteClient">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/Mono.Data.SqliteClient.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/Mono.Data.SqliteClient.dll</HintPath>
  </Reference>
  <Reference Include="System.Configuration">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/System.Configuration.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/System.Configuration.dll</HintPath>
  </Reference>
  <Reference Include="System.Data">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/System.Data.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/System.Data.dll</HintPath>
  </Reference>
  <Reference Include="System.EnterpriseServices">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/System.EnterpriseServices.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/System.EnterpriseServices.dll</HintPath>
  </Reference>
  <Reference Include="System.Security">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/System.Security.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/System.Security.dll</HintPath>
  </Reference>
  <Reference Include="uLink">
- <HintPath>C:/Users/root952/Desktop/PhonoBlocks/Assets/Plugins/uLink/Assembly/uLink.dll</HintPath>
+ <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/uLink/Assembly/uLink.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/Mono.Cecil.dll</HintPath>
@@ -384,7 +288,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{4385F5CE-C209-E3D3-E689-1F3AB0E530B2}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+      <Project>{7C75CA9F-AD62-B15B-159B-24D85A135BA9}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
+      <Project>{23D068B0-AEA1-0647-2344-6E6B69773E10}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
