@@ -11,6 +11,8 @@ public class SessionButton : MonoBehaviour {
 	void Start ()
 	{
 		sessionsDirector = sessionsDirectorOB.GetComponent<SessionsDirector> ();
+
+
 		
 	}
 	
