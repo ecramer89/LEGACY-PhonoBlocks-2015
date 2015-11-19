@@ -85,10 +85,12 @@ public class ProblemsRepository : MonoBehaviour
 		static readonly int TARGET_WORD_IDX = 0;
 		static string[][][] activity_word_sets = {
 
+
 		new string[][]{
-			new string[]{"bet","dad","tin"}, //target words
-			new string[]{"b t","d d","t n"} //initial versions of target words
+			new string[]{"bad","dad","tin"}, //target words
+			new string[]{"b d","d d","t n"} //initial versions of target words
 		},
+
 
 		new string[][]{
 			new string[]{"pup","hit","web"},
