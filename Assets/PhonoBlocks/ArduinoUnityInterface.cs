@@ -14,10 +14,41 @@ using System.Text;
 public class ArduinoUnityInterface : PhonoBlocksController
 {
 
+		bool sri_motor_code=true;
+		public static Arduino arduino;
+
+
+		//stuff for sri's 884 project 
+
+		/*constants and method used for communicating with Arduino for vibration   */
+		static readonly int MOTOR_PIN=3; //pin identity of the motor pin.
+		public static readonly int HARD_SOUND_VIBRATION_LEVEL = 255;
+		public static readonly int SOFT_SOUND_VIBRATION_LEVEL = 80;
+
+
+		public static void vibrateToIndicateHardOrSoftConsonant(int vibrationLevel){
+
+				arduino.analogWrite (MOTOR_PIN, vibrationLevel);
+
+
+		}
+
+
+
+
+
+
+
+
+		/// <summary>
+		/// T/////////////old phono color stuff		/// </summary>
+
+
+
 		int CURR_MAX_NUM_PIN = 2;
 		public float minimumSecondsBeforeNextLetterCheck = 1;
 		float timeOfLastCheck;
-		public Arduino arduino;
+
 		public static bool communicationWithArduinoAchieved = false; //begin the main program because arduino has finished connecting/configuring.
 		public GameObject arduinoLetterControllerOb;
 
@@ -94,27 +125,39 @@ public class ArduinoUnityInterface : PhonoBlocksController
 
 		void ConfigurePins ()
 		{
-				//Initialize the input Pins
+				if (sri_motor_code) {
 
-				for (int y=1; y<NUM_LETTER_POSITIONS; y++) {
-						for (int i=0; i<NUM_PINS_PER_LETTER_POSITION; i++) {
+
+						arduino.pinMode (MOTOR_PIN, PinMode.PWM);
+
+
+				} else {
+
+
+
+
+						//Initialize the input Pins
+
+						for (int y = 1; y < NUM_LETTER_POSITIONS; y++) {
+								for (int i = 0; i < NUM_PINS_PER_LETTER_POSITION; i++) {
        
-								arduino.pinMode (platformInputPins [y] [i], PinMode.INPUT);
-								arduino.digitalWrite (platformInputPins [y] [i], Arduino.HIGH);
+										arduino.pinMode (platformInputPins [y] [i], PinMode.INPUT);
+										arduino.digitalWrite (platformInputPins [y] [i], Arduino.HIGH);
            
-								arduino.reportDigital ((byte)(platformInputPins [y] [i] / 8), (byte)1);
+										arduino.reportDigital ((byte)(platformInputPins [y] [i] / 8), (byte)1);
                                 
+								}
 						}
-				}
 
 			
 		
-				//Initialize the Led Pins
-				for (int y=0; y<NUM_LETTER_POSITIONS; y++) {
-						for (int i=0; i<NUM_VALUES_PER_COLOR; i++) {
-								int pin = ledOutputPins [y] [i];
+						//Initialize the Led Pins
+						for (int y = 0; y < NUM_LETTER_POSITIONS; y++) {
+								for (int i = 0; i < NUM_VALUES_PER_COLOR; i++) {
+										int pin = ledOutputPins [y] [i];
 							
-								arduino.pinMode (ledOutputPins [y] [i], PinMode.OUTPUT);
+										arduino.pinMode (ledOutputPins [y] [i], PinMode.OUTPUT);
+								}
 						}
 				}
 			
@@ -165,22 +208,23 @@ public class ArduinoUnityInterface : PhonoBlocksController
 		}
 	
 		void Update ()
-		{
-				if (communicationWithArduinoAchieved) { //do not begin until after the connection with arduino is established.
 
-						if (TimeToCheckForChangeHasElapsed ()) {
+		{ if (!sri_motor_code) {
+						if (communicationWithArduinoAchieved) { //do not begin until after the connection with arduino is established.
 
-								SearchForAndSaveChangedLetterAndPosition ();
-								if (WasAChange ())
-										SendChangeToArduinoLetterController ();
+								if (TimeToCheckForChangeHasElapsed ()) {
 
-								timeOfLastCheck = Time.time;
+										SearchForAndSaveChangedLetterAndPosition ();
+										if (WasAChange ())
+												SendChangeToArduinoLetterController ();
+
+										timeOfLastCheck = Time.time;
 
 				
+								}
 						}
-				}
 		
-
+				}
 		}
 
 		int testPosition;
@@ -233,7 +277,7 @@ public class ArduinoUnityInterface : PhonoBlocksController
 
 						
 						arduino.digitalWrite (pin, CategoricalColorChannel (color, colorChannel));
-						Debug.Log ("position " + position + " pin # " + ledOutputPins [position] [rescaledChannel] + " " + valueAtChannel + " " + ParseLetter (position));
+						//Debug.Log ("position " + position + " pin # " + ledOutputPins [position] [rescaledChannel] + " " + valueAtChannel + " " + ParseLetter (position));
 				}
 	
 		}

@@ -160,6 +160,7 @@ public class SessionsDirector : MonoBehaviour
 		{
 
 				colourCodingScheme = ProblemsRepository.instance.GetColourCodingSchemeGivenProblemType (problemType);
+				//colourCodingScheme.initiateArduinoCommunication ();
 			
 
 				Application.LoadLevel ("Activity");
@@ -225,7 +226,7 @@ public class SessionsDirector : MonoBehaviour
 				colourCodingScheme = ProblemsRepository.instance.ActiveColourScheme;
 
 				StudentActivityController sc = studentActivityControllerOB.GetComponent<StudentActivityController> ();
-
+				//colourCodingScheme.initiateArduinoCommunication ();
 		}
 
 

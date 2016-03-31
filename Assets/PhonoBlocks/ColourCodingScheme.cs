@@ -1,9 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using Uniduino;
 public abstract class ColourCodingScheme: MonoBehaviour
 {
 
+	
+
+
+
+		protected const char ANY = '*';
 		//requirement for all activities:
 		//establish colours for all generally relevant LetterSoundComponents.
 		//we can do so by adjusting the singleton (LetterSoundComponent Color Map)
@@ -44,6 +49,26 @@ public abstract class ColourCodingScheme: MonoBehaviour
 				gray.b = gray.r;
 		}
 
+
+
+
+				
+						
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		public virtual Color GetColorsForOff ()
 		{
 				return gray;
@@ -62,7 +87,7 @@ public abstract class ColourCodingScheme: MonoBehaviour
 		
 		}
 
-		public virtual Color GetColorsForHardConsonant (int indexInWord=0)
+		public virtual Color GetColorsForHardConsonant (int indexInWord=0, char letter=ANY)
 		{
 				return Color.white;
 		}
@@ -206,11 +231,25 @@ class OpenClosedVowel : NoColour
 	     * that we alternate blue and green should work*/
 		
 
-		public override Color GetColorsForHardConsonant (int indexInWord=0)
+		public override Color GetColorsForHardConsonant (int indexInWord=0,char letter=ANY)
 		{
+
+
+				if (letter == 'c' || letter == 'g') {
+						ArduinoUnityInterface.vibrateToIndicateHardOrSoftConsonant (ArduinoUnityInterface.HARD_SOUND_VIBRATION_LEVEL);
+
+				}
+
+
 				return AlternatingColours (indexInWord);
 		}
 
+
+		public override Color ModifyColorForSoftConsonant (Color currentColor)
+		{
+				ArduinoUnityInterface.vibrateToIndicateHardOrSoftConsonant (ArduinoUnityInterface.SOFT_SOUND_VIBRATION_LEVEL);
+				return Color.magenta;
+		}
 
 }
 
@@ -352,7 +391,7 @@ class SyllableDivision : NoColour
 		
 		}
 	
-		public override Color GetColorsForHardConsonant (int indexInWord=0)
+		public override Color GetColorsForHardConsonant (int indexInWord=0,char letter=ANY)
 		{
 				return GetColorsForWholeWord ();
 		}

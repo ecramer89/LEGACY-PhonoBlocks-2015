@@ -345,21 +345,36 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 						
 						LetterSoundComponent last = pattern [2];
 						if (last.IsConsonantConsonantDigraphOrBlend) {
-								LetterSoundComponent beforeConsonant = pattern [1];
-								if (beforeConsonant.IsVowelOrVowelDigraph) {
-										LetterSoundComponent beforeVowel = pattern [0];
-										if (beforeVowel.IsConsonantConsonantDigraphOrBlend) {
+								LetterSoundComponent middle = pattern [1];
 
-												if (beforeConsonant is Vowel) {
-														Vowel v = (Vowel)beforeConsonant;
-														if (!IsRControlled (beforeConsonant, last)) {
+								if (middle.IsVowelOrVowelDigraph) {
+										LetterSoundComponent first = pattern [0];
+										if (first.IsConsonantConsonantDigraphOrBlend) {
+
+												if (middle is Vowel) {
+														Vowel v = (Vowel)middle;
+														if (!IsRControlled (middle, last)) {
 																v.MakeShort ();
 														} else
 																v.MakeRControlled ();
 												}
 
+												//March 29th: add check to see if the consonant in this pattern (CV) 
+												//is soft and to make it soft if so.
+												if (isSoftConsonant (first, middle)) {
+														makeSoft (first);
+												}
+
                                          
 												return true;
+										}
+								}
+
+								//March 30th: added special case for when middle is y (treated as consonant otherwise).
+								if (middle.LettersAre ("y")) {
+										LetterSoundComponent first_b = pattern [0];
+										if (isSoftConsonant (first_b, middle)) {
+												makeSoft (first_b);
 										}
 								}
 				
@@ -368,6 +383,7 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 		
 				}
 		
+			
 				bool TryMatch2UnitPattern (List<LetterSoundComponent> pattern, int idxOfFirstLetter)
 				{      
 						if (TryMatchVowelConsonant (pattern))
@@ -388,10 +404,26 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 												Vowel v = (Vowel)last;
 												v.MakeShort ();
 										}
+										//March 29th: add check to see if the consonant in this pattern (CV) 
+										//is soft and to make it soft if so.
+										if (isSoftConsonant (beforeVowel, last)) {
+												makeSoft (beforeVowel);
+										}
 										return true;
 								}
+
+
 								if (last.LettersAre ("y")) {
 										preSyllable [idxOfFirstLetter + 1] = new Vowel ("y");
+
+										//March 30th: added special case for when middle is y (treated as consonant otherwise).
+
+										if (isSoftConsonant (beforeVowel, last)) {
+												makeSoft (beforeVowel);
+												}
+										
+
+							
 										return true;
 								}
 
@@ -431,6 +463,26 @@ public class LetterSoundComponentFactoryManager : MonoBehaviour
 				{      
 						
 						return consonant.AsString.Equals ("r");
+				}
+
+
+
+				bool isSoftConsonant(LetterSoundComponent consonant, LetterSoundComponent vowel){
+						char v = vowel.AsString [0];
+						char c = consonant.AsString [0];
+					
+						bool isSoft = (v == 'y' || v == 'i' || v == 'e') && (c == 'c' || c == 'g');
+
+						return isSoft;
+
+
+
+				}
+
+				void makeSoft(LetterSoundComponent consonant){
+						Consonant con = (Consonant)consonant;
+					
+						con.MakeSoft ();
 				}
 		}
 	

@@ -312,8 +312,11 @@ public class Consonant : Letter
 		}
 	
 		protected override void ApplyLetterSoundUnitColor ()
-		{
-				color = SessionsDirector.colourCodingScheme.GetColorsForHardConsonant (placeInWord);
+		{		
+				if (soundType == SOFT) {
+						color = SessionsDirector.colourCodingScheme.ModifyColorForSoftConsonant (color);
+				}
+				else color = SessionsDirector.colourCodingScheme.GetColorsForHardConsonant (placeInWord, LetterAt(0));
 		
 		
 		}

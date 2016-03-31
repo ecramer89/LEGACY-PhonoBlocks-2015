@@ -3,6 +3,7 @@ using System.Text;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Uniduino;
 
 //to do... a more elegant way of handling different modes 
 //versus just swirtching out things like this.
@@ -68,7 +69,7 @@ public class UserInputRouter : MonoBehaviour
 		      
 				global = this;
 				sessionParametersOB = GameObject.Find ("SessionParameters");
-
+				uniduinoG0 = GameObject.Find ("Uniduino");
 
              
 				screenMode = sessionParametersOB.GetComponent<SessionsDirector> ().IsScreenMode ();
