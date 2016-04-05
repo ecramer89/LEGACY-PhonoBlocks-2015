@@ -10,7 +10,8 @@ public class ArduinoLetterController : PhonoBlocksController
 
 		public String EMPTY_USER_WORD;
 		List<InteractiveLetter> lettersToFlash = new List<InteractiveLetter> ();
-		private StringBuilder currUserControlledLettersAsStringBuilder = new StringBuilder (); //maintains this along with the letter bar so that it's easy to quickly update and get the new colours.
+		private StringBuilder currUserControlledLettersAsStringBuilder = new StringBuilder ();
+		//maintains this along with the letter bar so that it's easy to quickly update and get the new colours.
 		public string CurrentUserControlledLettersAsString {
 				get {
 						return currUserControlledLettersAsStringBuilder.ToString ();
@@ -74,7 +75,7 @@ public class ArduinoLetterController : PhonoBlocksController
 				StartingIndex = startingIndexOfArduinoLetters;
 				EndingIndex = endingIndexOfArduinoLetters;
 				maxUserLetters = EndingIndex + 1 - StartingIndex;
-				for (int i= 0; i<maxUserLetters; i++) 
+				for (int i = 0; i < maxUserLetters; i++)
 						currUserControlledLettersAsStringBuilder.Append (" ");
 						
 				EMPTY_USER_WORD = currUserControlledLettersAsStringBuilder.ToString ();
@@ -102,7 +103,7 @@ public class ArduinoLetterController : PhonoBlocksController
 						//...automatically remember the change but don't necessarily update the colours.
 						ChangeTheLetterOfASingleCell (atPosition, newLetter);
 						userInputRouter.HandleNewUserInputLetter (newLetter,
-			                                          atPosition, this);
+								atPosition, this);
 				}
 		}
 
@@ -163,18 +164,18 @@ public class ArduinoLetterController : PhonoBlocksController
 
 		}
 
-		public void ChangeDisplayColourOfCells (Color newColour, bool onlySelected=false, int start=-1, int count=7)
+		public void ChangeDisplayColourOfCells (Color newColour, bool onlySelected = false, int start = -1, int count = 7)
 		{
 				start = (start < StartingIndex ? StartingIndex : start);
 				count = (count > MaxArduinoLetters ? MaxArduinoLetters : count);
 				if (!onlySelected) {
-						for (int i=start; i<count; i++) {
+						for (int i = start; i < count; i++) {
 								ChangeDisplayColourOfASingleCell (i, newColour);
 
 						}
 				} else {
 					
-						for (int i=start; i<count; i++) {
+						for (int i = start; i < count; i++) {
 								if (selectedUserControlledLettersAsStringBuilder [i] != ' ')
 										ChangeDisplayColourOfASingleCell (i, newColour);
 						}
@@ -195,16 +196,16 @@ public class ArduinoLetterController : PhonoBlocksController
 
 		}
 
-		public void RevertLettersToDefaultColour (bool onlySelected=false, int start=-1, int count=7)
+		public void RevertLettersToDefaultColour (bool onlySelected = false, int start = -1, int count = 7)
 		{
 				start = (start < StartingIndex ? StartingIndex : start);
 				count = (count > MaxArduinoLetters ? MaxArduinoLetters : count);
 				if (!onlySelected) {
-						for (int i=start; i<count; i++) {
+						for (int i = start; i < count; i++) {
 								RevertASingleLetterToDefaultColour (i);
 						}
 				} else {
-						for (int i=start; i<count; i++) {
+						for (int i = start; i < count; i++) {
 								if (selectedUserControlledLettersAsStringBuilder [i] != ' ')
 										RevertASingleLetterToDefaultColour (i);
 				
@@ -223,7 +224,7 @@ public class ArduinoLetterController : PhonoBlocksController
 		public void PlaceWordInLetterGrid (string word)
 		{
 
-				for (int i=0, j=startingIndexOfUserLetters; i<word.Length; i++,j++) {
+				for (int i = 0, j = startingIndexOfUserLetters; i < word.Length; i++,j++) {
 						ChangeTheLetterOfASingleCell (j, word.Substring (i, 1) [0]);
 					
 				}
@@ -235,7 +236,7 @@ public class ArduinoLetterController : PhonoBlocksController
 		public void DisplayWordInLetterGrid (string word)
 		{
 		
-				for (int i=0, j=startingIndexOfUserLetters; i<word.Length; i++,j++) {
+				for (int i = 0, j = startingIndexOfUserLetters; i < word.Length; i++,j++) {
 						
 						ChangeTheImageOfASingleCell (j, LetterImageTable.instance.GetLetterImageFromLetter (word.Substring (i, 1) [0]));
 			
@@ -312,7 +313,7 @@ public class ArduinoLetterController : PhonoBlocksController
 
 				return currUserControlledLettersAsStringBuilder.ToString ().Equals (EMPTY_USER_WORD);
 		}
-	
+
 		UserWord GetNewColoursAndSoundsFromDecoder (LetterGridController letterGridController)
 		{
 			
@@ -324,7 +325,7 @@ public class ArduinoLetterController : PhonoBlocksController
 		void AssignInteractiveLettersToTangibleCounterParts ()
 		{
 				int indexOfLetterBarCell = startingIndexOfUserLetters;
-				for (; indexOfLetterBarCell<=endingIndexOfUserLetters; indexOfLetterBarCell++) {
+				for (; indexOfLetterBarCell <= endingIndexOfUserLetters; indexOfLetterBarCell++) {
 						GameObject letterCell = letterGrid.GetLetterCell (indexOfLetterBarCell);
      
 						letterCell.GetComponent<InteractiveLetter> ().IdxAsArduinoControlledLetter = ConvertScreenToArduinoIndex (indexOfLetterBarCell);//plus 1 because the indexes are shifted.
@@ -363,6 +364,17 @@ public class ArduinoLetterController : PhonoBlocksController
 								}
 
 						}
+
+
+						//april 5
+						if (SpeechSoundReference.IsHardConsonant (p.AsString)) {
+								Debug.Log ("VIBRATE HARD");
+								ArduinoUnityInterface.vibrateToIndicateHardOrSoftConsonant (ArduinoUnityInterface.HARD_SOUND_VIBRATION_LEVEL);
+						}
+						if (SpeechSoundReference.IsSoftConsonant (p.AsString)) {
+								Debug.Log ("VIBRATE SOFT");
+								ArduinoUnityInterface.vibrateToIndicateHardOrSoftConsonant (ArduinoUnityInterface.SOFT_SOUND_VIBRATION_LEVEL);
+						}
 				}
 		}
 
@@ -376,6 +388,9 @@ public class ArduinoLetterController : PhonoBlocksController
 						i.SetSelectColour (lc.GetColour ());
 
 				} else {
+
+
+					
 						i = letterGridController.UpdateLetter (indexOfLetterBarCell, lc.GetColour ());
 
 				}
@@ -384,13 +399,28 @@ public class ArduinoLetterController : PhonoBlocksController
 			
 				bool flashInteractiveLetter = flash && i.HasLetterOrSoundChanged (lc) && lc.GetColour () == i.CurrentColor ();
 				
+
+
+			
+				/*bool vibrateLetter = lc is Consonant && (lc.AsString [0] == 'c' || lc.AsString [0] == 'g') && i.HasLetterOrSoundChanged (lc); //&& lc.GetColour () == i.CurrentColor ();
+				if (vibrateLetter) {
+						if (lc.SoundType == Consonant.HARD) {
+								Debug.Log ("VIBRATE HARD");
+								//ArduinoUnityInterface.vibrateToIndicateHardOrSoftConsonant (ArduinoUnityInterface.HARD_SOUND_VIBRATION_LEVEL);
+						} else {
+								Debug.Log ("VIBRATE SOFT");
+								//ArduinoUnityInterface.vibrateToIndicateHardOrSoftConsonant (ArduinoUnityInterface.SOFT_SOUND_VIBRATION_LEVEL);
+						}
+
+
+				}*/
+
 				i.LetterSoundComponentIsPartOf = lc;
-		
+
 				if (flashInteractiveLetter) {
 						i.StartCoroutine ("Flash");
-			
-				}
 
+				}
 
 			
 						
@@ -417,13 +447,13 @@ public class ArduinoLetterController : PhonoBlocksController
 		}
 
 		bool selectButtonOnSelection = false;
-	
+
 		public void SelectDeselectAllButtonPressed ()
 		{       
 				selectButtonOnSelection = !selectButtonOnSelection;	 
 				InteractiveLetter l;
 				//select or deselect all letters
-				for (int i=0, j=StartingIndex; i<currUserControlledLettersAsStringBuilder.Length; i++,j++) {
+				for (int i = 0, j = StartingIndex; i < currUserControlledLettersAsStringBuilder.Length; i++,j++) {
 						SaveNewLetterInStringRepresentation ((selectButtonOnSelection ? currUserControlledLettersAsStringBuilder [i] : ' '), i, selectedUserControlledLettersAsStringBuilder);
 						l = letterGrid.GetInteractiveLetter (j);
 						
@@ -472,7 +502,7 @@ public class ArduinoLetterController : PhonoBlocksController
 			
 				UpdateLetterBarIfPositionAndLetterSpecified ();
 		}
-	    
+
 		static String testLetter;
 
 		public void SetTestLetter (String newLetter)
@@ -517,7 +547,7 @@ public class ArduinoLetterController : PhonoBlocksController
 		{
 				String s;
 	
-				for (int i=0; i<maxUserLetters; i++) {
+				for (int i = 0; i < maxUserLetters; i++) {
 						s = "" + i;
 						if (Input.GetKey (s)) {
 								//testPosition = i;

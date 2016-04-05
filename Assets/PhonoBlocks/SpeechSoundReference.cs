@@ -22,6 +22,9 @@ public class SpeechSoundReference : MonoBehaviour
 		static SpeechSoundLookup<string> initial_blends_ = new SpeechSoundLookup<string> ();
 		static SpeechSoundLookup<string> middle_blends_ = new SpeechSoundLookup<string> ();
 		static SpeechSoundLookup<string> final_blends_ = new SpeechSoundLookup<string> ();
+		//april 5
+		static SpeechSoundLookup<string> soft_consonants_ = new SpeechSoundLookup<string> ();
+		static SpeechSoundLookup<string> hard_consonants_ = new SpeechSoundLookup<string> ();
 		static PhonotacticChecker.Phonotactics[] blankRules = new PhonotacticChecker.Phonotactics[]{PhonotacticChecker.NoRestrictions};
 
 		public static PhonotacticChecker.Phonotactics[] BlankRules ()
@@ -172,7 +175,8 @@ public class SpeechSoundReference : MonoBehaviour
 				AddVowelDigraphs ();
 				AddStableSyllables ();
 				AddSpecialUnits ();
-
+				AddHardConsonants ();
+				AddSoftConsonants ();
 
 				initialized = true;
 
@@ -254,6 +258,27 @@ public class SpeechSoundReference : MonoBehaviour
 
 		}
 
+
+
+		static void AddHardConsonants(){
+				hard_consonants_.Add ("go", PhonotacticChecker.NoRestrictions);
+				hard_consonants_.Add ("ga", PhonotacticChecker.NoRestrictions);
+				hard_consonants_.Add ("gu", PhonotacticChecker.NoRestrictions);
+				hard_consonants_.Add ("co", PhonotacticChecker.NoRestrictions);
+				hard_consonants_.Add ("ca", PhonotacticChecker.NoRestrictions);
+				hard_consonants_.Add ("cu", PhonotacticChecker.NoRestrictions);
+		}
+
+		static void AddSoftConsonants(){
+				soft_consonants_.Add ("ge", PhonotacticChecker.NoRestrictions);
+				soft_consonants_.Add ("gi", PhonotacticChecker.NoRestrictions);
+				soft_consonants_.Add ("gy", PhonotacticChecker.NoRestrictions);
+				soft_consonants_.Add ("ci", PhonotacticChecker.NoRestrictions);
+				soft_consonants_.Add ("cy", PhonotacticChecker.NoRestrictions);
+				soft_consonants_.Add ("ce", PhonotacticChecker.NoRestrictions);
+
+		}
+
 		static void AddConsonantDigraphs ()
 		{
 				consonant_digraphs_.Add ("th", PhonotacticChecker.NoRestrictions);
@@ -264,7 +289,28 @@ public class SpeechSoundReference : MonoBehaviour
 				consonant_digraphs_.Add ("nk", PhonotacticChecker.NoRestrictions, PhonotacticChecker.CannotBeFirst);
 				consonant_digraphs_.Add ("sh", PhonotacticChecker.NoRestrictions);
 				consonant_digraphs_.Add ("wh", PhonotacticChecker.NoRestrictions, PhonotacticChecker.CannotBeLast);
+
+
+				//put them in here so they will be detected by the con digraph finder
+				//April 5
+				consonant_digraphs_.Add ("co", PhonotacticChecker.NoRestrictions);
+				consonant_digraphs_.Add ("ca", PhonotacticChecker.NoRestrictions);
+				consonant_digraphs_.Add ("ce", PhonotacticChecker.NoRestrictions);
+				consonant_digraphs_.Add ("cu", PhonotacticChecker.NoRestrictions);
+				consonant_digraphs_.Add ("ci", PhonotacticChecker.NoRestrictions);
+				consonant_digraphs_.Add ("cy", PhonotacticChecker.NoRestrictions);
+
+				consonant_digraphs_.Add ("go", PhonotacticChecker.NoRestrictions);
+				consonant_digraphs_.Add ("ga", PhonotacticChecker.NoRestrictions);
+				consonant_digraphs_.Add ("gu", PhonotacticChecker.NoRestrictions);
+				consonant_digraphs_.Add ("ge", PhonotacticChecker.NoRestrictions);
+				consonant_digraphs_.Add ("gi", PhonotacticChecker.NoRestrictions);
+				consonant_digraphs_.Add ("gy", PhonotacticChecker.NoRestrictions);
+
 		}
+
+
+
 	
 		static void AddVowelDigraphs ()
 		{
@@ -326,6 +372,24 @@ public class SpeechSoundReference : MonoBehaviour
 		
 		
 		
+		}
+
+		public static bool IsSoftConsonant(string candidate){
+
+				if (!initialized)
+						Initialize ();
+				return soft_consonants_.Contains (candidate);
+
+
+		}
+
+		public static bool IsHardConsonant(string candidate){
+
+				if (!initialized)
+						Initialize ();
+				return hard_consonants_.Contains (candidate);
+
+
 		}
 	
 		public static int IsBlendAndWhichType (string candidate)

@@ -235,10 +235,7 @@ class OpenClosedVowel : NoColour
 		{
 
 
-				if (letter == 'c' || letter == 'g') {
-						ArduinoUnityInterface.vibrateToIndicateHardOrSoftConsonant (ArduinoUnityInterface.HARD_SOUND_VIBRATION_LEVEL);
 
-				}
 
 
 				return AlternatingColours (indexInWord);
@@ -247,7 +244,6 @@ class OpenClosedVowel : NoColour
 
 		public override Color ModifyColorForSoftConsonant (Color currentColor)
 		{
-				ArduinoUnityInterface.vibrateToIndicateHardOrSoftConsonant (ArduinoUnityInterface.SOFT_SOUND_VIBRATION_LEVEL);
 				return Color.magenta;
 		}
 

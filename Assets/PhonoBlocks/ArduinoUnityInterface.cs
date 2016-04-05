@@ -25,7 +25,7 @@ public class ArduinoUnityInterface : PhonoBlocksController
 		public static readonly int HARD_SOUND_VIBRATION_LEVEL = 255;
 		public static readonly int SOFT_SOUND_VIBRATION_LEVEL = 80;
 
-
+		//change this to use diff vibration patterns
 		public static void vibrateToIndicateHardOrSoftConsonant(int vibrationLevel){
 
 				arduino.analogWrite (MOTOR_PIN, vibrationLevel);

@@ -2,6 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+
+/* creates a new instance of them each time. it is the interactive letters that stay the same.   */
+
 public abstract class LetterSoundComponent : MonoBehaviour
 {
 	
@@ -176,8 +179,9 @@ public abstract class LetterSoundComponent : MonoBehaviour
 		public void Update (UserWord context, int placeOfSelf, bool checkPhonotactics)
 		{
 				this.placeInWord = placeOfSelf;
-				if (checkPhonotactics)
+				if (checkPhonotactics) {
 						CheckPhonotactics (context, placeOfSelf);
+				}
 				ApplyColor ();
 				
 		}
@@ -269,8 +273,8 @@ public abstract class Letter : LetterSoundComponent
 
 public class Consonant : Letter
 {
-		const int HARD = SILENT + 1;
-		const int SOFT = SILENT + 2;
+		public static readonly int HARD = SILENT + 1;
+		public static readonly int SOFT = SILENT + 2;
 
 
 		//note: as of Min's study (fall 2015) we aren't distinguishing between hard and soft consonants. also note that
@@ -279,15 +283,12 @@ public class Consonant : Letter
 		//appears in a consonant digraph. so in the future you will need to change how colour pritory works if you want to incoporate this
 		public override string Sound ()
 		{
-				switch (soundType) {
-			
-				case HARD:
+				if (soundType==HARD) 
 						return "hard";
-				case SOFT:
+				if(soundType==SOFT)
 						return "soft";
-				}
+				
 				return base.Sound ();
-		
 		
 		}
 	
@@ -317,8 +318,6 @@ public class Consonant : Letter
 						color = SessionsDirector.colourCodingScheme.ModifyColorForSoftConsonant (color);
 				}
 				else color = SessionsDirector.colourCodingScheme.GetColorsForHardConsonant (placeInWord, LetterAt(0));
-		
-		
 		}
 	
 		protected override void ModifyColorBySound ()
