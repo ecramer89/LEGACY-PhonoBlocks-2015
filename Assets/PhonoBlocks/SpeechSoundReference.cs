@@ -35,6 +35,12 @@ public class SpeechSoundReference : MonoBehaviour
 		Dictionary<string, PhonotacticChecker.Phonotactics[]> rules = new Dictionary<string,PhonotacticChecker.Phonotactics[]> ();
 				HashSet<char> firstLetters = new HashSet<char>();
 
+
+		public bool IsAFirstLetter(char letter){
+			return firstLetters.Contains (letter);
+				}
+
+
 		        public void AddFirstLetters(string grapheme){
 					firstLetters.Add (grapheme [0]);
 				}
@@ -71,8 +77,10 @@ public class SpeechSoundReference : MonoBehaviour
 				}
 
 		public void Add (string letters)
-		{ AddFirstLetters (letters);
-			this.rules.Add (letters, new PhonotacticChecker.Phonotactics[]{PhonotacticChecker.NoRestrictions});
+		{   
+
+			  AddFirstLetters (letters);
+			  this.rules.Add (letters, new PhonotacticChecker.Phonotactics[]{PhonotacticChecker.NoRestrictions});
 		
 				}
 
@@ -394,10 +402,20 @@ public class SpeechSoundReference : MonoBehaviour
 						Initialize ();
 				return  vowels_.Contains (candidate+"");
 		
-		
-		
-		
+
 		}
+
+	public static bool IsFirstLetterOfConsonantDigraph(char letter){
+		return consonant_digraphs_.IsAFirstLetter(letter);
+	}
+
+	public static bool IsFirstLetterOfRControlledVowel(char letter){
+		return vowel_rs.IsAFirstLetter(letter);
+	}
+
+	public static bool IsFirstLetterOfVowelDigraph(char letter){
+		return vowel_digraphs_.IsAFirstLetter(letter);
+	}
 
 		public static bool IsY (char letter)
 		{

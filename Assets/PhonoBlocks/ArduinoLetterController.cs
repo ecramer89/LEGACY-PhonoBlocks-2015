@@ -442,21 +442,30 @@ public class ArduinoLetterController : PhonoBlocksController
 				} else {
 				 //in teacher mode. if rule is r controlled vowel, consonant or vowel digraphs, need to check if this
 				//letter is the first letter of any valid of these graphemes and flash it in that color if it is.
-				string currentRule = SessionsDirector.instance.GetCurrentRule;
-				switch(currentRule){
-				case "consonantDigraphs":
+					string currentRule = SessionsDirector.instance.GetCurrentRule;
+					if(currentRule.Equals("rControlledVowel")){
+						if(SpeechSoundReference.IsFirstLetterOfRControlledVowel(newLetter)){
+							flashColor = SessionsDirector.instance.GetCurrentColorScheme.GetColorsForRControlledVowel();
+							flash = letterIsNew;
+							timesToFlash = TIMES_TO_FLASH_CORRECT_PORTION_OF_FINAL_GRAPHEME;
+						}
+					} else if(currentRule.Equals("consonantDigraphs")){
+					if(SpeechSoundReference.IsFirstLetterOfConsonantDigraph(newLetter)){
+						flashColor = SessionsDirector.instance.GetCurrentColorScheme.GetColorsForConsonantDigraphs();
+						flash = letterIsNew;
+						timesToFlash = TIMES_TO_FLASH_CORRECT_PORTION_OF_FINAL_GRAPHEME;
+					}
+					}else if(currentRule.Equals("vowel Digraphs")){
+					if(SpeechSoundReference.IsFirstLetterOfVowelDigraph(newLetter)){
+						flashColor = SessionsDirector.instance.GetCurrentColorScheme.GetColorsForVowelDigraphs();
+						flash = letterIsNew;
+						timesToFlash = TIMES_TO_FLASH_CORRECT_PORTION_OF_FINAL_GRAPHEME;
+					}
 
-					break;
-				case "rControlledVowel":
-					break;
-				case "vowel Digraphs":
-					break;
+					}
 
 
-				}
-
-
-			}
+					}
 
 					asInteractiveLetter = letterGridController.UpdateLetter (indexOfLetterBarCell, newDefaultColor); 
 					asInteractiveLetter.LetterSoundComponentIsPartOf = lc;

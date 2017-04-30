@@ -20,6 +20,13 @@ public class SessionsDirector : MonoBehaviour
 				}
 		}
 
+
+	public ColourCodingScheme GetCurrentColorScheme{
+		get {
+						return colourCodingScheme;
+				}
+	}
+
 	public string GetCurrentRule{
 		get {
 
