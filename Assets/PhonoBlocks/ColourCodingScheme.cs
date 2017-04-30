@@ -2,7 +2,7 @@
 using System.Collections;
 
 public abstract class ColourCodingScheme: MonoBehaviour
-{
+{     
 
 		//requirement for all activities:
 		//establish colours for all generally relevant LetterSoundComponents.
@@ -15,7 +15,7 @@ public abstract class ColourCodingScheme: MonoBehaviour
 		protected Color yellow;
 		protected Color gray;
 		public string label;
-	protected Color[] errorColors;
+		protected Color[] errorColors;
 		protected int alternate = 0;
 	  
 
