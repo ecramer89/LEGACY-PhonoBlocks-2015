@@ -1,0 +1,30 @@
+2016-05-10 14:01:32Z,activity,change_letter,I,1
+2016-05-10 14:01:33Z,activity,change_letter,S,0
+2016-05-10 14:01:38Z,activity,change_letter,D,2
+2016-05-10 14:01:41Z,activity,change_letter,E,3
+2016-05-10 14:01:42Z,activity,submitted_answer,side  ,side  
+2016-05-10 14:01:55Z,activity,change_letter, ,3
+2016-05-10 14:01:57Z,activity,change_letter, ,2
+2016-05-10 14:01:59Z,activity,change_letter, ,1
+2016-05-10 14:02:00Z,activity,change_letter, ,0
+2016-05-10 14:02:09Z,activity,change_letter,W,0
+2016-05-10 14:02:10Z,activity,change_letter,I,1
+2016-05-10 14:02:12Z,activity,change_letter,D,2
+2016-05-10 14:02:13Z,activity,change_letter,E,3
+2016-05-10 14:02:15Z,activity,submitted_answer,wide  ,wide  
+2016-05-10 14:02:26Z,activity,change_letter, ,3
+2016-05-10 14:02:31Z,activity,change_letter, ,2
+2016-05-10 14:02:34Z,activity,change_letter, ,1
+2016-05-10 14:02:37Z,activity,change_letter, ,0
+2016-05-10 14:02:44Z,activity,change_letter,L,0
+2016-05-10 14:02:46Z,activity,change_letter,A,1
+2016-05-10 14:02:48Z,activity,change_letter,T,2
+2016-05-10 14:02:50Z,activity,change_letter,E,3
+2016-05-10 14:02:52Z,activity,submitted_answer,late  ,late  
+2016-05-10 14:02:53Z,activity,submitted_answer,late  ,      
+2016-05-10 14:02:56Z,activity,submitted_answer,late  ,      
+2016-05-10 14:02:57Z,activity,submitted_answer,late  ,      
+2016-05-10 14:03:05Z,activity,change_letter, ,3
+2016-05-10 14:03:07Z,activity,change_letter, ,2
+2016-05-10 14:03:10Z,activity,change_letter, ,1
+2016-05-10 14:03:12Z,activity,change_letter, ,0

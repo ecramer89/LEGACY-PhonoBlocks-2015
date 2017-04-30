@@ -21,6 +21,7 @@ public class StudentActivityController : PhonoBlocksController
 		HintController hintController;
 		ArduinoLetterController arduinoLetterController;
 		Problem currProblem;
+	UserWord targetWordAsLetterSoundComponents;
 
 		public bool StringMatchesTarget (string s)
 		{
@@ -56,6 +57,7 @@ public class StudentActivityController : PhonoBlocksController
 		public void Initialize (GameObject hintButton, ArduinoLetterController arduinoLetterController)
 		{
 				this.arduinoLetterController = arduinoLetterController;
+				arduinoLetterController.studentActivityController = this;
 				usersMostRecentChanges = new char[UserInputRouter.numOnscreenLetterSpaces];
 			
 				lockedPositionHandler = gameObject.GetComponent<LockedPositionHandler> ();
@@ -64,7 +66,7 @@ public class StudentActivityController : PhonoBlocksController
 				hintController.Initialize (hintButton);
 			
 				SetUpNextProblem ();
-
+	
 
 
 				excellent = InstructionsAudio.instance.excellent;
@@ -78,7 +80,8 @@ public class StudentActivityController : PhonoBlocksController
 				triumphantSoundForSessionDone = InstructionsAudio.instance.allDoneSession;
 		}
 
-		public void SetUpNextProblem ()
+		
+	public void SetUpNextProblem ()
 		{  
 
 				//get the next specific problem from the ProblemType class
@@ -86,19 +89,22 @@ public class StudentActivityController : PhonoBlocksController
 				hintController.Reset ();
 			
 				currProblem = ProblemsRepository.instance.GetNextProblem ();
-	
+	     
 				StudentsDataHandler.instance.RecordActivityTargetWord (currProblem.TargetWord (false));
-
-
+		        targetWordAsLetterSoundComponents = LetterSoundComponentFactoryManager.Decode (currProblem.TargetWord (true), 
+		                                                                               SessionsDirector.instance.IsSyllableDivisionMode);
 				lockedPositionHandler.ResetForNewProblem ();
 				lockedPositionHandler.RememberPositionsThatShouldNotBeChanged (currProblem.InitialWord, currProblem.TargetWord (false).Trim ()); 
 	
 				arduinoLetterController.ReplaceEachLetterWithBlank ();
 				arduinoLetterController.PlaceWordInLetterGrid (currProblem.InitialWord);
+
+
+
 				arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (false);
 				arduinoLetterController.LockAllLetters ();
-
-
+		   
+	
 				userInputRouter.RequestTurnOffImage ();
 
 				hintController.DeActivateHintButton ();
@@ -115,7 +121,15 @@ public class StudentActivityController : PhonoBlocksController
 		        
 		         
 				//
+
+
+
+
+		//april 20; added this so that we only show as many lines as there are letters in the current word.
+		arduinoLetterController.activateLinesBeneathLettersOfWord(currProblem.TargetWord(true));
+
 		}
+	
         
 		public void PlayInstructions ()
 		{
@@ -133,6 +147,10 @@ public class StudentActivityController : PhonoBlocksController
 				}
 
 
+		}
+
+		public LetterSoundComponent GetTargetLetterSoundComponentFor(int index){
+		   return targetWordAsLetterSoundComponents.GetLetterSoundComponentForIndexRelativeWholeWord (index);
 		}
 
 		bool CurrentStateOfLettersMatches (string targetLetters)
@@ -233,6 +251,17 @@ public class StudentActivityController : PhonoBlocksController
 
 		}
 
+	   public bool IsErroneous(int atPosition){
+		if (!ReferenceEquals(currProblem, null) && !ReferenceEquals(currProblem.TargetWord (true), null)) {
+			string target = currProblem.TargetWord(true);
+			if(atPosition > target.Length-1 || atPosition > usersMostRecentChanges.Length) return false;
+			char targetChar = target[atPosition];
+			char actualChar = usersMostRecentChanges[atPosition];
+			return (int)actualChar != 32 && targetChar != actualChar;
+			}
+		return false;
+	    }
+
 		bool PositionIsOutsideBoundsOfTargetWord (int wordRelativeIndex)
 		{
 				return wordRelativeIndex >= currProblem.TargetWord (true).Length; 
@@ -313,7 +342,7 @@ public class StudentActivityController : PhonoBlocksController
 		
 		}
 
-		protected bool IsSubmissionCorrect ()
+		public bool IsSubmissionCorrect ()
 		{      
 				string target = currProblem.TargetWord (true);
 

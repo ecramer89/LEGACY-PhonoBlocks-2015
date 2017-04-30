@@ -1,0 +1,39 @@
+2016-04-20 16:22:01Z,activity,change_letter,s,0
+2016-04-20 16:22:04Z,activity,change_letter,e,1
+2016-04-20 16:22:05Z,activity,change_letter,a,2
+2016-04-20 16:22:08Z,activity,change_letter,a,3
+2016-04-20 16:22:10Z,activity,change_letter,t,3
+2016-04-20 16:22:13Z,activity,submitted_answer,seat  ,seat  
+2016-04-20 16:22:20Z,activity,change_letter, ,0
+2016-04-20 16:22:21Z,activity,change_letter, ,1
+2016-04-20 16:22:22Z,activity,change_letter, ,2
+2016-04-20 16:22:23Z,activity,change_letter, ,3
+2016-04-20 16:22:26Z,activity,change_letter,c,0
+2016-04-20 16:22:30Z,activity,change_letter,o,1
+2016-04-20 16:22:32Z,activity,change_letter,a,2
+2016-04-20 16:22:34Z,activity,change_letter,t,3
+2016-04-20 16:22:36Z,activity,submitted_answer,coat  ,coat  
+2016-04-20 16:22:38Z,activity,change_letter, ,0
+2016-04-20 16:22:39Z,activity,change_letter, ,1
+2016-04-20 16:22:39Z,activity,change_letter, ,2
+2016-04-20 16:22:40Z,activity,change_letter, ,3
+2016-04-20 16:22:43Z,activity,change_letter,b,0
+2016-04-20 16:22:47Z,activity,change_letter,o,1
+2016-04-20 16:22:49Z,activity,change_letter,a,2
+2016-04-20 16:22:51Z,activity,change_letter,t,3
+2016-04-20 16:22:53Z,activity,submitted_answer,boat  ,bait  
+2016-04-20 16:23:10Z,activity,requested_hint,0,NA
+2016-04-20 16:23:18Z,activity,requested_hint,0,NA
+2016-04-20 16:23:27Z,activity,change_letter, ,0
+2016-04-20 16:23:32Z,activity,change_letter, ,1
+2016-04-20 16:23:33Z,activity,change_letter, ,2
+2016-04-20 16:23:35Z,activity,change_letter, ,0
+2016-04-20 16:23:37Z,activity,change_letter,b,0
+2016-04-20 16:23:39Z,activity,change_letter,a,1
+2016-04-20 16:23:41Z,activity,change_letter,i,2
+2016-04-20 16:23:43Z,activity,change_letter,t,3
+2016-04-20 16:23:46Z,activity,submitted_answer,bait  ,bait  
+2016-04-20 16:23:58Z,activity,change_letter, ,0
+2016-04-20 16:23:59Z,activity,change_letter, ,1
+2016-04-20 16:24:00Z,activity,change_letter, ,2
+2016-04-20 16:24:01Z,activity,change_letter, ,3

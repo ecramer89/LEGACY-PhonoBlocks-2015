@@ -1,0 +1,36 @@
+2016-05-06 11:46:53Z,activity,change_letter,P,0
+2016-05-06 11:46:57Z,activity,change_letter,A,1
+2016-05-06 11:47:01Z,activity,change_letter,T,2
+2016-05-06 11:47:05Z,activity,change_letter,H,3
+2016-05-06 11:47:06Z,activity,submitted_answer,path  ,path  
+2016-05-06 11:47:11Z,activity,change_letter, ,3
+2016-05-06 11:47:16Z,activity,change_letter, ,2
+2016-05-06 11:47:20Z,activity,change_letter, ,1
+2016-05-06 11:47:27Z,activity,change_letter, ,0
+2016-05-06 11:47:38Z,activity,change_letter,W,0
+2016-05-06 11:47:43Z,activity,change_letter,I,1
+2016-05-06 11:48:07Z,activity,change_letter,S,2
+2016-05-06 11:48:08Z,activity,change_letter,H,3
+2016-05-06 11:48:09Z,activity,submitted_answer,wish  ,wish  
+2016-05-06 11:48:12Z,activity,change_letter, ,3
+2016-05-06 11:48:13Z,activity,change_letter, ,2
+2016-05-06 11:48:17Z,activity,change_letter, ,1
+2016-05-06 11:48:23Z,activity,change_letter, ,0
+2016-05-06 11:48:39Z,activity,change_letter,L,0
+2016-05-06 11:48:52Z,activity,change_letter,U,1
+2016-05-06 11:48:55Z,activity,change_letter,N,2
+2016-05-06 11:48:59Z,activity,change_letter,S,3
+2016-05-06 11:49:06Z,activity,change_letter,H,4
+2016-05-06 11:49:07Z,activity,submitted_answer,lunsh ,lunch 
+2016-05-06 11:49:16Z,activity,requested_hint,0,NA
+2016-05-06 11:49:16Z,activity,requested_hint,0,NA
+2016-05-06 11:49:30Z,activity,change_letter, ,3
+2016-05-06 11:49:41Z,activity,change_letter,C,3
+2016-05-06 11:49:43Z,activity,submitted_answer,lunch ,lunch 
+2016-05-06 11:49:52Z,activity,change_letter, ,0
+2016-05-06 11:50:03Z,activity,change_letter,E,1
+2016-05-06 11:50:04Z,activity,change_letter,U,1
+2016-05-06 11:50:06Z,activity,change_letter, ,3
+2016-05-06 11:50:07Z,activity,change_letter, ,2
+2016-05-06 11:50:09Z,activity,change_letter, ,1
+2016-05-06 11:50:10Z,activity,change_letter, ,4

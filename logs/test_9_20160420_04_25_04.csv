@@ -1,0 +1,20 @@
+2016-04-20 16:25:27Z,activity,change_letter,s,0
+2016-04-20 16:25:28Z,activity,change_letter,s,1
+2016-04-20 16:25:31Z,activity,change_letter,e,1
+2016-04-20 16:25:32Z,activity,change_letter,a,2
+2016-04-20 16:25:34Z,activity,change_letter,t,3
+2016-04-20 16:25:36Z,activity,submitted_answer,seat  ,seat  
+2016-04-20 16:25:41Z,activity,change_letter, ,0
+2016-04-20 16:25:42Z,activity,change_letter, ,1
+2016-04-20 16:25:42Z,activity,change_letter, ,2
+2016-04-20 16:25:43Z,activity,change_letter, ,3
+2016-04-20 16:25:49Z,activity,change_letter,c,0
+2016-04-20 16:25:51Z,activity,change_letter,g,3
+2016-04-20 16:25:53Z,activity,submitted_answer,c  g  ,coat  
+2016-04-20 16:26:02Z,activity,requested_hint,0,NA
+2016-04-20 16:26:10Z,activity,change_letter,c,0
+2016-04-20 16:26:12Z,activity,change_letter,o,1
+2016-04-20 16:26:14Z,activity,change_letter,a,2
+2016-04-20 16:26:15Z,activity,change_letter,t,3
+2016-04-20 16:26:17Z,activity,submitted_answer,coat  ,coat  
+2016-04-20 16:26:24Z,activity,change_letter, ,0

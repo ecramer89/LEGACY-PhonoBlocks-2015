@@ -15,7 +15,9 @@ public abstract class ColourCodingScheme: MonoBehaviour
 		protected Color yellow;
 		protected Color gray;
 		public string label;
+	protected Color[] errorColors;
 		protected int alternate = 0;
+	  
 
 		public ColourCodingScheme ()
 		{
@@ -42,6 +44,8 @@ public abstract class ColourCodingScheme: MonoBehaviour
 				gray.r = (float)(gray.r * 1.2);
 				gray.g = gray.r;
 				gray.b = gray.r;
+
+		        errorColors = new Color[]{gray, Color.white};
 		}
 
 		public virtual Color GetColorsForOff ()
@@ -49,6 +53,11 @@ public abstract class ColourCodingScheme: MonoBehaviour
 				return gray;
 		
 		}
+
+	public virtual Color[] GetErrorColors(){
+		return errorColors;
+		}
+
 
 		public virtual Color GetColorsForWholeWord ()
 		{
@@ -155,6 +164,10 @@ class ConsonantBlends : NoColour
 
 		}
 
+	public override Color GetColorsForHardConsonant(int indexInWord=0){
+		return blue;
+		}
+
 		public override Color GetColorsForConsonantDigraphs ()
 		{
 				return green;
@@ -235,8 +248,6 @@ class VowelInfluenceERule : NoColour
     }
 
    
-
-
 
     public override Color GetColourForSilent (char letter)
 		{

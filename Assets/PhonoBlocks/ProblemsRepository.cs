@@ -87,8 +87,8 @@ public class ProblemsRepository : MonoBehaviour
 
 
 		new string[][]{
-			new string[]{"bad","dad","tin"}, //target words
-			new string[]{"b d","d d","t n"} //initial versions of target words
+			new string[]{"bet","dad","tin"}, //target words
+			new string[]{"b t","d d","t n"} //initial versions of target words
 		},
 
 
@@ -133,6 +133,12 @@ public class ProblemsRepository : MonoBehaviour
 			new string[]{"t","b  t","p  d"}
 		},
 
+
+		new string[][]{
+			new string[]{"seat","coat","bait"},
+			new string[]{"s  t","c  t","b  t"}
+		}, 
+
 		new string[][]{
 			new string[]{"car","jar","fir"},
 			new string[]{"c","j","f"}
@@ -141,15 +147,7 @@ public class ProblemsRepository : MonoBehaviour
 		new string[][]{
 			new string[]{"hurt","horn","part"},
 			new string[]{"h  t","h  n","p  t"}
-		},
-
-
-		new string[][]{
-			new string[]{"over","water","creepy"},
-			new string[]{"","",""}
 		}
-
-	
 
 
 	};
@@ -213,16 +211,18 @@ public class ProblemsRepository : MonoBehaviour
 						colourSchemeForSession = new VowelInfluenceERule ();
 						return;
 				case 8:
+		        case 9:
 
 						colourSchemeForSession = new VowelDigraphs ();
 						return;
-				case 9:
 				case 10:
+				case 11:
 
 						colourSchemeForSession = new RControlledVowel ();
 						return;
-				case 11:
-						colourSchemeForSession = new SyllableDivision ();
+				//case 11:
+						//colourSchemeForSession = new SyllableDivision ();
+
 						return;
 				default:
 						colourSchemeForSession = new NoColour ();

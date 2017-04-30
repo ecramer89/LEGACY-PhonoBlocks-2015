@@ -69,6 +69,30 @@ public class LetterGridController : PhonoBlocksController
 	
 		}
 
+
+
+		//added in april; sets numVisibleLetterLines' UITexture components to active, starting from the leftmost cell; sets the rest to be inactive.
+		//call when you initialize a new word. argument should be the number of letters in the word.
+		public void setNumVisibleLetterLines (int numVisibleLetterLines)
+		{
+				int i = 0;
+				for (; i<letterUnderlinesGrid.transform.childCount; i++) {
+
+						GameObject cell = GetCell (i, letterUnderlinesGrid);
+						UITexture lineImage = cell.GetComponent<UITexture> ();
+
+
+						if (i < numVisibleLetterLines) {
+								lineImage.enabled = true;
+
+						} else {
+								lineImage.enabled = false;
+		
+						}
+				}
+	
+		}
+
 		public void RemoveImageOfLetter (int position)
 		{
 
@@ -103,7 +127,7 @@ public class LetterGridController : PhonoBlocksController
 								newLetter.GetComponent<InteractiveLetter> ().SelectHighlight = letterHighlight;
 						}
 						if (letterUnderlinesGrid) {
-								CreateLetterUnderlineCell ();
+								CreateLetterUnderlineCell (i);
 						}
 				}
 				RepositionGrids ();
@@ -161,13 +185,14 @@ public class LetterGridController : PhonoBlocksController
 
 		}
 
-		public void CreateLetterUnderlineCell ()
+		public void CreateLetterUnderlineCell (int index)
 		{
 	
 				UITexture underline = NGUITools.AddChild<UITexture> (letterUnderlinesGrid);
 				underline.transform.localScale = new Vector2 (selectW, selectH);
 				underline = SetShaders (underline);
 				underline.mainTexture = CopyAndScaleTexture (selectW, selectH, LetterImageTable.LetterUnderlineImage);
+		        underline.gameObject.name = "" + index;
 				
 		}
 

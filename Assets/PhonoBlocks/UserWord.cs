@@ -101,6 +101,16 @@ public class UserWord : PhonoBlocksController, IEnumerable
 
 		}
 
+	public LetterSoundComponent GetLetterSoundComponentForIndexRelativeWholeWord(int index){
+		int letterCount = 0;
+		foreach(LetterSoundComponent lc in this){
+			letterCount+=lc.Length;
+			if(index < letterCount) return lc;
+		}
+		return null;
+
+	}
+
 
 
 

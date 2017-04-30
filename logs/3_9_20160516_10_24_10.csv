@@ -1,0 +1,28 @@
+2016-05-16 10:24:39Z,activity,change_letter,S,0
+2016-05-16 10:24:41Z,activity,change_letter,E,1
+2016-05-16 10:24:42Z,activity,change_letter,A,2
+2016-05-16 10:24:43Z,activity,change_letter,T,3
+2016-05-16 10:24:45Z,activity,submitted_answer,seat  ,seat  
+2016-05-16 10:24:48Z,activity,change_letter, ,3
+2016-05-16 10:24:52Z,activity,change_letter, ,0
+2016-05-16 10:24:53Z,activity,change_letter, ,2
+2016-05-16 10:24:55Z,activity,change_letter, ,1
+2016-05-16 10:25:04Z,activity,change_letter,C,0
+2016-05-16 10:25:06Z,activity,change_letter,O,1
+2016-05-16 10:25:10Z,activity,change_letter,A,2
+2016-05-16 10:25:11Z,activity,submitted_answer,coa   ,coat  
+2016-05-16 10:25:11Z,activity,change_letter,T,3
+2016-05-16 10:25:29Z,activity,submitted_answer,coat  ,coat  
+2016-05-16 10:25:44Z,activity,change_letter, ,3
+2016-05-16 10:25:46Z,activity,change_letter, ,2
+2016-05-16 10:25:48Z,activity,change_letter, ,1
+2016-05-16 10:25:49Z,activity,change_letter, ,0
+2016-05-16 10:25:55Z,activity,change_letter,B,0
+2016-05-16 10:26:02Z,activity,change_letter,A,1
+2016-05-16 10:26:03Z,activity,change_letter,I,2
+2016-05-16 10:26:30Z,activity,change_letter,T,3
+2016-05-16 10:26:32Z,activity,submitted_answer,bait  ,bait  
+2016-05-16 10:26:37Z,activity,change_letter, ,3
+2016-05-16 10:26:39Z,activity,change_letter, ,2
+2016-05-16 10:26:42Z,activity,change_letter, ,0
+2016-05-16 10:26:43Z,activity,change_letter, ,1

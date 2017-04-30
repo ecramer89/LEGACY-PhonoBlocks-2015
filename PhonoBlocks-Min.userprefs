@@ -1,27 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PhonoBlocks\SessionButton.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PhonoBlocks\SessionsDirector.cs">
     <Files>
-      <File FileName="Assets\PhonoBlocks\SessionButton.cs" Line="16" Column="3" />
-      <File FileName="Assets\PhonoBlocks\UserInputRouter.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\LetterSoundComponentFactoryHandler.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\ColourCodingScheme.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\StudentActivityController.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\AudioSourceController.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\ArduinoLetterController.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\LetterGridController.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\ProblemsRepository.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\Problem.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\InteractiveLetter.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\LetterSoundComponent.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\ArduinoUnityInterface.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\SpeechSoundReference.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\WordHistoryController.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\InputField.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\HintController.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\ContentButton.cs" Line="1" Column="1" />
-      <File FileName="Assets\PhonoBlocks\StudentsDataHandler.cs" Line="49" Column="3" />
-      <File FileName="Assets\PhonoBlocks\SessionsDirector.cs" Line="1" Column="1" />
+      <File FileName="Assets\PhonoBlocks\SessionsDirector.cs" Line="31" Column="31" />
+      <File FileName="Assets\PhonoBlocks\ColourCodingScheme.cs" Line="163" Column="14" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

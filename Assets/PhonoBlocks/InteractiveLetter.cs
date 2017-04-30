@@ -42,7 +42,7 @@ public class InteractiveLetter : PhonoBlocksController
 		public static event PressAction LetterPressed;
 
 		Color lockedColor = Color.clear;
-		Color flashOff = Color.black;
+		Color off = Color.black;
 		UITexture selectHighlight;
 		Color selectColor = Color.clear;
 
@@ -64,8 +64,8 @@ public class InteractiveLetter : PhonoBlocksController
 		BoxCollider trigger;
 		LetterSoundComponent lc;
 		int flashCounter = 0;
-		int timesToFlash = 5;
-		float secondsDelayBetweenFlashes = .2f;
+		const int defaultTimesToFlash = 1;
+		float secondsDelayBetweenFlashes = .5f;
 		const int NOT_AN_ARDUINO_CONTROLLED_LETTER = -1;
 		int idxAsArduinoControlledLetter = NOT_AN_ARDUINO_CONTROLLED_LETTER; //i.e., if it's a word history controlled letter. you have to "opt in" to be an arduino controlled letter.
 
@@ -151,31 +151,36 @@ public class InteractiveLetter : PhonoBlocksController
 				return letter [0] == ' ';
 		}
 
-		public IEnumerator Flash ()
-		{
-
-				int mod_To_end_on = (timesToFlash % 2 == 0 ? 1 : 0);
-	
-				while (flashCounter<timesToFlash) {
+	public IEnumerator Flash(Color flashColor, int timesToFlash = defaultTimesToFlash){
+		timesToFlash *= 2;
+		int default_color_mod = ((timesToFlash-1) % 2);
 		
-						if (flashCounter % 2 == mod_To_end_on) {
-								UpdateDisplayColour (defaultColour);
-							
+		while (flashCounter<timesToFlash) {
+			
+			if (flashCounter % 2 == default_color_mod) {
+				UpdateDisplayColour (defaultColour);
+			} else {
+				UpdateDisplayColour (flashColor);
+			}
+			flashCounter++;
+			
+			yield return new WaitForSeconds (secondsDelayBetweenFlashes);
+		}
+		
+		flashCounter = 0;
 
-						} else {
-								UpdateDisplayColour (flashOff);
-								
+		}
 
-						}
-						flashCounter++;
-					
-						yield return new WaitForSeconds (secondsDelayBetweenFlashes);
-				}
+	public void StartFlash (Color flashOff, int timesToFlash = defaultTimesToFlash)
+	{      
+		IEnumerator coroutine = Flash (flashOff, timesToFlash);
+		StartCoroutine (coroutine);
+		
+	}
+		public void StartFlash (int timesToFlash = defaultTimesToFlash)
+		{      
 
-				flashCounter = 0;
-				
-
-
+				StartFlash (off, timesToFlash);
 
 		}
 

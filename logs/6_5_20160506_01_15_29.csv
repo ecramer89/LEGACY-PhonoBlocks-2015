@@ -1,0 +1,45 @@
+2016-05-06 13:16:01Z,activity,change_letter,P,0
+2016-05-06 13:16:02Z,activity,change_letter,A,1
+2016-05-06 13:16:11Z,activity,change_letter,T,2
+2016-05-06 13:16:13Z,activity,change_letter,H,3
+2016-05-06 13:16:14Z,activity,submitted_answer,path  ,path  
+2016-05-06 13:16:33Z,activity,change_letter, ,0
+2016-05-06 13:16:35Z,activity,change_letter, ,1
+2016-05-06 13:16:38Z,activity,change_letter, ,2
+2016-05-06 13:16:39Z,activity,change_letter, ,3
+2016-05-06 13:16:54Z,activity,change_letter,W,0
+2016-05-06 13:17:01Z,activity,change_letter,I,1
+2016-05-06 13:17:09Z,activity,change_letter, ,1
+2016-05-06 13:17:11Z,activity,change_letter,I,1
+2016-05-06 13:17:15Z,activity,change_letter, ,1
+2016-05-06 13:17:16Z,activity,change_letter,I,1
+2016-05-06 13:17:18Z,activity,change_letter, ,0
+2016-05-06 13:17:19Z,activity,change_letter,W,0
+2016-05-06 13:17:40Z,activity,change_letter,S,2
+2016-05-06 13:17:42Z,activity,submitted_answer,wis   ,wish  
+2016-05-06 13:17:42Z,activity,change_letter,H,3
+2016-05-06 13:18:01Z,activity,requested_hint,0,NA
+2016-05-06 13:18:09Z,activity,submitted_answer,wish  ,wish  
+2016-05-06 13:18:18Z,activity,change_letter, ,3
+2016-05-06 13:18:22Z,activity,change_letter, ,2
+2016-05-06 13:18:24Z,activity,change_letter, ,1
+2016-05-06 13:18:34Z,activity,change_letter, ,0
+2016-05-06 13:18:47Z,activity,change_letter,S,3
+2016-05-06 13:18:54Z,activity,change_letter,H,4
+2016-05-06 13:18:59Z,activity,change_letter,L,0
+2016-05-06 13:19:04Z,activity,change_letter,U,1
+2016-05-06 13:19:05Z,activity,change_letter,N,2
+2016-05-06 13:19:13Z,activity,submitted_answer,lunsh ,lunch 
+2016-05-06 13:19:16Z,activity,requested_hint,0,NA
+2016-05-06 13:19:20Z,activity,change_letter,H,2
+2016-05-06 13:19:22Z,activity,change_letter,N,2
+2016-05-06 13:19:26Z,activity,change_letter, ,4
+2016-05-06 13:19:27Z,activity,change_letter, ,3
+2016-05-06 13:19:33Z,activity,change_letter,H,4
+2016-05-06 13:19:37Z,activity,change_letter,C,3
+2016-05-06 13:19:38Z,activity,submitted_answer,lunch ,lunch 
+2016-05-06 13:20:08Z,activity,change_letter, ,4
+2016-05-06 13:20:09Z,activity,change_letter, ,3
+2016-05-06 13:20:11Z,activity,change_letter, ,2
+2016-05-06 13:20:14Z,activity,change_letter, ,1
+2016-05-06 13:20:15Z,activity,change_letter, ,0

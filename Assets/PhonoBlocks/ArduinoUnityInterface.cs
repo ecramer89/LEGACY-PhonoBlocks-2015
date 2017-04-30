@@ -126,8 +126,6 @@ public class ArduinoUnityInterface : PhonoBlocksController
 		{
 				communicationWithArduinoAchieved = true;
 				timeOfLastCheck = Time.time;
-				if (userInputRouter != null && SessionsDirector.DelegateControlToStudentActivityController)
-						userInputRouter.TellUserToPlaceInitialLetters ();
 				for (int i=0; i<ledOutputPins.Length; i++)
 						ShutOffAt (i);
 
@@ -365,13 +363,13 @@ public class ArduinoUnityInterface : PhonoBlocksController
 						letter = 'Q'; 
 
 
-				if (stateOfPlatformInputPins [position] [3] == Arduino.LOW && stateOfPlatformInputPins [position] [1] == Arduino.LOW) 
+				if (stateOfPlatformInputPins [position] [2] == Arduino.LOW && stateOfPlatformInputPins [position] [1] == Arduino.LOW) 
 						letter = 'Z';  
 
 
 				//Detect the triple pins 
 		 
-				if (stateOfPlatformInputPins [position] [0] == Arduino.LOW && stateOfPlatformInputPins [position] [2] == Arduino.LOW && stateOfPlatformInputPins [position] [3] == Arduino.LOW) 
+				if (stateOfPlatformInputPins [position] [0] == Arduino.LOW && stateOfPlatformInputPins [position] [2] == Arduino.LOW && stateOfPlatformInputPins [position] [4] == Arduino.LOW) 
 						letter = 'K'; 
 				if (stateOfPlatformInputPins [position] [0] == Arduino.LOW && stateOfPlatformInputPins [position] [4] == Arduino.LOW && stateOfPlatformInputPins [position] [5] == Arduino.LOW) 
 						letter = 'L';

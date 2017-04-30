@@ -28,6 +28,12 @@ public class SessionsDirector : MonoBehaviour
 
 		}
 
+	public bool IsConsonantBlends {
+		get {
+			return colourCodingScheme.label.Equals ("Blends");
+				}
+	}
+
 		public INTERFACE_TYPE INTERFACE;
 
  
@@ -162,6 +168,7 @@ public class SessionsDirector : MonoBehaviour
 
 		}
 
+	 //1. 
 		public void SetContentForTeacherMode (ProblemsRepository.ProblemType problemType)
 		{
 

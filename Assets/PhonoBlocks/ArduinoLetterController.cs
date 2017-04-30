@@ -6,8 +6,10 @@ using System;
 using System.Collections;
 
 public class ArduinoLetterController : PhonoBlocksController
-{
-
+{       public int TIMES_TO_FLASH_ERRORNEOUS_LETTER = 1;
+	    public int TIMES_TO_FLASH_CORRECT_PORTION_OF_FINAL_GRAPHEME = 1;
+		public int TIMES_TO_FLASH_ON_COMPLETE_TARGET_GRAPHEME = 3;
+		public StudentActivityController studentActivityController;
 		public String EMPTY_USER_WORD;
 		List<InteractiveLetter> lettersToFlash = new List<InteractiveLetter> ();
 		private StringBuilder currUserControlledLettersAsStringBuilder = new StringBuilder (); //maintains this along with the letter bar so that it's easy to quickly update and get the new colours.
@@ -32,6 +34,7 @@ public class ArduinoLetterController : PhonoBlocksController
 		LetterGridController letterGrid;
 		ArduinoUnityInterface tangibleLetters;
 		public GameObject letterGridControllerGO;
+	    string stringRepresentationOfPrevious;
 
 		public int StartingIndex {
 				get {
@@ -231,6 +234,14 @@ public class ArduinoLetterController : PhonoBlocksController
 				 
 		}
 
+		public void activateLinesBeneathLettersOfWord (string word)
+		{
+		        
+				letterGrid.setNumVisibleLetterLines (word.Length);
+
+		        
+		}
+
 		//just updates the display images of the cells
 		public void DisplayWordInLetterGrid (string word)
 		{
@@ -279,10 +290,17 @@ public class ArduinoLetterController : PhonoBlocksController
 		{
 
 				//replace character that was at l with new character
+				stringRepresentationOfPrevious = stringRepresentation.ToString ();
 				stringRepresentation.Remove (position, 1);
 				stringRepresentation.Insert (position, letter);
 
 		}
+
+	public bool ChangedFromPrevious(int position){
+		return stringRepresentationOfPrevious!= null && CurrentUserControlledLettersAsString [position] != stringRepresentationOfPrevious [position];
+	}
+
+	   
 
 		public bool IsBlank (int indexInLetterGrid)
 		{
@@ -350,14 +368,14 @@ public class ArduinoLetterController : PhonoBlocksController
 								if (p is LetterSoundComposite) {
 										LetterSoundComposite l = (LetterSoundComposite)p;
 										foreach (LetterSoundComponent lc in l.Children) {
-
+						                //the individual letters that compose a multi letter unit, for example the "b" in blend "bl"
 												
-												UpdateInterfaceLetters (lc, letterGridController, indexOfLetterBarCell, flash);
+												UpdateInterfaceLetters (lc, letterGridController, indexOfLetterBarCell, l);
 												indexOfLetterBarCell++;
 										}
 								} else {
 									
-										UpdateInterfaceLetters (p, letterGridController, indexOfLetterBarCell, flash);
+										UpdateInterfaceLetters (p, letterGridController, indexOfLetterBarCell);
 							
 										indexOfLetterBarCell++;
 								}
@@ -366,46 +384,72 @@ public class ArduinoLetterController : PhonoBlocksController
 				}
 		}
 
-
-
-    bool IsVowel(char letter)
-    {
-        return letter == 'a' || letter == 'e' || letter == 'o' || letter == 'u' || letter == 'i';
-
-
-    }
-
-
-		void UpdateInterfaceLetters (LetterSoundComponent lc, LetterGridController letterGridController, int indexOfLetterBarCell, bool flash)
+		bool IsVowel (char letter)
 		{
-				
-				InteractiveLetter i;
+				return letter == 'a' || letter == 'e' || letter == 'o' || letter == 'u' || letter == 'i';
+
+
+		}
+
+		void UpdateInterfaceLetters (LetterSoundComponent lc, LetterGridController letterGridController, int indexOfLetterBarCell, LetterSoundComposite parent = null)
+	{           bool flash = false;
+		        bool letterIsNew = ChangedFromPrevious (indexOfLetterBarCell);
+		        bool isPartOfCompletedGrapheme = !ReferenceEquals (parent, null);
+				char newLetter = lc.AsString [0];
+				int timesToFlash=0;
+				InteractiveLetter asInteractiveLetter;
+
 				if (SessionsDirector.instance.IsSyllableDivisionMode) {
-						i = letterGridController.GetInteractiveLetter (indexOfLetterBarCell);
-						i.UpdateDefaultColour (SessionsDirector.colourCodingScheme.GetColorsForWholeWord ());
-						i.SetSelectColour (lc.GetColour ());
-
+						asInteractiveLetter = letterGridController.GetInteractiveLetter (indexOfLetterBarCell);
+						asInteractiveLetter.UpdateDefaultColour (SessionsDirector.colourCodingScheme.GetColorsForWholeWord ());
+						asInteractiveLetter.SetSelectColour (lc.GetColour ());
 				} else {
-						i = letterGridController.UpdateLetter (indexOfLetterBarCell, lc.GetColour ());
+		                //need to get the error color if the individual letter is incorrect and it's practice mode.
+					Color newDefaultColor = lc.GetColour ();
+					Color flashColor = Color.white;
 
-				}
+					if(SessionsDirector.DelegateControlToStudentActivityController){
+				  		if(studentActivityController.IsErroneous(indexOfLetterBarCell)){
+		             		Color[] errorColors = SessionsDirector.colourCodingScheme.GetErrorColors();
+						 	newDefaultColor = errorColors[0];
+							flashColor = errorColors[1];
+							flash = letterIsNew;
+						    timesToFlash=TIMES_TO_FLASH_ERRORNEOUS_LETTER;
+						} else {
+					     //correct letter; see whether it's part of a multi-letter unit.
+					      LetterSoundComponent targetComponent = 
+						 studentActivityController.GetTargetLetterSoundComponentFor(indexOfLetterBarCell);
 
-        char letter = lc.AsString[0];
-        bool flashInteractiveLetter = SessionsDirector.instance.IsMagicERule && IsVowel(lc.AsString[0]);
-            flashInteractiveLetter&= flash && i.HasLetterOrSoundChanged (lc) && lc.GetColour () == i.CurrentColor ();
-		       		
+					     if( //did student place all the letters needed to instantiate the spelling rule they are practiscing?
+						   (isPartOfCompletedGrapheme && targetComponent.AsString.Equals(parent.AsString)) || 
+					       SessionsDirector.instance.IsMagicERule && studentActivityController.IsSubmissionCorrect()) {
+						    flash = true;
+							timesToFlash = TIMES_TO_FLASH_ON_COMPLETE_TARGET_GRAPHEME;
+					    } else {
+					      if(!ReferenceEquals(targetComponent, null)){
+					      if(targetComponent.LetterAt(targetComponent.Length-1) == newLetter){
+								newDefaultColor = targetComponent.GetColour();
+							} else {
+								if(!SessionsDirector.instance.IsConsonantBlends){
+									flashColor = targetComponent.GetColour();
+									timesToFlash=TIMES_TO_FLASH_CORRECT_PORTION_OF_FINAL_GRAPHEME;
+									flash=letterIsNew;
+								}
+						 }
+						}
+					}
+					}
+				}    
 
-
-
-				i.LetterSoundComponentIsPartOf = lc;
+					asInteractiveLetter = letterGridController.UpdateLetter (indexOfLetterBarCell, newDefaultColor); 
+					asInteractiveLetter.LetterSoundComponentIsPartOf = lc;
+		           
 		
-				if (flashInteractiveLetter) {
-						i.StartCoroutine ("Flash");
-			
+			    if (flash) {
+						asInteractiveLetter.StartFlash(flashColor, timesToFlash);
 				}
 
-
-			
+			}
 						
 		}
 
