@@ -20,6 +20,14 @@ public class SessionsDirector : MonoBehaviour
 				}
 		}
 
+	public string GetCurrentRule{
+		get {
+
+			return colourCodingScheme.label;
+				}
+
+	}
+
 		public bool IsSyllableDivisionMode {
 				get {
 						return colourCodingScheme.label.Equals ("syllableDivision");

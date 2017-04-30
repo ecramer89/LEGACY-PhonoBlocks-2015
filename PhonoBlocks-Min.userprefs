@@ -1,9 +1,11 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PhonoBlocks\SessionsDirector.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PhonoBlocks\SpeechSoundReference.cs">
     <Files>
-      <File FileName="Assets\PhonoBlocks\SessionsDirector.cs" Line="31" Column="31" />
-      <File FileName="Assets\PhonoBlocks\ColourCodingScheme.cs" Line="163" Column="14" />
+      <File FileName="Assets\PhonoBlocks\ArduinoLetterController.cs" Line="448" Column="6" />
+      <File FileName="Assets\PhonoBlocks\SessionsDirector.cs" Line="24" Column="8" />
+      <File FileName="Assets\PhonoBlocks\ColourCodingScheme.cs" Line="328" Column="2" />
+      <File FileName="Assets\PhonoBlocks\SpeechSoundReference.cs" Line="85" Column="6" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

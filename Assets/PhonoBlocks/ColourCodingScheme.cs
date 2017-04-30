@@ -323,10 +323,12 @@ class RControlledVowel: VowelDigraphs
 //changes to parent
 //colour vowel digraphs orange
 class VowelDigraphs : NoColour
+
 {
+
 		public VowelDigraphs () : base()
 		{
-				label = "vowel Digraphs";
+		label = "vowel Digraphs";
 		}
 
 		public override Color GetColorsForVowelDigraphs ()

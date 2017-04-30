@@ -12,16 +12,16 @@ public class SpeechSoundReference : MonoBehaviour
 		public static readonly int MIDDLE_BLEND = 0;
 		public static readonly int FINAL_BLEND = 2;
 		public static readonly int INITIAL_BLEND = 3;
-		static SpeechSoundLookup<char> vowels_ = new SpeechSoundLookup<char> ();
-		static SpeechSoundLookup<char> consonants_ = new SpeechSoundLookup<char> ();
-		static SpeechSoundLookup<string> consonant_digraphs_ = new SpeechSoundLookup<string> ();
-		static SpeechSoundLookup<string> vowel_rs = new SpeechSoundLookup<string> ();
-		static SpeechSoundLookup<string> vowel_digraphs_ = new SpeechSoundLookup<string> ();
-		static SpeechSoundLookup<string> stable_syllables_ = new SpeechSoundLookup<string> ();
-		static SpeechSoundLookup<string> special_units = new SpeechSoundLookup<string> ();
-		static SpeechSoundLookup<string> initial_blends_ = new SpeechSoundLookup<string> ();
-		static SpeechSoundLookup<string> middle_blends_ = new SpeechSoundLookup<string> ();
-		static SpeechSoundLookup<string> final_blends_ = new SpeechSoundLookup<string> ();
+	   static SpeechSoundLookup vowels_ = new SpeechSoundLookup ();
+	   static SpeechSoundLookup consonants_ = new SpeechSoundLookup();
+		static SpeechSoundLookup consonant_digraphs_ = new SpeechSoundLookup ();
+		static SpeechSoundLookup vowel_rs = new SpeechSoundLookup ();
+		static SpeechSoundLookup vowel_digraphs_ = new SpeechSoundLookup ();
+		static SpeechSoundLookup stable_syllables_ = new SpeechSoundLookup ();
+		static SpeechSoundLookup special_units = new SpeechSoundLookup();
+		static SpeechSoundLookup initial_blends_ = new SpeechSoundLookup ();
+		static SpeechSoundLookup middle_blends_ = new SpeechSoundLookup();
+		static SpeechSoundLookup final_blends_ = new SpeechSoundLookup ();
 		static PhonotacticChecker.Phonotactics[] blankRules = new PhonotacticChecker.Phonotactics[]{PhonotacticChecker.NoRestrictions};
 
 		public static PhonotacticChecker.Phonotactics[] BlankRules ()
@@ -29,54 +29,61 @@ public class SpeechSoundReference : MonoBehaviour
 				return blankRules;
 		}
 
-		public class SpeechSoundLookup<Type>
+	public class SpeechSoundLookup
 		{
 
-				Dictionary<Type, PhonotacticChecker.Phonotactics[]> rules = new Dictionary<Type,PhonotacticChecker.Phonotactics[]> ();
+		Dictionary<string, PhonotacticChecker.Phonotactics[]> rules = new Dictionary<string,PhonotacticChecker.Phonotactics[]> ();
+				HashSet<char> firstLetters = new HashSet<char>();
 
-				public void Add (Type letters, PhonotacticChecker.Phonotactics rule)
-				{
+		        public void AddFirstLetters(string grapheme){
+					firstLetters.Add (grapheme [0]);
+				}
+
+			public void Add (string letters, PhonotacticChecker.Phonotactics rule)
+		{        AddFirstLetters (letters);
 						this.rules.Add (letters, new PhonotacticChecker.Phonotactics[]{rule});
-
-
 
 				}
 
-				public void Add (Type letters, PhonotacticChecker.Phonotactics a, PhonotacticChecker.Phonotactics b)
-				{
+		public void Add (char letter, PhonotacticChecker.Phonotactics rule)
+		{        
+			this.rules.Add (letter+"", new PhonotacticChecker.Phonotactics[]{rule});
+			
+		}
+		
+		public void Add (string letters, PhonotacticChecker.Phonotactics a, PhonotacticChecker.Phonotactics b)
+		{		 AddFirstLetters (letters);
 						this.rules.Add (letters, new PhonotacticChecker.Phonotactics[]{a,b});
 		
 				}
 
-				public void Add (Type letters, PhonotacticChecker.Phonotactics a, PhonotacticChecker.Phonotactics b, PhonotacticChecker.Phonotactics c)
-				{
+		public void Add (string letters, PhonotacticChecker.Phonotactics a, PhonotacticChecker.Phonotactics b, PhonotacticChecker.Phonotactics c)
+		{ AddFirstLetters (letters);
 						this.rules.Add (letters, new PhonotacticChecker.Phonotactics[]{a,b,});
 			
 				}
 
-				public void Add (Type letters, PhonotacticChecker.Phonotactics[] rules)
-				{
-						this.rules.Add (letters, rules);
+		public void Add (string letters, PhonotacticChecker.Phonotactics[] rules)
+		{ AddFirstLetters (letters);
+			this.rules.Add (letters, rules);
 			
 		
 				}
 
-				public void Add (Type letters)
-				{
-						this.rules.Add (letters, new PhonotacticChecker.Phonotactics[]{PhonotacticChecker.NoRestrictions});
-			
-			
-			
+		public void Add (string letters)
+		{ AddFirstLetters (letters);
+			this.rules.Add (letters, new PhonotacticChecker.Phonotactics[]{PhonotacticChecker.NoRestrictions});
+		
 				}
 
-				public bool Contains (Type letters)
+		public bool Contains (string letters)
 				{
 
 						return rules.ContainsKey (letters);
 
 				}
 
-				public PhonotacticChecker.Phonotactics[] TryGetValue (Type key)
+				public PhonotacticChecker.Phonotactics[] TryGetValue (string key)
 				{
 						PhonotacticChecker.Phonotactics[] val = null;
 						rules.TryGetValue (key, out val);
@@ -84,7 +91,7 @@ public class SpeechSoundReference : MonoBehaviour
 
 				}
 
-				public Dictionary<Type,PhonotacticChecker.Phonotactics[]>.KeyCollection Units ()
+		public Dictionary<string,PhonotacticChecker.Phonotactics[]>.KeyCollection Units ()
 				{
 						return rules.Keys;
 
@@ -98,15 +105,15 @@ public class SpeechSoundReference : MonoBehaviour
 		public static PhonotacticChecker.Phonotactics[] GetRulesForConsonant (char consonant)
 		{
 
-				return consonants_.TryGetValue (consonant);
+				return consonants_.TryGetValue (consonant+"");
 
 		}
 
 		public static PhonotacticChecker.Phonotactics[] GetRulesForVowel (char vowel)
 		{
 				if (IsY (vowel))
-						return consonants_.TryGetValue (vowel);
-				return vowels_.TryGetValue (vowel);
+						return consonants_.TryGetValue (vowel+"");
+				return vowels_.TryGetValue (vowel+"");
 		
 		}
 
@@ -205,11 +212,11 @@ public class SpeechSoundReference : MonoBehaviour
 				consonants_.Add ('m', PhonotacticChecker.NoRestrictions);
 				consonants_.Add ('n', PhonotacticChecker.NoRestrictions);
 				consonants_.Add ('p', PhonotacticChecker.NoRestrictions);
-				consonants_.Add ('q', PhonotacticChecker.Q, PhonotacticChecker.NoRestrictions);
+				consonants_.Add ('q', PhonotacticChecker.NoRestrictions);
 				consonants_.Add ('r', PhonotacticChecker.NoRestrictions);
 				consonants_.Add ('s', PhonotacticChecker.NoRestrictions);
 				consonants_.Add ('t', PhonotacticChecker.NoRestrictions);
-				consonants_.Add ('v', PhonotacticChecker.CannotBeLast, PhonotacticChecker.NoRestrictions);
+				consonants_.Add ('v', PhonotacticChecker.NoRestrictions);
 				consonants_.Add ('w', PhonotacticChecker.NoRestrictions);
 				consonants_.Add ('x', PhonotacticChecker.NoRestrictions);
 				consonants_.Add ('y', PhonotacticChecker.NoRestrictions);
@@ -385,7 +392,7 @@ public class SpeechSoundReference : MonoBehaviour
 		{
 				if (!initialized)
 						Initialize ();
-				return  vowels_.Contains (candidate);
+				return  vowels_.Contains (candidate+"");
 		
 		
 		
@@ -401,18 +408,18 @@ public class SpeechSoundReference : MonoBehaviour
 		{
 				if (!initialized)
 						Initialize ();
-				return consonants_.Contains (candidate);
+				return consonants_.Contains (candidate+"");
 
 		}
 
-		public static Dictionary<char,PhonotacticChecker.Phonotactics[]>.KeyCollection Vowels ()
+		public static Dictionary<string,PhonotacticChecker.Phonotactics[]>.KeyCollection Vowels ()
 		{	
 				return vowels_.Units ();
 		
 		
 		}
 
-		public static Dictionary<char,PhonotacticChecker.Phonotactics[]>.KeyCollection Consonants ()
+		public static Dictionary<string,PhonotacticChecker.Phonotactics[]>.KeyCollection Consonants ()
 		{	
 				return consonants_.Units ();
 		
