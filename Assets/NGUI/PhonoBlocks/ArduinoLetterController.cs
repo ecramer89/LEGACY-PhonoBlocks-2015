@@ -243,11 +243,11 @@ public class ArduinoLetterController : PhonoBlocksController
 		}
 
 		//just updates the display images of the cells
-		public void DisplayWordInLetterGrid (string word)
+		public void DisplayWordInLetterGrid (string word, bool ignoreBlanks=false)
 		{
 		
 				for (int i=0, j=startingIndexOfUserLetters; i<word.Length; i++,j++) {
-						
+					if(!ignoreBlanks || word[i] != ' ')
 						ChangeTheImageOfASingleCell (j, LetterImageTable.instance.GetLetterImageFromLetter (word.Substring (i, 1) [0]));
 			
 				}

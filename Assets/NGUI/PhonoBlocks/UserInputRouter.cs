@@ -187,11 +187,11 @@ public class UserInputRouter : MonoBehaviour
 				checkedWordImageController.EndDisplay ();
 		}
 
-		public void DisplayLettersOf (string word)
+		public void DisplayLettersOf (string word, bool ignoreBlanks=false)
 		{
-        hintLetterTimer = DELAY_BEFORE_REMOVE_HINT_LETTERS;
+        //hintLetterTimer = DELAY_BEFORE_REMOVE_HINT_LETTERS;
 
-				arduinoLetterController.DisplayWordInLetterGrid (word);
+			arduinoLetterController.DisplayWordInLetterGrid (word,ignoreBlanks);
 
 		}
 

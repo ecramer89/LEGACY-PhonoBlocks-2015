@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Text;
 
 public class HintController : PhonoBlocksController
 {
@@ -9,9 +10,14 @@ public class HintController : PhonoBlocksController
 		int currHintIdx = -1;
 		public const int NUM_HINTS = 2;
 
+	    //for guided letter placement mode
+		string targetLetters="";
+		string blanks="";
+		AudioClip[] targetLetterSounds;
+		int targetLetterIndex=0;
+
 		public void Initialize (GameObject hintButton)
 		{
-				
 				this.hintButton = hintButton;
 				studentActivityController = gameObject.GetComponent<StudentActivityController> ();
 				sound_out_word = InstructionsAudio.instance.soundOutTheWord;
@@ -20,7 +26,9 @@ public class HintController : PhonoBlocksController
 		public void Reset ()
 		{
 				currHintIdx = -1;
-	
+				targetLetters = "";
+				targetLetterSounds = null;
+				targetLetterIndex=0;
 		}
 
 		public void DeActivateHintButton ()
@@ -43,21 +51,31 @@ public class HintController : PhonoBlocksController
 
 		}
 
+
 		public void ProvideHint (Problem currProblem)
 		{      //maybe make this a couroutine that can "iterate" thru each hint step
 				//each of which is an audio file, except for the last which involves a visual change as wellS
 				
-		userInputRouter.DisplayLettersOf (currProblem.TargetWord (false));
+		//userInputRouter.DisplayLettersOf (currProblem.TargetWord (false));
 
 		       
 				switch (currHintIdx) {
 				case 0:
-			            
-						AudioSourceController.PushClip (sound_out_word);
+						currProblem.PlaySoundedOutWord ();
+						//AudioSourceController.PushClip (sound_out_word);
 						break;
 
-				case 1:
-						currProblem.PlaySoundedOutWord ();
+				case 1: //level two hint
+						//currProblem.PlaySoundedOutWord ();
+						studentActivityController.EnterGuidedLetterPlacementMode();
+						targetLetters = studentActivityController.TargetLetters;
+						StringBuilder blanksSB = new StringBuilder();
+						for(int i=0;i<targetLetters.Length;i++){
+							blanksSB.Append(" ");
+						}
+						userInputRouter.DisplayLettersOf(blanksSB.ToString());
+						targetLetterIndex = 0;
+						DisplayAndPlaySoundOfCurrentTargetLetter();
 						break;
 
 	
@@ -66,6 +84,20 @@ public class HintController : PhonoBlocksController
 
 				StudentsDataHandler.instance.LogEvent ("requested_hint", currHintIdx + "", "NA");
 			
+		}
+
+		   public void DisplayAndPlaySoundOfCurrentTargetLetter(){
+		   if (targetLetterIndex < targetLetters.Length) {
+						string next = targetLetters.Substring (0, targetLetterIndex + 1);
+						userInputRouter.DisplayLettersOf (next);
+						string pathTo = "audio/sounded_out_words/" + targetLetters + "/" + targetLetters [targetLetterIndex];
+						AudioClip targetSound = AudioSourceController.GetClipFromResources (pathTo);
+						AudioSourceController.PushClip (targetSound);
+				}
+			}
+
+		public void AdvanceTargetLetter(){
+			targetLetterIndex++;
 		}
 
 		public bool UsedLastHint ()

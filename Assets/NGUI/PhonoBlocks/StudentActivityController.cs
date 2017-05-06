@@ -13,15 +13,27 @@ public class StudentActivityController : PhonoBlocksController
 				PLACE_INITIAL_LETTERS,
 				MAIN_ACTIVITY,
 				REMOVE_ALL_LETTERS,
+				HINT_PLACE_EACH_LETTER
 			
 		}
 
 		State state = State.PLACE_INITIAL_LETTERS;
+		public void EnterGuidedLetterPlacementMode(){
+			state = State.HINT_PLACE_EACH_LETTER;
+		}
 		LockedPositionHandler lockedPositionHandler;
 		HintController hintController;
 		ArduinoLetterController arduinoLetterController;
 		Problem currProblem;
-	UserWord targetWordAsLetterSoundComponents;
+		public string TargetLetters{
+		get {
+			string targetWord = currProblem.TargetWord(true);
+
+			return targetWord;
+		}
+	}
+
+		UserWord targetWordAsLetterSoundComponents;
 
 		public bool StringMatchesTarget (string s)
 		{
@@ -219,6 +231,16 @@ public class StudentActivityController : PhonoBlocksController
 	
 		public void HandleNewArduinoLetter (char letter, int atPosition)
 		{       
+				if(state == State.HINT_PLACE_EACH_LETTER){
+					RecordUsersChange (atPosition, letter);
+					if(!IsErroneous(atPosition)){
+						hintController.AdvanceTargetLetter();
+					} 
+					hintController.DisplayAndPlaySoundOfCurrentTargetLetter();
+					arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (true);
+					return;
+				} 
+
 				if (LetterIsActuallyNew (letter, atPosition)) {
 						bool positionWasLocked = lockedPositionHandler.IsLocked (atPosition); 
 						//we treat all positions as "locked" when the state is the end of the activity.
@@ -230,7 +252,7 @@ public class StudentActivityController : PhonoBlocksController
 								arduinoLetterController.UnLockASingleLetter (atPosition);
 
 						RecordUsersChange (atPosition, letter); 
-		        
+
 						ChangeProblemStateIfAllLockedPositionsAHaveCorrectCharacter ();
 			   
 						arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (state != State.PLACE_INITIAL_LETTERS);
