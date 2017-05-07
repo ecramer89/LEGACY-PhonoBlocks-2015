@@ -13,15 +13,28 @@ public class StudentActivityController : PhonoBlocksController
 				PLACE_INITIAL_LETTERS,
 				MAIN_ACTIVITY,
 				REMOVE_ALL_LETTERS,
+				HINT_PLACE_EACH_LETTER
 			
 		}
 
 		State state = State.PLACE_INITIAL_LETTERS;
+		public void EnterGuidedLetterPlacementMode(){
+			state = State.HINT_PLACE_EACH_LETTER;
+		}
 		LockedPositionHandler lockedPositionHandler;
 		HintController hintController;
 		ArduinoLetterController arduinoLetterController;
 		Problem currProblem;
-	UserWord targetWordAsLetterSoundComponents;
+
+		public string TargetLetters{
+		get {
+			string targetWord = currProblem.TargetWord(true);
+
+			return targetWord;
+		}
+	}
+
+		UserWord targetWordAsLetterSoundComponents;
 
 		public bool StringMatchesTarget (string s)
 		{
@@ -146,7 +159,6 @@ public class StudentActivityController : PhonoBlocksController
 					
 				}
 
-
 		}
 
 		public LetterSoundComponent GetTargetLetterSoundComponentFor(int index){
@@ -159,7 +171,7 @@ public class StudentActivityController : PhonoBlocksController
 						if (i >= targetLetters.Length) {
 								if (usersMostRecentChanges [i] != ' ')
 										return false;
-						} else if (usersMostRecentChanges [i] != targetLetters [i])
+					} else if (targetLetters [i] != ' ' && usersMostRecentChanges [i] != targetLetters [i])
 								return false;
 				}
 				return true;
@@ -216,9 +228,39 @@ public class StudentActivityController : PhonoBlocksController
 						hintController.ProvideHint (currProblem);
 
 		}
+
+	   public void SkipToNextLetterToHint(){
+		if (IsErroneous (hintController.TargetLetterIndex)) {
+					hintController.DisplayAndPlaySoundOfCurrentTargetLetter ();
+				} else {
+						int alreadyCorrect = hintController.TargetLetterIndex; 
+						while (!IsErroneous(alreadyCorrect) && alreadyCorrect < hintController.NumTargetLetters) {
+								hintController.AdvanceTargetLetter ();
+								hintController.DisplayAndPlaySoundOfCurrentTargetLetter ();
+								alreadyCorrect++;
+						}
+
+						if (alreadyCorrect == hintController.NumTargetLetters)
+								state = State.MAIN_ACTIVITY;
+				}
+
+			
+		}
 	
 		public void HandleNewArduinoLetter (char letter, int atPosition)
 		{       
+				if(state == State.HINT_PLACE_EACH_LETTER){
+					RecordUsersChange (atPosition, letter);
+			        //child needs to place the correct letters they haven't already placed in order starting from the target index.
+					if(atPosition == hintController.TargetLetterIndex && !IsErroneous(atPosition)){
+							SkipToNextLetterToHint();
+					} else {
+						hintController.DisplayAndPlaySoundOfCurrentTargetLetter();
+					}
+					arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (true);
+					return;
+				} 
+
 				if (LetterIsActuallyNew (letter, atPosition)) {
 						bool positionWasLocked = lockedPositionHandler.IsLocked (atPosition); 
 						//we treat all positions as "locked" when the state is the end of the activity.
@@ -230,7 +272,7 @@ public class StudentActivityController : PhonoBlocksController
 								arduinoLetterController.UnLockASingleLetter (atPosition);
 
 						RecordUsersChange (atPosition, letter); 
-		        
+
 						ChangeProblemStateIfAllLockedPositionsAHaveCorrectCharacter ();
 			   
 						arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (state != State.PLACE_INITIAL_LETTERS);
@@ -268,25 +310,26 @@ public class StudentActivityController : PhonoBlocksController
 		}
 
 		public virtual void HandleSubmittedAnswer ()
-		{
-				StudentsDataHandler.instance.LogEvent ("submitted_answer", UserChangesAsString, currProblem.TargetWord (false));
+		{      if (state == State.MAIN_ACTIVITY || state == State.HINT_PLACE_EACH_LETTER) {
+						StudentsDataHandler.instance.LogEvent ("submitted_answer", UserChangesAsString, currProblem.TargetWord (false));
 				
-				currProblem.IncrementTimesAttempted ();
+						currProblem.IncrementTimesAttempted ();
 	
-				if (IsSubmissionCorrect ()) {
-						//TO DO!!! then if this was the first time that student submitted an answer (get the data from the current student object)
-						//then play the good hint else play the less good hint
-						AudioSourceController.PushClip (correctSoundEffect);
-						if (currProblem.TimesAttempted > 1)
-								AudioSourceController.PushClip (youDidIt);
-						else
-								AudioSourceController.PushClip (excellent);
-						currProblem.PlayAnswer ();
-						CurrentProblemCompleted (true);
+						if (IsSubmissionCorrect ()) {
+								//TO DO!!! then if this was the first time that student submitted an answer (get the data from the current student object)
+								//then play the good hint else play the less good hint
+								AudioSourceController.PushClip (correctSoundEffect);
+								if (currProblem.TimesAttempted > 1)
+										AudioSourceController.PushClip (youDidIt);
+								else
+										AudioSourceController.PushClip (excellent);
+								currProblem.PlayAnswer ();
+								CurrentProblemCompleted (true);
 				
-				} else {
-						HandleIncorrectAnswer ();				
+						} else {
+								HandleIncorrectAnswer ();				
 				
+						}
 				}
 
 		}

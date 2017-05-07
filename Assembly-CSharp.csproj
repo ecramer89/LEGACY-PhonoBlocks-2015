@@ -78,6 +78,39 @@
      <Compile Include="Assets\NGUI\Examples\Scripts\Other\UpdateManager.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\Other\WindowAutoYaw.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\Other\WindowDragTilt.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\ArduinoLetterController.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\ArduinoUnityInterface.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\AudioSourceController.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\CheckedWordImageController.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\ColourCodingScheme.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\ContentButton.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\HintController.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\InputField.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\InstructionsAudio.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\InteractiveLetter.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\LetterGridController.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\LetterImageTable.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\LetterSoundComponent.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\LetterSoundComponentFactoryHandler.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\LockedPositionHandler.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\Permanent.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\PhonoBlocksController.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\PhonotacticChecker.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\Problem.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\ProblemsRepository.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\SessionButton.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\SessionsDirector.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\SpeechSoundReference.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\SpeechSoundsAudio.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\StudentActivityController.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\StudentsDataHandler.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\SwipeDetector.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\UDPPacketIO.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\UserInputRouter.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\UserStarGridController.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\UserWord.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\Word.cs" />
+     <Compile Include="Assets\NGUI\PhonoBlocks\WordHistoryController.cs" />
      <Compile Include="Assets\NGUI\Scripts\Interaction\LanguageSelection.cs" />
      <Compile Include="Assets\NGUI\Scripts\Interaction\UIButton.cs" />
      <Compile Include="Assets\NGUI\Scripts\Interaction\UIButtonActivate.cs" />
@@ -163,39 +196,6 @@
      <Compile Include="Assets\NGUI\Scripts\UI\UITiledSprite.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
-     <Compile Include="Assets\PhonoBlocks\ArduinoLetterController.cs" />
-     <Compile Include="Assets\PhonoBlocks\ArduinoUnityInterface.cs" />
-     <Compile Include="Assets\PhonoBlocks\AudioSourceController.cs" />
-     <Compile Include="Assets\PhonoBlocks\CheckedWordImageController.cs" />
-     <Compile Include="Assets\PhonoBlocks\ColourCodingScheme.cs" />
-     <Compile Include="Assets\PhonoBlocks\ContentButton.cs" />
-     <Compile Include="Assets\PhonoBlocks\HintController.cs" />
-     <Compile Include="Assets\PhonoBlocks\InputField.cs" />
-     <Compile Include="Assets\PhonoBlocks\InstructionsAudio.cs" />
-     <Compile Include="Assets\PhonoBlocks\InteractiveLetter.cs" />
-     <Compile Include="Assets\PhonoBlocks\LetterGridController.cs" />
-     <Compile Include="Assets\PhonoBlocks\LetterImageTable.cs" />
-     <Compile Include="Assets\PhonoBlocks\LetterSoundComponent.cs" />
-     <Compile Include="Assets\PhonoBlocks\LetterSoundComponentFactoryHandler.cs" />
-     <Compile Include="Assets\PhonoBlocks\LockedPositionHandler.cs" />
-     <Compile Include="Assets\PhonoBlocks\Permanent.cs" />
-     <Compile Include="Assets\PhonoBlocks\PhonoBlocksController.cs" />
-     <Compile Include="Assets\PhonoBlocks\PhonotacticChecker.cs" />
-     <Compile Include="Assets\PhonoBlocks\Problem.cs" />
-     <Compile Include="Assets\PhonoBlocks\ProblemsRepository.cs" />
-     <Compile Include="Assets\PhonoBlocks\SessionButton.cs" />
-     <Compile Include="Assets\PhonoBlocks\SessionsDirector.cs" />
-     <Compile Include="Assets\PhonoBlocks\SpeechSoundReference.cs" />
-     <Compile Include="Assets\PhonoBlocks\SpeechSoundsAudio.cs" />
-     <Compile Include="Assets\PhonoBlocks\StudentActivityController.cs" />
-     <Compile Include="Assets\PhonoBlocks\StudentsDataHandler.cs" />
-     <Compile Include="Assets\PhonoBlocks\SwipeDetector.cs" />
-     <Compile Include="Assets\PhonoBlocks\UDPPacketIO.cs" />
-     <Compile Include="Assets\PhonoBlocks\UserInputRouter.cs" />
-     <Compile Include="Assets\PhonoBlocks\UserStarGridController.cs" />
-     <Compile Include="Assets\PhonoBlocks\UserWord.cs" />
-     <Compile Include="Assets\PhonoBlocks\Word.cs" />
-     <Compile Include="Assets\PhonoBlocks\WordHistoryController.cs" />
      <Compile Include="Assets\Scripts\TextureScale.cs" />
      <Compile Include="Assets\Uniduino\Scripts\Arduino.Firmata.cs" />
      <Compile Include="Assets\Uniduino\Scripts\Arduino.cs" />
@@ -243,17 +243,11 @@
      <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Normal.txt" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (SoftClip).shader" />
      <None Include="Assets\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Analytics">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>
  <Reference Include="Jayrock">
  <HintPath>C:/Users/root952/Desktop/PhonoBlocks-Min/Assets/Plugins/Jayrock.dll</HintPath>
