@@ -172,7 +172,7 @@ public class StudentActivityController : PhonoBlocksController
 						if (i >= targetLetters.Length) {
 								if (usersMostRecentChanges [i] != ' ')
 										return false;
-						} else if (usersMostRecentChanges [i] != targetLetters [i])
+					} else if (targetLetters [i] != ' ' && usersMostRecentChanges [i] != targetLetters [i])
 								return false;
 				}
 				return true;
@@ -311,25 +311,26 @@ public class StudentActivityController : PhonoBlocksController
 		}
 
 		public virtual void HandleSubmittedAnswer ()
-		{
-				StudentsDataHandler.instance.LogEvent ("submitted_answer", UserChangesAsString, currProblem.TargetWord (false));
+		{      if (state == State.MAIN_ACTIVITY) {
+						StudentsDataHandler.instance.LogEvent ("submitted_answer", UserChangesAsString, currProblem.TargetWord (false));
 				
-				currProblem.IncrementTimesAttempted ();
+						currProblem.IncrementTimesAttempted ();
 	
-				if (IsSubmissionCorrect ()) {
-						//TO DO!!! then if this was the first time that student submitted an answer (get the data from the current student object)
-						//then play the good hint else play the less good hint
-						AudioSourceController.PushClip (correctSoundEffect);
-						if (currProblem.TimesAttempted > 1)
-								AudioSourceController.PushClip (youDidIt);
-						else
-								AudioSourceController.PushClip (excellent);
-						currProblem.PlayAnswer ();
-						CurrentProblemCompleted (true);
+						if (IsSubmissionCorrect ()) {
+								//TO DO!!! then if this was the first time that student submitted an answer (get the data from the current student object)
+								//then play the good hint else play the less good hint
+								AudioSourceController.PushClip (correctSoundEffect);
+								if (currProblem.TimesAttempted > 1)
+										AudioSourceController.PushClip (youDidIt);
+								else
+										AudioSourceController.PushClip (excellent);
+								currProblem.PlayAnswer ();
+								CurrentProblemCompleted (true);
 				
-				} else {
-						HandleIncorrectAnswer ();				
+						} else {
+								HandleIncorrectAnswer ();				
 				
+						}
 				}
 
 		}
