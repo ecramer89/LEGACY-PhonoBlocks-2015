@@ -25,6 +25,7 @@ public class StudentActivityController : PhonoBlocksController
 		HintController hintController;
 		ArduinoLetterController arduinoLetterController;
 		Problem currProblem;
+
 		public string TargetLetters{
 		get {
 			string targetWord = currProblem.TargetWord(true);
@@ -228,16 +229,36 @@ public class StudentActivityController : PhonoBlocksController
 						hintController.ProvideHint (currProblem);
 
 		}
+
+	   public void SkipToNextLetterToHint(){
+		if (IsErroneous (hintController.TargetLetterIndex)) {
+					hintController.DisplayAndPlaySoundOfCurrentTargetLetter ();
+				} else {
+						int alreadyCorrect = hintController.TargetLetterIndex; 
+						while (!IsErroneous(alreadyCorrect) && alreadyCorrect < hintController.NumTargetLetters) {
+								hintController.AdvanceTargetLetter ();
+								hintController.DisplayAndPlaySoundOfCurrentTargetLetter ();
+								alreadyCorrect++;
+						}
+
+						if (alreadyCorrect == hintController.NumTargetLetters)
+								state = State.MAIN_ACTIVITY;
+				}
+
+			arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (true);
+		}
 	
 		public void HandleNewArduinoLetter (char letter, int atPosition)
 		{       
 				if(state == State.HINT_PLACE_EACH_LETTER){
 					RecordUsersChange (atPosition, letter);
-					if(!IsErroneous(atPosition)){
-						hintController.AdvanceTargetLetter();
-					} 
-					hintController.DisplayAndPlaySoundOfCurrentTargetLetter();
-					arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (true);
+			        //child needs to place the correct letters they haven't already placed in order starting from the target index.
+					if(atPosition == hintController.TargetLetterIndex && !IsErroneous(atPosition)){
+							SkipToNextLetterToHint();
+					} else {
+						hintController.DisplayAndPlaySoundOfCurrentTargetLetter();
+					}
+				
 					return;
 				} 
 

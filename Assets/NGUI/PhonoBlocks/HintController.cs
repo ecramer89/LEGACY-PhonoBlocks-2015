@@ -12,9 +12,15 @@ public class HintController : PhonoBlocksController
 
 	    //for guided letter placement mode
 		string targetLetters="";
+	    public int NumTargetLetters{
+		get { return targetLetters.Length;}
+		}
 		string blanks="";
 		AudioClip[] targetLetterSounds;
 		int targetLetterIndex=0;
+		public int TargetLetterIndex {
+				get { return targetLetterIndex;}
+		}
 
 		public void Initialize (GameObject hintButton)
 		{
@@ -75,10 +81,8 @@ public class HintController : PhonoBlocksController
 						}
 						userInputRouter.DisplayLettersOf(blanksSB.ToString());
 						targetLetterIndex = 0;
-						DisplayAndPlaySoundOfCurrentTargetLetter();
+						studentActivityController.SkipToNextLetterToHint();
 						break;
-
-	
 				}
 			
 

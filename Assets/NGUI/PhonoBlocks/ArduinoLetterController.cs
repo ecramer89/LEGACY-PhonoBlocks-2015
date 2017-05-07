@@ -334,8 +334,8 @@ public class ArduinoLetterController : PhonoBlocksController
 		UserWord GetNewColoursAndSoundsFromDecoder (LetterGridController letterGridController)
 		{
 			
-
-				return LetterSoundComponentFactoryManager.Decode (GetUserControlledLettersAsString (false), SessionsDirector.instance.IsSyllableDivisionMode);
+				string userControlledLettersAsString = GetUserControlledLettersAsString (false);
+		return LetterSoundComponentFactoryManager.Decode (userControlledLettersAsString, SessionsDirector.instance.IsSyllableDivisionMode);
 		
 		}
 
