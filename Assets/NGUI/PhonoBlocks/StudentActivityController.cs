@@ -159,7 +159,6 @@ public class StudentActivityController : PhonoBlocksController
 					
 				}
 
-
 		}
 
 		public LetterSoundComponent GetTargetLetterSoundComponentFor(int index){
@@ -245,7 +244,7 @@ public class StudentActivityController : PhonoBlocksController
 								state = State.MAIN_ACTIVITY;
 				}
 
-			arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (true);
+			
 		}
 	
 		public void HandleNewArduinoLetter (char letter, int atPosition)
@@ -258,7 +257,7 @@ public class StudentActivityController : PhonoBlocksController
 					} else {
 						hintController.DisplayAndPlaySoundOfCurrentTargetLetter();
 					}
-				
+					arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (true);
 					return;
 				} 
 
@@ -311,7 +310,7 @@ public class StudentActivityController : PhonoBlocksController
 		}
 
 		public virtual void HandleSubmittedAnswer ()
-		{      if (state == State.MAIN_ACTIVITY) {
+		{      if (state == State.MAIN_ACTIVITY || state == State.HINT_PLACE_EACH_LETTER) {
 						StudentsDataHandler.instance.LogEvent ("submitted_answer", UserChangesAsString, currProblem.TargetWord (false));
 				
 						currProblem.IncrementTimesAttempted ();
