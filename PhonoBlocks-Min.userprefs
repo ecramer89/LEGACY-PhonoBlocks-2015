@@ -1,40 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\NGUI\PhonoBlocks\StudentActivityController.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="..\Stories\Assets\FollowPlayer.cs">
     <Files>
-      <File FileName="Assets\NGUI\PhonoBlocks\InteractiveLetter.cs" Line="177" Column="17" />
-      <File FileName="Assets\NGUI\PhonoBlocks\StudentActivityController.cs" Line="237" Column="4" />
-      <File FileName="Assets\NGUI\PhonoBlocks\HintController.cs" Line="79" Column="4" />
-      <File FileName="Assets\NGUI\PhonoBlocks\AudioSourceController.cs" Line="1" Column="1" />
-      <File FileName="Assets\NGUI\PhonoBlocks\ArduinoLetterController.cs" Line="411" Column="111" />
-      <File FileName="Assets\NGUI\PhonoBlocks\UserInputRouter.cs" Line="342" Column="1" />
-      <File FileName="Assets\NGUI\PhonoBlocks\ProblemsRepository.cs" Line="115" Column="3" />
-      <File FileName="Assets\NGUI\PhonoBlocks\Problem.cs" Line="69" Column="1" />
+      <File FileName="..\Stories\Assets\FollowPlayer.cs" Line="20" Column="1" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State expanded="True">
-          <Node name="Assembly-CSharp" expanded="True">
-            <Node name="NGUI" expanded="True">
-              <Node name="PhonoBlocks" expanded="True">
-                <Node name="StudentActivityController.cs" selected="True" />
-              </Node>
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-      <Pad Id="ClassPad">
-        <State expanded="True" selected="True" />
-      </Pad>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State>
-          <Value>userControlledLettersAsString</Value>
-          <Value>state</Value>
-          <Value>alreadyCorrect</Value>
-          <Value>newLetterSoundComponents</Value>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
