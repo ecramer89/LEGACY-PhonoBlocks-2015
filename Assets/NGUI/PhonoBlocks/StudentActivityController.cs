@@ -16,11 +16,6 @@ public class StudentActivityController : PhonoBlocksController
 				HINT_PLACE_EACH_LETTER
 			
 		}
-		public bool ActivityOver {
-					get {
-							return state == State.REMOVE_ALL_LETTERS;
-					}
-			}
 
 		State state = State.PLACE_INITIAL_LETTERS;
 		public void EnterGuidedLetterPlacementMode(){
@@ -229,34 +224,27 @@ public class StudentActivityController : PhonoBlocksController
 						currProblem.PlayAnswer ();
 						arduinoLetterController.PlaceWordInLetterGrid (currProblem.TargetWord (false));
 						CurrentProblemCompleted (false);
-						arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters(false);
-				} else {
+				} else 
 						hintController.ProvideHint (currProblem);
-				}
 
 		}
-
 
 	   public void SkipToNextLetterToHint(){
 		if (IsErroneous (hintController.TargetLetterIndex)) {
 					hintController.DisplayAndPlaySoundOfCurrentTargetLetter ();
 				} else {
-						StartCoroutine(ShowAllAlreadyCorrectLetters());
+						int alreadyCorrect = hintController.TargetLetterIndex; 
+						while (!IsErroneous(alreadyCorrect) && alreadyCorrect < hintController.NumTargetLetters) {
+								hintController.AdvanceTargetLetter ();
+								hintController.DisplayAndPlaySoundOfCurrentTargetLetter ();
+								alreadyCorrect++;
+						}
+
+						if (alreadyCorrect == hintController.NumTargetLetters)
+								state = State.MAIN_ACTIVITY;
 				}
 
 			
-		}
-
-	    IEnumerator ShowAllAlreadyCorrectLetters(){
-			int alreadyCorrect = hintController.TargetLetterIndex; 
-			while (!IsErroneous(alreadyCorrect) && alreadyCorrect < hintController.NumTargetLetters) {
-				hintController.AdvanceTargetLetter ();
-				hintController.DisplayAndPlaySoundOfCurrentTargetLetter ();
-				alreadyCorrect++;
-				yield return new WaitForSeconds (hintController.SecondsDelayBetweenHintedLetters);
-			}
-				if (alreadyCorrect == hintController.NumTargetLetters)
-					state = State.MAIN_ACTIVITY;
 		}
 	
 		public void HandleNewArduinoLetter (char letter, int atPosition)
@@ -350,15 +338,11 @@ public class StudentActivityController : PhonoBlocksController
 		{
 				
 				AudioSourceController.PushClip (incorrectSoundEffect);
-				AudioSourceController.PushClip (notQuiteIt);
-
+				
 				if (!hintController.HintButtonActive ()) {
 						hintController.ActivateHintButton ();
-				}
-
-		
-				if (!hintController.OnLastHint ()) {
-					AudioSourceController.PushClip(offerHint);
+						AudioSourceController.PushClip (notQuiteIt);
+						AudioSourceController.PushClip (offerHint);
 				}
 
 				hintController.AdvanceHint ();

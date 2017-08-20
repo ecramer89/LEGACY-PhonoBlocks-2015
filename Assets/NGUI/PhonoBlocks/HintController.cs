@@ -21,12 +21,6 @@ public class HintController : PhonoBlocksController
 		public int TargetLetterIndex {
 				get { return targetLetterIndex;}
 		}
-		int secondsDelayBetweenHintedLetters = 1;
-		public int SecondsDelayBetweenHintedLetters {
-					get {
-							return secondsDelayBetweenHintedLetters;
-					}
-			}
 
 		public void Initialize (GameObject hintButton)
 		{

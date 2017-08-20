@@ -335,7 +335,7 @@ public class ArduinoLetterController : PhonoBlocksController
 		{
 			
 				string userControlledLettersAsString = GetUserControlledLettersAsString (false);
-				return LetterSoundComponentFactoryManager.Decode (userControlledLettersAsString, SessionsDirector.instance.IsSyllableDivisionMode);
+		return LetterSoundComponentFactoryManager.Decode (userControlledLettersAsString, SessionsDirector.instance.IsSyllableDivisionMode);
 		
 		}
 
@@ -408,7 +408,7 @@ public class ArduinoLetterController : PhonoBlocksController
 					Color newDefaultColor = lc.GetColour ();
 					Color flashColor = Color.white;
 
-					if(SessionsDirector.DelegateControlToStudentActivityController && !studentActivityController.ActivityOver){
+					if(SessionsDirector.DelegateControlToStudentActivityController){
 				  		if(studentActivityController.IsErroneous(indexOfLetterBarCell)){
 		             		Color[] errorColors = SessionsDirector.colourCodingScheme.GetErrorColors();
 						 	newDefaultColor = errorColors[0];
