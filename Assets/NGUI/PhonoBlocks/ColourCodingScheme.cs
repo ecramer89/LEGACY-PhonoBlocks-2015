@@ -4,6 +4,7 @@ using System.Collections;
 public abstract class ColourCodingScheme: MonoBehaviour
 {     
 
+		//todo refactor rename to 'ActivityColorRule'
 		//requirement for all activities:
 		//establish colours for all generally relevant LetterSoundComponents.
 		//we can do so by adjusting the singleton (LetterSoundComponent Color Map)
@@ -54,8 +55,8 @@ public abstract class ColourCodingScheme: MonoBehaviour
 		
 		}
 
-	public virtual Color[] GetErrorColors(){
-		return errorColors;
+		public virtual Color[] GetErrorColors(){
+			return errorColors;
 		}
 
 
@@ -127,6 +128,10 @@ public abstract class ColourCodingScheme: MonoBehaviour
 				return Color.white;
 		}
 
+		public virtual Color GetColorForPortionOfTargetComposite(){
+				return Color.gray;
+		}
+
 		protected virtual Color AlternatingColours (int alternate)
 		{
 				//we basically distinguish between first and not first, at least for consonants and syllables.
@@ -164,31 +169,31 @@ class ConsonantBlends : NoColour
 
 		}
 
-	public override Color GetColorsForHardConsonant(int indexInWord=0){
-		return blue;
+		public override Color GetColorsForHardConsonant(int indexInWord=0){
+			return blue;
 		}
 
-		public override Color GetColorsForConsonantDigraphs ()
+		//todo initially thought we would distinguish between different blend positions.
+		//no longer the case. should collapse into one function.
+		public override Color GetColorsForInitialBlends (int letterInBlendPos=0)
 		{
 				return green;
 		}
 	
-		public override Color GetColorsForInitialBlends (int letterInBlendPos=0)
-		{
-				return GetColorsForConsonantDigraphs ();
-				//return AlternatingColours (letterInBlendPos);
-		}
-	
 		public override Color GetColorsForMiddleBlends (int letterInBlendPos=0)
 		{
-				return GetColorsForConsonantDigraphs ();
-				//return AlternatingColours (letterInBlendPos);
+				return GetColorsForInitialBlends ();
+
 		}
 	
 		public override Color GetColorsForFinalBlends (int letterInBlendPos=0)
 		{
-				return GetColorsForConsonantDigraphs ();
-				//return AlternatingColours (letterInBlendPos);
+				return GetColorsForInitialBlends ();
+			
+		}
+
+		public override Color GetColorForPortionOfTargetComposite(){
+				return GetColorsForHardConsonant ();
 		}
 
 

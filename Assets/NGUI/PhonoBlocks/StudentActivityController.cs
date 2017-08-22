@@ -10,18 +10,16 @@ public class StudentActivityController : PhonoBlocksController
 
 		enum State
 		{
-				PLACE_INITIAL_LETTERS,
 				MAIN_ACTIVITY,
 				REMOVE_ALL_LETTERS,
 				HINT_PLACE_EACH_LETTER
 			
 		}
 
-		State state = State.PLACE_INITIAL_LETTERS;
+		State state = State.MAIN_ACTIVITY;
 		public void EnterGuidedLetterPlacementMode(){
 			state = State.HINT_PLACE_EACH_LETTER;
 		}
-		LockedPositionHandler lockedPositionHandler;
 		HintController hintController;
 		ArduinoLetterController arduinoLetterController;
 		Problem currProblem;
@@ -72,8 +70,7 @@ public class StudentActivityController : PhonoBlocksController
 				this.arduinoLetterController = arduinoLetterController;
 				arduinoLetterController.studentActivityController = this;
 				usersMostRecentChanges = new char[UserInputRouter.numOnscreenLetterSpaces];
-			
-				lockedPositionHandler = gameObject.GetComponent<LockedPositionHandler> ();
+		
 			
 				hintController = gameObject.GetComponent<HintController> ();
 				hintController.Initialize (hintButton);
@@ -96,8 +93,7 @@ public class StudentActivityController : PhonoBlocksController
 		
 	public void SetUpNextProblem ()
 		{  
-
-				//get the next specific problem from the ProblemType class
+			
 				ClearSavedUserChanges ();
 				hintController.Reset ();
 			
@@ -105,41 +101,20 @@ public class StudentActivityController : PhonoBlocksController
 	     
 				StudentsDataHandler.instance.RecordActivityTargetWord (currProblem.TargetWord (false));
 		        targetWordAsLetterSoundComponents = LetterSoundComponentFactoryManager.Decode (currProblem.TargetWord (true), 
-		                                                                               SessionsDirector.instance.IsSyllableDivisionMode);
-				lockedPositionHandler.ResetForNewProblem ();
-				lockedPositionHandler.RememberPositionsThatShouldNotBeChanged (currProblem.InitialWord, currProblem.TargetWord (false).Trim ()); 
-	
+		                                                                               SessionsDirector.instance.IsSyllableDivisionActivity);
 				arduinoLetterController.ReplaceEachLetterWithBlank ();
 				arduinoLetterController.PlaceWordInLetterGrid (currProblem.InitialWord);
-
-
-
 				arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (false);
-				arduinoLetterController.LockAllLetters ();
-		   
-	
+		
 				userInputRouter.RequestTurnOffImage ();
 
 				hintController.DeActivateHintButton ();
 			
 				PlayInstructions (); //dont bother telling to place initial letters during assessment mode
 
-	
-				state = State.PLACE_INITIAL_LETTERS;
+				state = State.MAIN_ACTIVITY;
 
-
-				//In case the initial state is already correct (...which happens when the user needs to build the word "from scratch". This makes it so
-				//we don;t need to trigger the check by adding a "blank"!
-				ChangeProblemStateIfAllLockedPositionsAHaveCorrectCharacter ();
-		        
-		         
-				//
-
-
-
-
-		//april 20; added this so that we only show as many lines as there are letters in the current word.
-		arduinoLetterController.activateLinesBeneathLettersOfWord(currProblem.TargetWord(true));
+		        arduinoLetterController.activateLinesBeneathLettersOfWord(currProblem.TargetWord(true));
 
 		}
 	
@@ -177,25 +152,7 @@ public class StudentActivityController : PhonoBlocksController
 				return true;
 
 		}
-
-		public void ChangeProblemStateIfAllLockedPositionsAHaveCorrectCharacter ()
-		{
-			
-				if (state == State.PLACE_INITIAL_LETTERS) {
-						if (CurrentStateOfLettersMatches (currProblem.InitialWord))
-								BeginMainProblemState ();
 				
-				}
-				if (state == State.REMOVE_ALL_LETTERS) {
-					
-						if (CurrentStateOfLettersMatches (currProblem.TargetWord (false))) {
-							
-								HandleEndOfActivity ();
-						}
-					
-				}
-	
-		}
 
 		void HandleEndOfActivity ()
 		{
@@ -209,14 +166,7 @@ public class StudentActivityController : PhonoBlocksController
 				}
 
 		}
-
-		void BeginMainProblemState ()
-		{
-				arduinoLetterController.UnLockAllLetters (); //we do this to unlock the letters that are outside the range of the initial word.
-				//during the initial stage only the letters in the initial word will absolutely be locked.
-				state = State.MAIN_ACTIVITY;
-
-		}
+				
 
 		public void UserRequestsHint ()
 		{
@@ -249,35 +199,9 @@ public class StudentActivityController : PhonoBlocksController
 	
 		public void HandleNewArduinoLetter (char letter, int atPosition)
 		{       
-				if(state == State.HINT_PLACE_EACH_LETTER){
-					RecordUsersChange (atPosition, letter);
-			        //child needs to place the correct letters they haven't already placed in order starting from the target index.
-					if(atPosition == hintController.TargetLetterIndex && !IsErroneous(atPosition)){
-							SkipToNextLetterToHint();
-					} else {
-						hintController.DisplayAndPlaySoundOfCurrentTargetLetter();
-					}
-					arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (true);
-					return;
-				} 
+				RecordUsersChange (atPosition, letter); 
+				arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (true);
 
-				if (LetterIsActuallyNew (letter, atPosition)) {
-						bool positionWasLocked = lockedPositionHandler.IsLocked (atPosition); 
-						//we treat all positions as "locked" when the state is the end of the activity.
-						if (positionWasLocked || state == State.REMOVE_ALL_LETTERS) {
-								lockedPositionHandler.HandleChangeToLockedPosition (atPosition, letter, currProblem.TargetWord (false), usersMostRecentChanges, arduinoLetterController);
-						}
-
-						if (state == State.PLACE_INITIAL_LETTERS)
-								arduinoLetterController.UnLockASingleLetter (atPosition);
-
-						RecordUsersChange (atPosition, letter); 
-
-						ChangeProblemStateIfAllLockedPositionsAHaveCorrectCharacter ();
-			   
-						arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (state != State.PLACE_INITIAL_LETTERS);
-
-				}
 		}
 
 		/// <summary>
@@ -357,7 +281,7 @@ public class StudentActivityController : PhonoBlocksController
 
 				currProblem.SetTargetWordToEmpty ();
 				userInputRouter.AddCurrentWordToHistory (false);
-				//arduinoLetterController.LockAllLetters ();
+	
 		   
 				userInputRouter.RequestDisplayImage (currProblem.TargetWord (true), false, true);
 

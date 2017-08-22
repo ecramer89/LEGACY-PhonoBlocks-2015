@@ -267,7 +267,7 @@ public class UserInputRouter : MonoBehaviour
 						if (!wholeWordWasSelected) {
 								if (!SessionsDirector.DelegateControlToStudentActivityController || studentActivityController.StringMatchesTarget (selectedLetters)) {
 										if (AudioSourceController.PushClip (AudioSourceController.GetWordFromResources (selectedLetters))) {					
-												if (!SessionsDirector.instance.IsSyllableDivisionMode)
+												if (!SessionsDirector.instance.IsSyllableDivisionActivity)
 														arduinoLetterController.ChangeDisplayColourOfCells (SessionsDirector.colourCodingScheme.GetColorsForWholeWord (), true);
 												wholeWordWasSelected = true;
 												

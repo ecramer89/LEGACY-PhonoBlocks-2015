@@ -1,17 +1,13 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2008
-
-Project("{67DC90CF-4F9B-B9A3-8BB4-7A74782968F9}") = "PhonoBlocks-Min", "Assembly-CSharp-firstpass.csproj", "{7C75CA9F-AD62-B15B-159B-24D85A135BA9}"
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhonoBlocks-Min", "Assembly-CSharp-firstpass.csproj", "{7C75CA9F-AD62-B15B-159B-24D85A135BA9}"
 EndProject
-Project("{67DC90CF-4F9B-B9A3-8BB4-7A74782968F9}") = "PhonoBlocks-Min", "Assembly-CSharp.csproj", "{3FADB7D3-8B20-7E7D-E934-4332AB274D5D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhonoBlocks-Min", "Assembly-CSharp.csproj", "{3FADB7D3-8B20-7E7D-E934-4332AB274D5D}"
 EndProject
-Project("{67DC90CF-4F9B-B9A3-8BB4-7A74782968F9}") = "PhonoBlocks-Min", "Assembly-CSharp-Editor-firstpass.csproj", "{40F6E4CB-020D-4F66-F1D5-C61EDCA6EF03}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhonoBlocks-Min", "Assembly-CSharp-Editor-firstpass.csproj", "{40F6E4CB-020D-4F66-F1D5-C61EDCA6EF03}"
 EndProject
-Project("{67DC90CF-4F9B-B9A3-8BB4-7A74782968F9}") = "PhonoBlocks-Min", "Assembly-CSharp-Editor.csproj", "{C8542374-434B-721B-964F-25A36FE05DA3}"
-EndProject
-Project("{67DC90CF-4F9B-B9A3-8BB4-7A74782968F9}") = "PhonoBlocks-Min", "Assembly-UnityScript-firstpass.unityproj", "{23D068B0-AEA1-0647-2344-6E6B69773E10}"
-EndProject
-Project("{67DC90CF-4F9B-B9A3-8BB4-7A74782968F9}") = "PhonoBlocks-Min", "Assembly-UnityScript.unityproj", "{DEEA1DBD-313A-D764-CE81-71978D59505B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhonoBlocks-Min", "Assembly-CSharp-Editor.csproj", "{C8542374-434B-721B-964F-25A36FE05DA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,14 +31,6 @@ Global
 		{C8542374-434B-721B-964F-25A36FE05DA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8542374-434B-721B-964F-25A36FE05DA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8542374-434B-721B-964F-25A36FE05DA3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{23D068B0-AEA1-0647-2344-6E6B69773E10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23D068B0-AEA1-0647-2344-6E6B69773E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23D068B0-AEA1-0647-2344-6E6B69773E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{23D068B0-AEA1-0647-2344-6E6B69773E10}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DEEA1DBD-313A-D764-CE81-71978D59505B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DEEA1DBD-313A-D764-CE81-71978D59505B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DEEA1DBD-313A-D764-CE81-71978D59505B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DEEA1DBD-313A-D764-CE81-71978D59505B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,5 +53,4 @@ Global
 		$3.inheritsScope = text/plain
 		$3.scope = text/plain
 	EndGlobalSection
-
 EndGlobal

@@ -65,7 +65,7 @@ public class WordHistoryController : PhonoBlocksController
 				foreach (InteractiveLetter l in newWord) {
 					
 						
-			GameObject letterInWord = lettersOfWordInHistory.CreateLetterBarCell (l.Letter (), l.Image (), (position++) + "", (SessionsDirector.instance.IsSyllableDivisionMode?l.SelectColour:l.DefaultColour));
+			GameObject letterInWord = lettersOfWordInHistory.CreateLetterBarCell (l.Letter (), l.Image (), (position++) + "", (SessionsDirector.instance.IsSyllableDivisionActivity?l.SelectColour:l.DefaultColour));
 				
 
 						letterInWord.AddComponent<BoxCollider> ();

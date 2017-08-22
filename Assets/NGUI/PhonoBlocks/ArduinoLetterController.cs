@@ -109,55 +109,8 @@ public class ArduinoLetterController : PhonoBlocksController
 				}
 		}
 
+	
 
-
-		//unlocks the letter at position atPosition.
-		//the effect of unlocking a letter is to change its colour from the locked colour to whatever the colour of that letter should be
-		//given then other letters in the word
-		public void UnLockASingleLetter (int atPosition)
-		{
-				GameObject nthArduinoControlledLetter = letterGrid.GetLetterCell (atPosition);
-				nthArduinoControlledLetter.GetComponent<InteractiveLetter> ().UnLock ();
-
-				
-		}
-
-
-		//locks the letter at position atPosition.
-		//the effect of locking a letter is to make that letter appear black
-		//instead of appearing in its usual colour.
-		//letters that are locked will have their default colours updated
-		//but this class will not tell the letters to instantly assume their new colour
-		public void LockASingleLetter (int atPosition)
-		{
-
-				GameObject nthArduinoControlledLetter = letterGrid.GetLetterCell (atPosition);
-				nthArduinoControlledLetter.GetComponent<InteractiveLetter> ().Lock ();
-
-
-		}
-
-		public void LockAllLetters ()
-		{
-				
-				List<InteractiveLetter> letters = letterGrid.GetLetters (false);
-
-				foreach (InteractiveLetter il in letters) {
-						il.Lock ();
-
-				}
-
-		}
-
-		public void UnLockAllLetters ()
-		{
-				List<InteractiveLetter> letters = letterGrid.GetLetters (false);
-				foreach (InteractiveLetter il in letters) {
-						il.UnLock ();
-			
-				}
-
-		}
 
 		public void ChangeTheLetterOfASingleCell (int atPosition, char newLetter)
 		{
@@ -222,6 +175,8 @@ public class ArduinoLetterController : PhonoBlocksController
 				InteractiveLetter l = letterGrid.GetLetterCell (atPosition).GetComponent<InteractiveLetter> ();
 				l.RevertToDefaultColour ();
 		}
+
+
 		//updates letters and images of letter cells
 		public void PlaceWordInLetterGrid (string word)
 		{
@@ -299,8 +254,7 @@ public class ArduinoLetterController : PhonoBlocksController
 	public bool ChangedFromPrevious(int position){
 		return stringRepresentationOfPrevious!= null && CurrentUserControlledLettersAsString [position] != stringRepresentationOfPrevious [position];
 	}
-
-	   
+			
 
 		public bool IsBlank (int indexInLetterGrid)
 		{
@@ -335,7 +289,7 @@ public class ArduinoLetterController : PhonoBlocksController
 		{
 			
 				string userControlledLettersAsString = GetUserControlledLettersAsString (false);
-		return LetterSoundComponentFactoryManager.Decode (userControlledLettersAsString, SessionsDirector.instance.IsSyllableDivisionMode);
+		return LetterSoundComponentFactoryManager.Decode (userControlledLettersAsString, SessionsDirector.instance.IsSyllableDivisionActivity);
 		
 		}
 
@@ -364,7 +318,6 @@ public class ArduinoLetterController : PhonoBlocksController
 			            
 						if (indexOfLetterBarCell <= endingIndexOfUserLetters) { //no longer required because I fixed the bug in the LCFactoryManager that caused the error, but I'm leaving this here for redundant error protection...
 
-
 								if (p is LetterSoundComposite) {
 										LetterSoundComposite l = (LetterSoundComposite)p;
 										foreach (LetterSoundComponent lc in l.Children) {
@@ -376,7 +329,6 @@ public class ArduinoLetterController : PhonoBlocksController
 								} else {
 									
 										UpdateInterfaceLetters (p, letterGridController, indexOfLetterBarCell);
-							
 										indexOfLetterBarCell++;
 								}
 
@@ -391,88 +343,44 @@ public class ArduinoLetterController : PhonoBlocksController
 
 		}
 
-		void UpdateInterfaceLetters (LetterSoundComponent lc, LetterGridController letterGridController, int indexOfLetterBarCell, LetterSoundComposite parent = null)
-	{           bool flash = false;
+
+
+
+		bool flash = false;
+		int timesToFlash=0;
+		Color newDefaultColor;
+		Color flashColor;
+		InteractiveLetter asInteractiveLetter;
+
+		void UpdateInterfaceLetters (
+				LetterSoundComponent lc, 
+				LetterGridController letterGridController, 
+				int indexOfLetterBarCell, 
+				LetterSoundComposite parent = null)
+	{           
+
+	
 		        bool letterIsNew = ChangedFromPrevious (indexOfLetterBarCell);
 		        bool isPartOfCompletedGrapheme = !ReferenceEquals (parent, null);
 				char newLetter = lc.AsString [0];
-				int timesToFlash=0;
-				InteractiveLetter asInteractiveLetter;
-
-				if (SessionsDirector.instance.IsSyllableDivisionMode) {
-						asInteractiveLetter = letterGridController.GetInteractiveLetter (indexOfLetterBarCell);
-						asInteractiveLetter.UpdateDefaultColour (SessionsDirector.colourCodingScheme.GetColorsForWholeWord ());
-						asInteractiveLetter.SetSelectColour (lc.GetColour ());
-				} else {
-		                //need to get the error color if the individual letter is incorrect and it's practice mode.
-					Color newDefaultColor = lc.GetColour ();
-					Color flashColor = Color.white;
-
-					if(SessionsDirector.DelegateControlToStudentActivityController){
-				  		if(studentActivityController.IsErroneous(indexOfLetterBarCell)){
-		             		Color[] errorColors = SessionsDirector.colourCodingScheme.GetErrorColors();
-						 	newDefaultColor = errorColors[0];
-							flashColor = errorColors[1];
-							flash = letterIsNew;
-						    timesToFlash=TIMES_TO_FLASH_ERRORNEOUS_LETTER;
-						} else {
-					     //correct letter; see whether it's part of a multi-letter unit.
-					      LetterSoundComponent targetComponent = 
-						 studentActivityController.GetTargetLetterSoundComponentFor(indexOfLetterBarCell);
-
-					     if( //did student place all the letters needed to instantiate the spelling rule they are practiscing?
-						   (isPartOfCompletedGrapheme && targetComponent.AsString.Equals(parent.AsString)) || 
-					       SessionsDirector.instance.IsMagicERule && studentActivityController.IsSubmissionCorrect()) {
-						    flash = true;
-							timesToFlash = TIMES_TO_FLASH_ON_COMPLETE_TARGET_GRAPHEME;
-					    } else {
-					      if(!ReferenceEquals(targetComponent, null)){
-					      if(targetComponent.LetterAt(targetComponent.Length-1) == newLetter){
-								newDefaultColor = targetComponent.GetColour();
-							} else {
-								if(!SessionsDirector.instance.IsConsonantBlends){
-									flashColor = targetComponent.GetColour();
-									timesToFlash=TIMES_TO_FLASH_CORRECT_PORTION_OF_FINAL_GRAPHEME;
-									flash=letterIsNew;
-								}
-						 }
-						}
-					}
-					}
-				} else {
-				 //in teacher mode. if rule is r controlled vowel, consonant or vowel digraphs, need to check if this
-				//letter is the first letter of any valid of these graphemes and flash it in that color if it is.
-				if(!isPartOfCompletedGrapheme){
-					string currentRule = SessionsDirector.instance.GetCurrentRule;
-					flash = letterIsNew;
-					timesToFlash = TIMES_TO_FLASH_CORRECT_PORTION_OF_FINAL_GRAPHEME;
-					switch(currentRule){
-						case "rControlledVowel":
-							if(SpeechSoundReference.IsFirstLetterOfRControlledVowel(newLetter)){
-								flashColor = SessionsDirector.instance.GetCurrentColorScheme.GetColorsForRControlledVowel();
-								newDefaultColor = Color.gray;
-							}
-							break;
-						case "consonantDigraphs":
-							if(SpeechSoundReference.IsFirstLetterOfConsonantDigraph(newLetter)){
-								flashColor = SessionsDirector.instance.GetCurrentColorScheme.GetColorsForConsonantDigraphs();
-								newDefaultColor = Color.gray;
-							}
-							break;
-						case "vowel Digraphs":
-							if(SpeechSoundReference.IsFirstLetterOfVowelDigraph(newLetter)){
-								flashColor = SessionsDirector.instance.GetCurrentColorScheme.GetColorsForVowelDigraphs();
-								newDefaultColor = Color.gray;
-							}
-							break;
-						default:
-							flash = false;
-							timesToFlash = 0;
-							break;
+				newDefaultColor = lc.GetColour ();
 		
-						}
-						}
-					}
+
+				if (SessionsDirector.instance.IsSyllableDivisionActivity) {
+						handleSyllableDivisionMode (lc, letterGridController, 
+								indexOfLetterBarCell);
+				} else if(SessionsDirector.IsStudentMode) {
+						handleStudentMode (
+								letterIsNew, 
+								isPartOfCompletedGrapheme, 
+								indexOfLetterBarCell,
+								newLetter, 
+								parent);
+				} else {
+						handleTeacherMode(
+								isPartOfCompletedGrapheme,
+								letterIsNew, newLetter);
+				}
 
 					asInteractiveLetter = letterGridController.UpdateLetter (indexOfLetterBarCell, newDefaultColor); 
 					asInteractiveLetter.LetterSoundComponentIsPartOf = lc;
@@ -484,6 +392,106 @@ public class ArduinoLetterController : PhonoBlocksController
 
 			}
 						
+
+		void handleSyllableDivisionMode(
+				LetterSoundComponent lc,
+				LetterGridController letterGridController, 
+				int indexOfLetterBarCell
+		){
+				asInteractiveLetter = letterGridController.GetInteractiveLetter (indexOfLetterBarCell);
+				asInteractiveLetter.UpdateDefaultColour (SessionsDirector.colourCodingScheme.GetColorsForWholeWord ());
+				asInteractiveLetter.SetSelectColour (lc.GetColour ());
+		}
+
+		void handleTeacherMode(
+				bool isPartOfCompletedGrapheme,
+				bool letterIsNew,
+				char newLetter
+
+		){
+
+				//in teacher mode. if rule is r controlled vowel, consonant or vowel digraphs, need to check if this
+				//letter is the first letter of any valid of these graphemes and flash it in that color if it is.
+				if(!isPartOfCompletedGrapheme){
+						string currentRule = SessionsDirector.instance.GetCurrentRule;
+						flash = letterIsNew;
+						timesToFlash = TIMES_TO_FLASH_CORRECT_PORTION_OF_FINAL_GRAPHEME;
+						switch(currentRule){
+						case "rControlledVowel":
+								if(SpeechSoundReference.IsFirstLetterOfRControlledVowel(newLetter)){
+										flashColor = SessionsDirector.instance.CurrentActivityColorRules.GetColorsForRControlledVowel();
+										newDefaultColor = Color.gray;
+								}
+								break;
+						case "consonantDigraphs":
+								if(SpeechSoundReference.IsFirstLetterOfConsonantDigraph(newLetter)){
+										flashColor = SessionsDirector.instance.CurrentActivityColorRules.GetColorsForConsonantDigraphs();
+										newDefaultColor = Color.gray;
+								}
+								break;
+						case "vowel Digraphs":
+								if(SpeechSoundReference.IsFirstLetterOfVowelDigraph(newLetter)){
+										flashColor = SessionsDirector.instance.CurrentActivityColorRules.GetColorsForVowelDigraphs();
+										newDefaultColor = Color.gray;
+								}
+								break;
+						default:
+								flash = false;
+								timesToFlash = 0;
+								break;
+
+						}
+				}
+		}
+
+
+		void handleStudentMode(
+				bool letterIsNew,
+				bool isPartOfCompletedGrapheme,
+				int indexOfLetterBarCell, 
+				char newLetter,
+				LetterSoundComposite parent = null
+		){
+				if(studentActivityController.IsErroneous(indexOfLetterBarCell)){
+						Color[] errorColors = SessionsDirector.colourCodingScheme.GetErrorColors();
+						newDefaultColor = errorColors[0];
+						flashColor = errorColors[1];
+						flash = letterIsNew;
+						timesToFlash=TIMES_TO_FLASH_ERRORNEOUS_LETTER;
+						return;
+				} 
+						
+
+				//correct letter; see whether it's part of a multi-letter unit.
+				LetterSoundComponent targetComponent = 
+						studentActivityController.GetTargetLetterSoundComponentFor(indexOfLetterBarCell);
+
+				if( //did student place all the letters needed to instantiate the spelling rule they are practiscing?
+						(isPartOfCompletedGrapheme && targetComponent.AsString.Equals(parent.AsString)) || 
+						(SessionsDirector.instance.IsMagicERule && studentActivityController.IsSubmissionCorrect())) {
+
+						flash = true;
+						timesToFlash = TIMES_TO_FLASH_ON_COMPLETE_TARGET_GRAPHEME;
+						return;
+				} 
+
+				//if the target grapheme for this index is part of a multi-letter unit (a blend, stable syllable, digraph or
+				//ar vowel)
+				if(!ReferenceEquals(targetComponent, null)){
+
+						newDefaultColor = SessionsDirector.instance.
+								CurrentActivityColorRules.GetColorForPortionOfTargetComposite ();
+
+						//If it isn't blends, then should flash.
+						//todo abstract this into the color coding scheme as well.
+						if (!SessionsDirector.instance.IsConsonantBlends) {
+								flash = true;
+								flashColor = targetComponent.GetColour ();
+								timesToFlash = TIMES_TO_FLASH_CORRECT_PORTION_OF_FINAL_GRAPHEME;
+						}
+		
+				} 
+
 		}
 
 		int FindIndexOfGraphemeThatCorrespondsToLastNonBlankPhonogram (UserWord userWord)

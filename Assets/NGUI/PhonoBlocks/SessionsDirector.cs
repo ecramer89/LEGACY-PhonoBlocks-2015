@@ -21,7 +21,7 @@ public class SessionsDirector : MonoBehaviour
 		}
 
 
-	public ColourCodingScheme GetCurrentColorScheme{
+	public ColourCodingScheme CurrentActivityColorRules{
 		get {
 						return colourCodingScheme;
 				}
@@ -35,7 +35,7 @@ public class SessionsDirector : MonoBehaviour
 
 	}
 
-		public bool IsSyllableDivisionMode {
+		public bool IsSyllableDivisionActivity {
 				get {
 						return colourCodingScheme.label.Equals ("syllableDivision");
 
