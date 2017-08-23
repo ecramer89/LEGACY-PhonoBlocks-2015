@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 11.0
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.PhonoBlocks-Min.CSharp", "UnityVS.PhonoBlocks-Min.CSharp.csproj", "{999CA64F-B603-60D9-3521-85F6D4ECCAB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.PhonoBlocks-Min.CSharp.Editor.Plugins", "UnityVS.PhonoBlocks-Min.CSharp.Editor.Plugins.csproj", "{4E37244A-F433-0C7F-B823-E9D4ABE7F3B6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.PhonoBlocks-Min.CSharp.Editor", "UnityVS.PhonoBlocks-Min.CSharp.Editor.csproj", "{168EFA6B-2436-224B-36DA-6B2AC0388B6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.PhonoBlocks-Min.CSharp.Editor.Plugins", "UnityVS.PhonoBlocks-Min.CSharp.Editor.Plugins.csproj", "{4E37244A-F433-0C7F-B823-E9D4ABE7F3B6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.PhonoBlocks-Min.CSharp.Plugins", "UnityVS.PhonoBlocks-Min.CSharp.Plugins.csproj", "{26656174-60D0-36C5-506F-56F65276B965}"
 EndProject
@@ -19,14 +19,14 @@ Global
 		{999CA64F-B603-60D9-3521-85F6D4ECCAB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{999CA64F-B603-60D9-3521-85F6D4ECCAB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{999CA64F-B603-60D9-3521-85F6D4ECCAB8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4E37244A-F433-0C7F-B823-E9D4ABE7F3B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4E37244A-F433-0C7F-B823-E9D4ABE7F3B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4E37244A-F433-0C7F-B823-E9D4ABE7F3B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4E37244A-F433-0C7F-B823-E9D4ABE7F3B6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{168EFA6B-2436-224B-36DA-6B2AC0388B6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{168EFA6B-2436-224B-36DA-6B2AC0388B6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{168EFA6B-2436-224B-36DA-6B2AC0388B6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{168EFA6B-2436-224B-36DA-6B2AC0388B6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E37244A-F433-0C7F-B823-E9D4ABE7F3B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E37244A-F433-0C7F-B823-E9D4ABE7F3B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E37244A-F433-0C7F-B823-E9D4ABE7F3B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E37244A-F433-0C7F-B823-E9D4ABE7F3B6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26656174-60D0-36C5-506F-56F65276B965}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{26656174-60D0-36C5-506F-56F65276B965}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26656174-60D0-36C5-506F-56F65276B965}.Release|Any CPU.ActiveCfg = Release|Any CPU

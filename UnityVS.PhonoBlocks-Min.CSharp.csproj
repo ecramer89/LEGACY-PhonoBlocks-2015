@@ -100,45 +100,6 @@
     <Reference Include="UnityEngine.VR">
       <HintPath>\Applications\Unity\Unity.app\Contents\UnityExtensions\Unity\UnityVR\RuntimeEditor\UnityEngine.VR.dll</HintPath>
     </Reference>
-    <Reference Include="Jayrock">
-      <HintPath>Assets\Plugins\Jayrock.dll</HintPath>
-    </Reference>
-    <Reference Include="Jayrock.Json">
-      <HintPath>Assets\Plugins\Jayrock.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Data">
-      <HintPath>Assets\Plugins\Mono.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Data.Sqlite">
-      <HintPath>Assets\Plugins\Mono.Data.Sqlite.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Data.SqliteClient">
-      <HintPath>Assets\Plugins\Mono.Data.SqliteClient.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Configuration">
-      <HintPath>Assets\Plugins\System.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data">
-      <HintPath>Assets\Plugins\System.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="System.EnterpriseServices">
-      <HintPath>Assets\Plugins\System.EnterpriseServices.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security">
-      <HintPath>Assets\Plugins\System.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="uLink">
-      <HintPath>Assets\Plugins\uLink\Assembly\uLink.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-UnityScript-firstpass">
-      <HintPath>Library\ScriptAssemblies\Assembly-UnityScript-firstpass.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="UnityVS.PhonoBlocks-Min.CSharp.Plugins.csproj">
-      <Project>{26656174-60D0-36C5-506F-56F65276B965}</Project>
-      <Name>UnityVS.PhonoBlocks-Min.CSharp.Plugins</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipItems.cs" />
@@ -336,7 +297,6 @@
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (Packed).shader" />
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored (SoftClip).shader" />
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
-    <None Include="Assets\Plugins\uLink\Assembly\uLink.xml" />
     <None Include="Assets\recorded_raw.xml" />
     <None Include="\Applications\Unity\Unity.app\Contents\UnityExtensions\Unity\Advertisements\UnityEngine.Advertisements.dll" />
     <None Include="\Applications\Unity\Unity.app\Contents\UnityExtensions\Unity\GUISystem\Standalone\UnityEngine.UI.dll" />
