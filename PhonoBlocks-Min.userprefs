@@ -1,6 +1,16 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/NGUI/PhonoBlocks/LetterSoundComponent.cs">
+    <Files>
+      <File FileName="Assets/NGUI/PhonoBlocks/SessionsDirector.cs" Line="223" Column="4" />
+      <File FileName="Assets/NGUI/PhonoBlocks/StudentsDataHandler.cs" Line="340" Column="39" />
+      <File FileName="Assets/NGUI/PhonoBlocks/UserInputRouter.cs" Line="290" Column="5" />
+      <File FileName="Assets/NGUI/PhonoBlocks/StudentActivityController.cs" Line="169" Column="5" />
+      <File FileName="Assets/NGUI/PhonoBlocks/ArduinoLetterController.cs" Line="300" Column="53" />
+      <File FileName="Assets/NGUI/PhonoBlocks/LetterSoundComponentFactoryHandler.cs" Line="17" Column="3" />
+      <File FileName="Assets/NGUI/PhonoBlocks/LetterSoundComponent.cs" Line="184" Column="2" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -150,12 +150,7 @@ public class SessionsDirector : MonoBehaviour
 				SetupModeSelectionMenu ();
 
 		}
-
-
-
-	                                   
-
-
+				
 		//Teacher mode is the current "sandbox" mode, which just defaults to rthe colour scheme chosen at the head of this file.
 		public void SelectTeacherMode ()
 		{
