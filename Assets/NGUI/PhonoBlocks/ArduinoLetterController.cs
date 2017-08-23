@@ -28,6 +28,7 @@ public class ArduinoLetterController : PhonoBlocksController
 				}
 		
 		}
+				
 
 		public static int startingIndexOfUserLetters;
 		public static int endingIndexOfUserLetters;
@@ -72,7 +73,10 @@ public class ArduinoLetterController : PhonoBlocksController
 
 		}
 
-		public void Initialize (int startingIndexOfArduinoLetters, int endingIndexOfArduinoLetters, ArduinoUnityInterface tangibleLetters)
+		public void Initialize (
+				int startingIndexOfArduinoLetters, 
+				int endingIndexOfArduinoLetters, 
+				ArduinoUnityInterface tangibleLetters)
 		{
 				StartingIndex = startingIndexOfArduinoLetters;
 				EndingIndex = endingIndexOfArduinoLetters;
@@ -178,11 +182,14 @@ public class ArduinoLetterController : PhonoBlocksController
 
 
 		//updates letters and images of letter cells
-		public void PlaceWordInLetterGrid (string word)
+		public void PlaceWordInLetterGrid (string word, bool updateUserControlled)
 		{
 
 				for (int i=0, j=startingIndexOfUserLetters; i<word.Length; i++,j++) {
-						ChangeTheLetterOfASingleCell (j, word.Substring (i, 1) [0]);
+						ChangeTheLetterOfASingleCell (j, word[i]);
+						if(updateUserControlled){
+								SaveNewLetterInStringRepresentation (word[i], i, currUserControlledLettersAsStringBuilder);
+						}
 					
 				}
 		
@@ -213,7 +220,7 @@ public class ArduinoLetterController : PhonoBlocksController
 		public void ReplaceEachLetterWithBlank ()
 		{
 
-				PlaceWordInLetterGrid (EMPTY_USER_WORD);
+				PlaceWordInLetterGrid (EMPTY_USER_WORD, true);
 		}
 
 		public UserWord UpdateDefaultColoursAndSoundsOfLetters (bool flash)
@@ -289,7 +296,8 @@ public class ArduinoLetterController : PhonoBlocksController
 		{
 			
 				string userControlledLettersAsString = GetUserControlledLettersAsString (false);
-		return LetterSoundComponentFactoryManager.Decode (userControlledLettersAsString, SessionsDirector.instance.IsSyllableDivisionActivity);
+				Debug.Log (userControlledLettersAsString);
+				return LetterSoundComponentFactoryManager.Decode (userControlledLettersAsString, SessionsDirector.instance.IsSyllableDivisionActivity);
 		
 		}
 
@@ -382,13 +390,17 @@ public class ArduinoLetterController : PhonoBlocksController
 								letterIsNew, newLetter);
 				}
 
+				    Debug.Log ($"{newLetter} {newDefaultColor}");
+
+
 					asInteractiveLetter = letterGridController.UpdateLetter (indexOfLetterBarCell, newDefaultColor); 
 					asInteractiveLetter.LetterSoundComponentIsPartOf = lc;
 		           
 		
-			    if (flash) {
+				//todo disabled until understand whats going on.
+			    /*if (flash) {
 						asInteractiveLetter.StartFlash(flashColor, timesToFlash);
-				}
+				}*/
 
 			}
 						

@@ -78,21 +78,8 @@ public class SessionsDirector : MonoBehaviour
 		}
 
 		static Mode mode; //testing mode. can be student driven (usual phonoblocks practice session, phono reads words), test (assessment) or sandbox
-
-		public static bool DelegateControlToStudentActivityController {
-				get {
-						return mode == Mode.STUDENT;
-				}
-
-
-		}
-
-
-
-	   
-
-
-
+	
+			
 		/* also more like a "sandbox" mode; teacher can create whatever words they want */
 		public static bool IsTeacherMode {
 				get {
@@ -113,11 +100,9 @@ public class SessionsDirector : MonoBehaviour
 		public GameObject studentActivityControllerOB;
 		public GameObject activitySelectionButtons;
 		public GameObject sessionSelectionButtons;
-		//public GameObject modeSelectionScreen;
 		public GameObject teacherModeButton;
 		public GameObject studentModeButton;
 		public GameObject studentNameInputField;
-		//public GameObject returnToModeSelectButton;
 		public GameObject dataTables;
 		InputField studentName;
 		public AudioClip noDataForStudentName;

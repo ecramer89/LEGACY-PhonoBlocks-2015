@@ -77,8 +77,7 @@ public class StudentActivityController : PhonoBlocksController
 			
 				SetUpNextProblem ();
 	
-
-
+			
 				excellent = InstructionsAudio.instance.excellent;
 				incorrectSoundEffect = InstructionsAudio.instance.incorrectSoundEffect;
 				notQuiteIt = InstructionsAudio.instance.notQuiteIt;
@@ -103,7 +102,8 @@ public class StudentActivityController : PhonoBlocksController
 		        targetWordAsLetterSoundComponents = LetterSoundComponentFactoryManager.Decode (currProblem.TargetWord (true), 
 		                                                                               SessionsDirector.instance.IsSyllableDivisionActivity);
 				arduinoLetterController.ReplaceEachLetterWithBlank ();
-				arduinoLetterController.PlaceWordInLetterGrid (currProblem.InitialWord);
+				arduinoLetterController.PlaceWordInLetterGrid (currProblem.InitialWord, true);
+	
 				arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters (false);
 		
 				userInputRouter.RequestTurnOffImage ();
@@ -172,7 +172,7 @@ public class StudentActivityController : PhonoBlocksController
 		{
 				if (hintController.UsedLastHint ()) {
 						currProblem.PlayAnswer ();
-						arduinoLetterController.PlaceWordInLetterGrid (currProblem.TargetWord (false));
+						arduinoLetterController.PlaceWordInLetterGrid (currProblem.TargetWord (false), false);
 						CurrentProblemCompleted (false);
 				} else 
 						hintController.ProvideHint (currProblem);

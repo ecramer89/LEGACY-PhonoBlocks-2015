@@ -114,7 +114,7 @@ public class UserInputRouter : MonoBehaviour
 				if (sessionParametersOB != null) {
 					
 						sessionManager = sessionParametersOB.GetComponent<SessionsDirector> ();
-						if (SessionsDirector.DelegateControlToStudentActivityController) {
+						if (SessionsDirector.IsStudentMode) {
 							      
 								studentActivityControllerGO = sessionManager.studentActivityControllerOB;
 								studentActivityController = studentActivityControllerGO.GetComponent<StudentActivityController> ();
@@ -153,7 +153,7 @@ public class UserInputRouter : MonoBehaviour
 
 		public void RequestReplayInstruction ()
 		{
-				if (SessionsDirector.DelegateControlToStudentActivityController)
+				if (SessionsDirector.IsStudentMode)
 						studentActivityController.PlayInstructions ();
 
 		}
@@ -245,7 +245,7 @@ public class UserInputRouter : MonoBehaviour
 		/* if it is activity mode, then we delegate control of the new letter to the student activity controller. otherwise just update all of the letters*/
 		public void HandleNewUserInputLetter (char newLetter, int atPosition, ArduinoLetterController alc)
 		{
-				if (sessionManager != null && SessionsDirector.DelegateControlToStudentActivityController)
+				if (sessionManager != null && SessionsDirector.IsStudentMode)
 			
 						studentActivityController.HandleNewArduinoLetter (newLetter, atPosition);
 				else 
@@ -265,7 +265,7 @@ public class UserInputRouter : MonoBehaviour
 						selectTimer--;
 				if (selectTimer == 0) {
 						if (!wholeWordWasSelected) {
-								if (!SessionsDirector.DelegateControlToStudentActivityController || studentActivityController.StringMatchesTarget (selectedLetters)) {
+								if (!SessionsDirector.IsStudentMode || studentActivityController.StringMatchesTarget (selectedLetters)) {
 										if (AudioSourceController.PushClip (AudioSourceController.GetWordFromResources (selectedLetters))) {					
 												if (!SessionsDirector.instance.IsSyllableDivisionActivity)
 														arduinoLetterController.ChangeDisplayColourOfCells (SessionsDirector.colourCodingScheme.GetColorsForWholeWord (), true);
@@ -292,7 +292,7 @@ public class UserInputRouter : MonoBehaviour
         if(hintLetterTimer==0)
         {
            
-            arduinoLetterController.PlaceWordInLetterGrid(arduinoLetterController.CurrentUserControlledLettersAsString);
+            arduinoLetterController.PlaceWordInLetterGrid(arduinoLetterController.CurrentUserControlledLettersAsString,false);
             arduinoLetterController.UpdateDefaultColoursAndSoundsOfLetters(true);
             //replace colours and letters that are there
             hintLetterTimer = -1;
